@@ -13,5 +13,9 @@ const config: StorybookConfig = {
     name: "@storybook/react-vite",
     options: {},
   },
+  core: {
+    builder: "@storybook/builder-vite", // Viteビルダーを使用
+  },
 };
+
 export default config;

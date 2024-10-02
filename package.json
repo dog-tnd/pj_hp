@@ -28,7 +28,10 @@
     "@storybook/blocks": "^8.3.4",
     "@storybook/react": "^8.3.4",
     "@storybook/react-vite": "^8.3.4",
+    "@storybook/react-webpack5": "^8.3.4",
     "@storybook/test": "^8.3.4",
+    "@types/react": "^18.3.10",
+    "@types/react-dom": "^18.3.0",
     "storybook": "^8.3.4"
   }
 }

@@ -1,3 +1,10 @@
 {
-  "extends": "astro/tsconfigs/strict"
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "types": ["@types/react", "@types/react-dom", "@storybook/react"], // 型定義を追加
+    "skipLibCheck": true
+  },
+  "include": ["src"]
 }
