@@ -3,33 +3,33 @@ name: Deploy Astro site to GitHub Pages (Organization)
 on:
   push:
     branches: [temp/publish] # メインブランチで動作
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout your repository using git
         uses: actions/checkout@v4
+      - name: Install, build, and upload your site
+        uses: withastro/action@v1
+        # with:
+        # path: . # リポジトリ内のAstroプロジェクトのルートロケーション。(オプション)
+        # node-version: 18 # サイト構築に使用するNodeのバージョン。デフォルトは18です。（オプション）
+        # package-manager: pnpm@latest # 依存関係のインストールとサイトのビルドに使用する Node パッケージマネージャ。ロックファイルに基づいて自動的に検出されます。(オプション)
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.9
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build the site
-        run: npm run build
-
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+        id: deployment
+        uses: actions/deploy-pages@v1
