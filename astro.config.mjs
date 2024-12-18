@@ -6,4 +6,6 @@ import tailwind from "@astrojs/tailwind";
 // https://astro.build/config
 export default defineConfig({
   integrations: [react(), tailwind()],
+  output: "static",
+  site: "https://dog_tnd.github.io/pj_hp",
 });
