@@ -16,12 +16,26 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.6.0 # pnpmのバージョンを指定
+          run_install: false # `pnpm install`を別ステップで行う
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Install, build, and upload your site
         uses: withastro/action@v1
-        # with:
-        # path: . # リポジトリ内のAstroプロジェクトのルートロケーション。(オプション)
-        # node-version: 18 # サイト構築に使用するNodeのバージョン。デフォルトは18です。（オプション）
-        # package-manager: pnpm@latest # 依存関係のインストールとサイトのビルドに使用する Node パッケージマネージャ。ロックファイルに基づいて自動的に検出されます。(オプション)
+        with:
+          package-manager: pnpm@8.6.0
 
   deploy:
     needs: build
