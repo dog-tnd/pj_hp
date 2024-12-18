@@ -7,5 +7,5 @@ import tailwind from "@astrojs/tailwind";
 export default defineConfig({
   integrations: [react(), tailwind()],
   output: "static",
-  site: "https://dog_tnd.github.io/pj_hp",
+  site: "https://dog-tnd.github.io/pj_hp",
 });
