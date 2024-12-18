@@ -8,4 +8,5 @@ export default defineConfig({
   integrations: [react(), tailwind()],
   output: "static",
   site: "https://dog-tnd.github.io/pj_hp",
+  base: "/pj_hp",
 });
