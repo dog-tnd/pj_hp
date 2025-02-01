@@ -62,3 +62,22 @@ const NewsCard: FC<NewsCardProps> = ({
 };
 
 export default NewsCard;
+
+{
+  /* 
+
+  使い方
+  
+<NewsCard
+image="https://example.com/sample.jpg"
+title="新しいプロジェクトが始まりました"
+description="これは新しいプロジェクトの説明です..."
+author="田中 太郎"
+role="エンジニア"
+authorImage="/author-image.jpg"
+date="2024.10.01"
+client:load
+/> 
+
+  */
+}
