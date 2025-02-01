@@ -18,7 +18,7 @@ const links: Link[] = [
 
 const Menu: React.FC = () => {
   return (
-    <div className="p-0 w-40">
+    <div className="p-0 w-40 absolute top-[5rem] right-[0rem]">
       <div className="flex flex-col items-center w-full">
         <div className="flex justify-center items-center gap-2 mb-10">
           <img
