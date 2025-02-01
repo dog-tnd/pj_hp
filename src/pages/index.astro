@@ -1,10 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
+import ExCard from '../components/ex)Card.astro';
+import TwoLine from '../components/TwoLine.astro';
 ---
 
 <Layout title="理科大プログラミングサークル TND">
-  
+
+  <header>
+    <TwoLine></TwoLine>
+  </header>
+
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
     <!-- Hero Section -->
 
@@ -27,7 +32,8 @@ import Layout from '../layouts/Layout.astro';
 	<div class="container flex flex-col md:flex-row items-center gap-10">
 	<section class="mb-16">
 		<h2 class="mb-8 text-gray-900" style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 30px; font-style: normal; font-weight: 400; line-height: normal;">NEWS</h2>
-	</section>
+    <ExCard href="#" title="Yay" body="context."></ExCard>
+  </section>
 	</div>
     
 	<!-- SNS LOGOs -->

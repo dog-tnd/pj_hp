@@ -1,0 +1,32 @@
+<canvas id="myCanvas" class="absolute top-2 right-5"></canvas>
+
+<script>
+  window.onload = function () {
+    const canvas = document.getElementById("myCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    // Canvasのサイズをウィンドウサイズに設定
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+
+    // 右上の基準点を計算
+    const startX = canvas.width - 30;
+    const startY = 30;
+
+    // 横線を描画
+    ctx.beginPath();
+    ctx.moveTo(startX - 120, startY);
+    ctx.lineTo(startX + 120, startY);
+    ctx.stroke();
+
+    // 縦線を描画
+    ctx.beginPath();
+    ctx.moveTo(startX, startY - 100);
+    ctx.lineTo(startX, startY + 100);
+    ctx.stroke();
+  };
+</script>
