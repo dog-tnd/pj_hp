@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import ExCard from '../components/ex)Card.astro';
 import TwoLine from '../components/TwoLine.astro';
+import Menu from '../components/menu';
 ---
 
 <Layout title="理科大プログラミングサークル TND">
@@ -43,6 +44,7 @@ import TwoLine from '../components/TwoLine.astro';
 		<img src="/sns-line.png" alt="LineIcon" class="max-w-[1rem] max-h-[1rem] sm:w-[1.5rem] sm:h-[1.5rem] md:max-w-[1.5rem] md:max-w-[2rem] md:max-h-[2rem]" />
 		<img src="/sns-discord.svg" alt="DiscordIcon" class="max-w-[1rem] max-h-[1rem] sm:w-[1.5rem] sm:h-[1.5rem] md:max-w-[1.5rem] md:max-w-[2rem] md:max-h-[2rem]" />
 	</div> 
+  <Menu client:load />
 	
 </main>
     <!-- Footer -->
