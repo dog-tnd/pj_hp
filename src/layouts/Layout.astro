@@ -1,0 +1,42 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="「TND」は東京理科大学野田キャンパスで活動するプログラミングサークルです。Web開発やデータサイエンスに挑戦し、メンバーと共に成長を目指しています。" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <title>{title}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Doodle+Shadow&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-gray-50">
+    <div class="relative min-h-screen overflow-hidden">
+      <!-- Gradient shape -->
+      <div class="absolute right-0 top-0 -z-10">
+        <div class="h-[600px] w-[600px] rotate-12 transform rounded-[40%] bg-gradient-to-br from-blue-400 to-teal-300 opacity-20 blur-3xl"></div>
+      </div>
+      <main>
+        <slot />
+      </main>
+    </div>
+    <style is:global>
+      body {
+        font-family: 'Noto Sans JP', sans-serif;
+      }
+
+      .vertical {
+        writing-mode: vertical-rl;
+    }
+    </style>
+  </body>
+
