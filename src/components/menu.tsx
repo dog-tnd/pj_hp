@@ -10,7 +10,7 @@ interface Link {
 
 const links: Link[] = [
   { href: "/", label: "私たちについて" },
-  { href: "/", label: "テックブログ" },
+  { href: "/blog", label: "テックブログ" },
   { href: "/", label: "よくある質問" },
   { href: "/", label: "お問い合わせ" },
   { href: "/", label: "入会申し込み" },

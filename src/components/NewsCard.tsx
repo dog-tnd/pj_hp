@@ -18,9 +18,11 @@ const NewsCard: FC<NewsCardProps> = ({
   role,
   authorImage,
   date,
+  height,
+  width,
 }) => {
   return (
-    <div className="w-full max-w-md overflow-hidden bg-white rounded-lg shadow-md">
+    <div className="w-[{width}px] max-w-md h-[{height}px] overflow-hidden bg-white rounded-lg shadow-md">
       {/* Image Section */}
       <div className="relative h-48 w-full overflow-hidden">
         <img
