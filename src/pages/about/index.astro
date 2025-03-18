@@ -4,15 +4,18 @@ import Menu from '../../components/menu';
 ---
 <Layout title="私たちについて | プログラミングサークル TND">
     <div class="relative">
+      <div class="container mx-auto px-4 relative">
+        <Menu client:load/>
+      </div>
   <!-- 「プログラミングサークルTNDとは？」セクション -->
-  <section id="about" class="py-20 bg-gray-50">
-    <div class="container mx-auto px-4">
+  <section id="about" class="py-20 bg-gray-50 ">
+    <div class="container mx-auto px-4 py-10">
       <h2 class="text-3xl md:text-4xl font-bold text-center mb-12" style="font-family: 'Rubik Doodle Shadow';">
         プログラミングサークル TNDとは？
       </h2>
       <div class="prose text-gray-600 mx-auto max-w-3xl">
         <p>
-          TNDは、ウェブ開発、デザイン、データサイエンスに焦点を当てた大学連携のプログラミングサークルです。2024年に設立され、実践的なプロジェクトや共同イベントを通して共に学び、成長することに力を入れています。
+          TNDは、ウェブ開発、デザイン、データサイエンスに焦点を当てた東京理科大学野田キャンパスのプログラミングサークルです。2024年に設立され、実践的なプロジェクトや共同イベントを通して共に学び、成長することに力を入れています。
         </p>
       </div>
     </div>
@@ -67,8 +70,7 @@ import Menu from '../../components/menu';
           <h3 class="text-xl font-semibold mb-3">外部ハッカソン</h3>
           <ul class="space-y-2 text-gray-600">
             <li>企業主催イベントへの参加</li>
-            <li>他大学との交流と競争</li>
-            <li>業界プロフェッショナルとのネットワーク構築</li>
+            <li>他大学との交流</li>
           </ul>
         </div>
         <!-- ソーシャルイベントカード -->
@@ -121,13 +123,13 @@ import Menu from '../../components/menu';
             <h3 class="text-2xl font-bold">ウェブ開発コース</h3>
           </div>
           <p class="text-gray-600 mb-4">
-            フロントエンドとバックエンドの両方をカバーする包括的なトレーニングです。
+            フロントエンドとバックエンドの開発をします。
           </p>
           <div class="grid md:grid-cols-2 gap-4">
             <div>
               <h4 class="font-semibold text-lg mb-2">フロントエンド</h4>
               <ul class="list-disc list-inside text-gray-600">
-                <li>HTML / CSS（レスポンシブデザイン）</li>
+                <li>HTML / CSS</li>
                 <li>JavaScript &amp; TypeScript</li>
                 <li>React / Next.js</li>
               </ul>
@@ -159,13 +161,13 @@ import Menu from '../../components/menu';
             <div>
               <h4 class="font-semibold text-lg mb-2">UI/UX基礎</h4>
               <ul class="list-disc list-inside text-gray-600">
-                <li>プロトタイピングのためのFigma</li>
+                <li>Figma</li>
                 <li>デザイン原則</li>
                 <li>ユーザーリサーチ</li>
               </ul>
             </div>
             <div>
-              <h4 class="font-semibold text-lg mb-2">高度なツール</h4>
+              <h4 class="font-semibold text-lg mb-2">その他ツール</h4>
               <ul class="list-disc list-inside text-gray-600">
                 <li>Illustrator</li>
                 <li>Photoshop</li>
@@ -218,21 +220,21 @@ import Menu from '../../components/menu';
       </h2>
       <div class="prose text-gray-700 mx-auto max-w-3xl text-center">
         <p>
-          TNDに参加して、実際のプロジェクトを構築し、情熱ある仲間と協力しながら、キャリアを後押しする実践的なスキルを身につけましょう。
+          TNDに参加して、実際のプロジェクトを構築し、情熱ある仲間と協力しながら、<br/>実践的なスキルを身につけましょう！
         </p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
         <div class="bg-white/80 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
           <h3 class="text-xl font-semibold mb-2">実践で学ぶ</h3>
-          <p class="text-gray-600">理論を実践に変えるハンズオンプロジェクトに注力します。</p>
+          <p class="text-gray-600">理論を実践に変えるハンズオンプロジェクト</p>
         </div>
         <div class="bg-white/80 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
           <h3 class="text-xl font-semibold mb-2">共に成長する</h3>
-          <p class="text-gray-600">経験豊富な仲間やメンターと協力して学びます。</p>
+          <p class="text-gray-600">経験豊富な仲間と協力して学びます</p>
         </div>
         <div class="bg-white/80 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
           <h3 class="text-xl font-semibold mb-2">経験を積む</h3>
-          <p class="text-gray-600">ハッカソンやイベントに参加して、ポートフォリオを充実させましょう。</p>
+          <p class="text-gray-600">ハッカソンやイベントに参加して、<br/>ポートフォリオを充実させましょう</p>
         </div>
       </div>
     </div>
@@ -245,7 +247,7 @@ import Menu from '../../components/menu';
         参加方法
       </h2>
       <div class="prose text-gray-600 mx-auto max-w-3xl text-center mb-12">
-        <p>募集は毎年4月と5月にのみ行われます。以下の手順に従ってご参加ください。</p>
+        <p>募集は毎年4月と5月に行われます。以下の手順に従ってご参加ください。</p>
       </div>
       <div class="relative max-w-2xl mx-auto">
         <div class="absolute left-8 top-0 h-full w-1 bg-blue-200"></div>
@@ -256,7 +258,7 @@ import Menu from '../../components/menu';
             </div>
             <div class="ml-6">
               <h3 class="text-xl font-semibold">募集開始</h3>
-              <p class="text-gray-600">募集期間は毎年4月と5月のみです。</p>
+              <p class="text-gray-600">新歓Discordに入りましょう</p>
             </div>
           </div>
           <div class="flex items-start">
@@ -265,7 +267,7 @@ import Menu from '../../components/menu';
             </div>
             <div class="ml-6">
               <h3 class="text-xl font-semibold">説明会に参加</h3>
-              <p class="text-gray-600">TNDの詳細を知り、現メンバーと出会うために説明会に参加してください。</p>
+              <p class="text-gray-600">4,5月は定期的に行う予定です</p>
             </div>
           </div>
           <div class="flex items-start">
@@ -274,17 +276,17 @@ import Menu from '../../components/menu';
             </div>
             <div class="ml-6">
               <h3 class="text-xl font-semibold">参加申し込み</h3>
-              <p class="text-gray-600">応募フォームに記入し、希望するコースを選択してください。</p>
+              <p class="text-gray-600">応募フォームに記入して完了！</p>
             </div>
           </div>
         </div>
       </div>
       <div class="mt-16 text-center">
         <p class="text-lg mb-6">
-          <strong>初心者歓迎：</strong> プログラミング経験は問いません。<br>
-          <strong>経験者歓迎：</strong> スキルを向上させ、ポートフォリオを充実させましょう。
+          <strong>会費：</strong> 半期2000円(年間4000円)<br>
+          <strong>初心者歓迎：</strong> 現メンバーの9割は大学から始めてます！
         </p>
-        <a href="#contact" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition transform hover:scale-105">
+        <a href="/contact" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition transform hover:scale-105">
           お問い合わせ
         </a>
       </div>
