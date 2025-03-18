@@ -9,11 +9,11 @@ interface Link {
 }
 
 const links: Link[] = [
-  { href: "/", label: "私たちについて" },
-  { href: "/", label: "テックブログ" },
-  { href: "/", label: "よくある質問" },
-  { href: "/", label: "お問い合わせ" },
-  { href: "/", label: "入会申し込み" },
+  { href: "/about", label: "私たちについて" },
+  { href: "/blog", label: "テックブログ" },
+  { href: "/faq", label: "よくある質問" },
+  { href: "/contact", label: "お問い合わせ" },
+  { href: "/application", label: "入会申し込み" },
 ];
 
 const Menu: React.FC = () => {
@@ -48,7 +48,7 @@ const Menu: React.FC = () => {
       <div className="md:hidden w-full px-4 py-4">
         <div className="flex justify-between items-center">
           {/* 左側：TND Logo と TND（左寄せ） */}
-          <div className="flex items-center gap-2">
+          <a href="/" className="flex items-center gap-2">
             <img
               src={Logo || "/placeholder.svg"}
               alt="TND Logo"
@@ -63,7 +63,7 @@ const Menu: React.FC = () => {
             >
               TND
             </h1>
-          </div>
+          </a>
           {/* 右側：ハンバーガーボタン＆ドロップダウン */}
           <div className="relative" ref={menuRef}>
             <button onClick={toggleMenu}>
@@ -115,20 +115,22 @@ const Menu: React.FC = () => {
       <div className="hidden md:block p-0 w-40 md:absolute top-[5rem] right-[0rem] pb-[5rem]">
         <div className="flex flex-col items-center w-full">
           <div className="flex justify-center items-center gap-2 mb-10">
-            <img
-              src={Logo || "/placeholder.svg"}
-              alt="TND Logo"
-              className="w-12 h-12"
-            />
-            <h1
-              className="text-5xl text-gray-900"
-              style={{
-                fontFamily: "'Rubik Doodle Shadow', system-ui",
-                fontWeight: 400,
-              }}
-            >
-              TND
-            </h1>
+            <a href="/" className="flex items-center gap-2">
+              <img
+                src={Logo || "/placeholder.svg"}
+                alt="TND Logo"
+                className="w-12 h-12"
+              />
+              <h1
+                className="text-5xl text-gray-900"
+                style={{
+                  fontFamily: "'Rubik Doodle Shadow', system-ui",
+                  fontWeight: 400,
+                }}
+              >
+                TND
+              </h1>
+            </a>
           </div>
           <nav className="w-full">
             <div className="flex flex-col items-end gap-6 w-full">
