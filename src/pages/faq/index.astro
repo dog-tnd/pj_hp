@@ -1,0 +1,287 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Menu from '../../components/menu';
+---
+<Layout title="よくある質問 | プログラミングサークル TND">
+  <div class="container mx-auto px-4 relative">
+        <Menu client:load/>
+      </div>
+  <!-- ヒーローセクション -->
+  <section id="about" class="py-20 bg-gray-50 ">
+    <div class="container mx-auto px-4 py-10">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-12" style="font-family: 'Rubik Doodle Shadow';">
+        よくある質問
+      </h2>
+      <div class="prose text-gray-600 mx-auto max-w-3xl text-center">
+        <p>
+          よくある質問をまとめました。ご不明な点がございましたら、お気軽にお問い合わせください。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ 用のカスタムスタイル -->
+  <style>
+    /* 回答部分は初期状態で折り畳まれており、左右にパディングを確保 */
+    .faq-answer {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+      border-radius: 0.5rem;
+      padding: 0 1.5rem; /* 初期状態は左右のみ */
+    }
+    /* expanded クラスが付与されたら全体にパディングを付与 */
+    .faq-answer.expanded {
+      max-height: 500px; /* 内容に合わせて十分な高さに */
+      opacity: 1;
+      padding: 1.5rem; /* 上下左右に1.5remの余白 */
+    }
+  </style>
+
+  <!-- FAQ セクション -->
+  <section class="py-20">
+    <div class="container mx-auto px-6">
+      <div class="max-w-3xl mx-auto">
+        <!-- FAQ カテゴリ -->
+        <div class="flex flex-wrap justify-center gap-4 mb-12">
+          <button class="category-btn active px-4 py-2 rounded-full bg-blue-100 text-blue-700 font-medium" data-category="all">
+            すべて
+          </button>
+          <button class="category-btn px-4 py-2 rounded-full bg-gray-100 text-gray-700 font-medium hover:bg-blue-50" data-category="general">
+            一般的な質問
+          </button>
+          <button class="category-btn px-4 py-2 rounded-full bg-gray-100 text-gray-700 font-medium hover:bg-blue-50" data-category="courses">
+            コース内容
+          </button>
+          <button class="category-btn px-4 py-2 rounded-full bg-gray-100 text-gray-700 font-medium hover:bg-blue-50" data-category="joining">
+            入会について
+          </button>
+          <button class="category-btn px-4 py-2 rounded-full bg-gray-100 text-gray-700 font-medium hover:bg-blue-50" data-category="activities">
+            活動内容
+          </button>
+        </div>
+
+        <!-- FAQ アイテム -->
+        <div class="space-y-6">
+          <!-- 一般的な質問 -->
+          <div class="faq-item" data-category="general">
+            <button class="faq-question w-full flex items-center justify-between bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all">
+              <span class="text-lg font-semibold">TNDとは何ですか？</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon h-6 w-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer bg-white -mt-1 shadow-md">
+              <p class="text-gray-600">
+                TND は大学公認のプログラミングサークルで、Web 開発、デザイン、データサイエンスの各分野に特化しています。プログラミングを学びたい、何かを作りたい、仲間と協力したい方に最適な環境を提供しています。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="general">
+            <button class="faq-question w-full flex items-center justify-between bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all">
+              <span class="text-lg font-semibold">プログラミング初心者でも参加できますか？</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon h-6 w-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer bg-white -mt-1 shadow-md">
+              <p class="text-gray-600">
+                はい、初心者の方も大歓迎です！先輩メンバーがサポートする体制が整っており、定期的な勉強会やハンズオンワークショップを通じて、基礎からしっかりと学べます。
+              </p>
+            </div>
+          </div>
+
+          <!-- コースに関する質問 -->
+          <div class="faq-item" data-category="courses">
+            <button class="faq-question w-full flex items-center justify-between bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all">
+              <span class="text-lg font-semibold">Web開発コースでは何を学べますか？</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon h-6 w-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer bg-white -mt-1 shadow-md">
+              <p class="text-gray-600">
+                Web開発コースでは、フロントエンドとバックエンドの両面を学習します。具体的には、HTML/CSS（モバイル対応含む）、JavaScript/TypeScript、React/Next.js、Python、Golang、Node.js（TypeScript）、データベース設計などを扱います。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="courses">
+            <button class="faq-question w-full flex items-center justify-between bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all">
+              <span class="text-lg font-semibold">デザインコースではどのようなツールを使いますか？</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon h-6 w-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer bg-white -mt-1 shadow-md">
+              <p class="text-gray-600">
+                デザインコースでは、Figma、Adobe Illustrator、Adobe Photoshop、Adobe XD、Blender などのツールを使用し、UI/UX デザインの原則や効果的なデザイン手法も学びます。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="courses">
+            <button class="faq-question w-full flex items-center justify-between bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all">
+              <span class="text-lg font-semibold">データサイエンスコースは難しいですか？</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon h-6 w-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer bg-white -mt-1 shadow-md">
+              <p class="text-gray-600">
+                データサイエンスコースは、初心者にも分かりやすいカリキュラムで構成されています。基本的な Python プログラミングから始め、段階的にデータ分析や AI の基礎を学んでいきます。数学の知識があるとより理解が深まりますが、必須ではありません。
+              </p>
+            </div>
+          </div>
+
+          <!-- 入会に関する質問 -->
+          <div class="faq-item" data-category="joining">
+            <button class="faq-question w-full flex items-center justify-between bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all">
+              <span class="text-lg font-semibold">入会はいつでもできますか？</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon h-6 w-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer bg-white -mt-1 shadow-md">
+              <p class="text-gray-600">
+                新メンバーの募集は毎年4月と5月のみ実施しています。募集期間中に説明会を開催し、入会希望者を受け付けていますので、詳細はその際にご確認ください。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="joining">
+            <button class="faq-question w-full flex items-center justify-between bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all">
+              <span class="text-lg font-semibold">入会に必要な持ち物はありますか？</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon h-6 w-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer bg-white -mt-1 shadow-md">
+              <p class="text-gray-600">
+                自分のノートパソコンをご持参いただくことを推奨します。OSは問わず、開発環境構築に十分なスペックがあれば快適に活動できます。また、入会金と年会費が必要です。詳細は説明会にてご案内します。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="joining">
+            <button class="faq-question w-full flex items-center justify-between bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all">
+              <span class="text-lg font-semibold">複数のコースを同時に受講できますか？</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon h-6 w-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer bg-white -mt-1 shadow-md">
+              <p class="text-gray-600">
+                複数のコースを同時に受講することは可能ですが、各コースには定期的な勉強会や課題があるため、時間管理にはご注意ください。まずは一つのコースから始め、余裕があれば他のコースにも参加することをお勧めします。
+              </p>
+            </div>
+          </div>
+
+          <!-- 活動に関する質問 -->
+          <div class="faq-item" data-category="activities">
+            <button class="faq-question w-full flex items-center justify-between bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all">
+              <span class="text-lg font-semibold">ハッカソンとは何ですか？</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon h-6 w-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer bg-white -mt-1 shadow-md">
+              <p class="text-gray-600">
+                ハッカソンは、短期間で集中的にプロダクトを開発するイベントです。チームでアイデア出しから実装までを行い、内部ハッカソンや企業・他大学主催の外部ハッカソンに参加しています。初心者も参加しやすいようサポート体制が整っています。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="activities">
+            <button class="faq-question w-full flex items-center justify-between bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all">
+              <span class="text-lg font-semibold">勉強会はどのくらいの頻度で開催されますか？</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon h-6 w-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer bg-white -mt-1 shadow-md">
+              <p class="text-gray-600">
+                各コースの勉強会は基本的に週1回、月に1回程度の全体勉強会やライトニングトークも実施しています。録画も行っているため、参加できなかった場合も後から確認できます。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="activities">
+            <button class="faq-question w-full flex items-center justify-between bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all">
+              <span class="text-lg font-semibold">チーム開発プロジェクトに参加するには？</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon h-6 w-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer bg-white -mt-1 shadow-md">
+              <p class="text-gray-600">
+                TND では学期ごとにチーム開発プロジェクトを実施しています。Web アプリ、モバイルアプリ、データ分析など、幅広いテーマのプロジェクトに参加可能です。プロジェクト開始時に募集を行うほか、自主的に提案することもできます。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- まだ質問がありますか？ -->
+        <div class="mt-16 p-8 bg-blue-50 rounded-xl text-center">
+          <h3 class="text-2xl font-bold mb-4">その他の質問</h3>
+          <p class="text-gray-600 mb-6">
+            ここに載っていない質問がございましたら、お気軽にお問い合わせください。<br>
+          </p>
+          <a 
+            href="/contact" 
+            class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105"
+          >
+            お問い合わせ
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="mt-24 border-t border-gray-200 py-8">
+    <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+      <p class="text-sm text-gray-500">© 2024 TND All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- FAQ のトグルおよびカテゴリフィルタリング用 JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // FAQ トグル機能
+      const faqQuestions = document.querySelectorAll('.faq-question');
+      faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+          const answer = question.nextElementSibling;
+          const icon = question.querySelector('.faq-icon');
+          answer.classList.toggle('expanded');
+          icon.classList.toggle('rotate-180');
+        });
+      });
+      
+      // カテゴリフィルタリング機能
+      const categoryButtons = document.querySelectorAll('.category-btn');
+      const faqItems = document.querySelectorAll('.faq-item');
+      categoryButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const category = button.getAttribute('data-category');
+          categoryButtons.forEach(btn => {
+            btn.classList.remove('active', 'bg-blue-100', 'text-blue-700');
+            btn.classList.add('bg-gray-100', 'text-gray-700');
+          });
+          button.classList.add('active', 'bg-blue-100', 'text-blue-700');
+          button.classList.remove('bg-gray-100', 'text-gray-700');
+          faqItems.forEach(item => {
+            if (category === 'all' || item.getAttribute('data-category') === category) {
+              item.classList.remove('hidden');
+            } else {
+              item.classList.add('hidden');
+            }
+          });
+        });
+      });
+    });
+  </script>
+</Layout>
