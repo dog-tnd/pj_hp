@@ -84,7 +84,7 @@ const Menu: React.FC = () => {
             </button>
             {/* ドロップダウンメニュー：ハンバーガーボタンの下に表示 */}
             <div
-              className={`absolute right-0 top-full mt-2 w-40 bg-white/80 shadow-md rounded transition-all duration-300 transform ${
+              className={`absolute right-0 top-full mt-2 w-40 bg-white/80 shadow-md rounded transition-all duration-300 transform z-[100] ${
                 isOpen
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 -translate-y-4 pointer-events-none"
