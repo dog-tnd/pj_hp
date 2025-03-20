@@ -1,14 +1,15 @@
 <canvas id="myCanvas" class="absolute top-2 right-5"></canvas>
 
 <script>
-  window.onload = function () {
+  window.onload = () => {
     const canvas = document.getElementById("myCanvas");
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    // Canvasのサイズをウィンドウサイズに設定
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // Canvasのサイズを設定
+    canvas.width = 300;
+    canvas.height = 200;
 
     ctx.strokeStyle = "black";
     ctx.lineWidth = 1;
@@ -28,5 +29,5 @@
     ctx.moveTo(startX, startY - 100);
     ctx.lineTo(startX, startY + 100);
     ctx.stroke();
-  };
+  }
 </script>
