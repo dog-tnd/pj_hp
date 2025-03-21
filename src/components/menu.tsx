@@ -13,17 +13,37 @@ const links: Link[] = [
   { href: "/blog", label: "テックブログ" },
   { href: "/faq", label: "よくある質問" },
   { href: "/contact", label: "お問い合わせ" },
-  { href: "/application", label: "入会申し込み" },
+  { href: "#", label: "入会申し込み" }, // href を # に変更して、クリックイベントで処理するように
 ];
 
 const Menu: React.FC = () => {
   // モバイル用ドロップダウンメニューの表示切替用
   const [isOpen, setIsOpen] = useState(false);
+  // ポップアップの表示状態
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   // ハンバーガーボタンとドロップダウンを囲むコンテナの ref
   const menuRef = useRef<HTMLDivElement>(null);
+  // ポップアップコンテンツの ref
+  const popupContentRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
+  };
+
+  // ポップアップを開く
+  const openPopup = (e: React.MouseEvent) => {
+    // 「入会申し込み」リンクの場合、デフォルトの挙動を防止
+    if ((e.target as HTMLElement).closest('a')?.textContent === "入会申し込み") {
+      e.preventDefault();
+      setIsPopupOpen(true);
+      document.body.style.overflow = 'hidden'; // スクロールを無効化
+    }
+  };
+
+  // ポップアップを閉じる
+  const closePopup = () => {
+    setIsPopupOpen(false);
+    document.body.style.overflow = ''; // スクロールを再有効化
   };
 
   // メニュー以外をクリックしたときに、メニューを閉じる
@@ -41,6 +61,34 @@ const Menu: React.FC = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
+
+  // ポップアップの外側をクリックしたときに、ポップアップを閉じる
+  useEffect(() => {
+    const handlePopupClickOutside = (event: MouseEvent) => {
+      if (
+        isPopupOpen &&
+        popupContentRef.current &&
+        !popupContentRef.current.contains(event.target as Node)
+      ) {
+        closePopup();
+      }
+    };
+
+    // ESCキーでポップアップを閉じる
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (isPopupOpen && event.key === 'Escape') {
+        closePopup();
+      }
+    };
+
+    document.addEventListener("mousedown", handlePopupClickOutside);
+    document.addEventListener("keydown", handleEscKey);
+    
+    return () => {
+      document.removeEventListener("mousedown", handlePopupClickOutside);
+      document.removeEventListener("keydown", handleEscKey);
+    };
+  }, [isPopupOpen]);
 
   return (
     <>
@@ -90,12 +138,16 @@ const Menu: React.FC = () => {
                   : "opacity-0 -translate-y-4 pointer-events-none"
               }`}
             >
-              <nav className="flex flex-col items-end gap-6 p-4">
+              <nav className="flex flex-col items-end gap-6 p-4" onClick={openPopup}>
                 {links.map((link, index) => (
                   <a
                     key={index}
                     href={link.href}
-                    onClick={() => setIsOpen(false)}
+                    onClick={link.label === "入会申し込み" ? (e) => {
+                      e.preventDefault();
+                      setIsOpen(false);
+                      setIsPopupOpen(true);
+                    } : () => setIsOpen(false)}
                     className={`flex items-center justify-center text-sm font-medium transition-all duration-200 ${
                       link.label === "入会申し込み"
                         ? "relative overflow-hidden text-white font-bold py-2 px-4 rounded-lg bg-[#F5BF48] transition-all duration-300 before:absolute before:inset-0 before:bg-[linear-gradient(94deg,#F5BF48_0.43%,#F7BC5B_33.92%,#EFA169_100%)] before:opacity-0 hover:before:opacity-100 before:transition-all before:duration-300 z-10"
@@ -132,7 +184,7 @@ const Menu: React.FC = () => {
               </h1>
             </a>
           </div>
-          <nav className="w-full">
+          <nav className="w-full" onClick={openPopup}>
             <div className="flex flex-col items-end gap-6 w-full">
               {links.map((link, index) => (
                 <a
@@ -151,6 +203,81 @@ const Menu: React.FC = () => {
           </nav>
         </div>
       </div>
+
+      {/* ポップアップ */}
+      {isPopupOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 transition-opacity duration-300">
+          <div 
+            ref={popupContentRef}
+            className="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden animate-popup"
+            style={{
+              animation: 'popup 0.4s ease-out forwards'
+            }}
+          >
+            {/* ポップアップヘッダー */}
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white">
+              <div className="flex justify-between items-center">
+                <h3 className="text-xl font-bold">Discordに参加しよう！</h3>
+                <button onClick={closePopup} className="text-white hover:text-gray-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            {/* ポップアップコンテンツ */}
+            <div className="p-6">
+              <div className="mb-6">
+                <img 
+                  src="/sns-discord.svg" 
+                  alt="Discord Icon" 
+                  className="w-16 h-16 mx-auto text-indigo-600" 
+                />
+              </div>
+              
+              <div className="space-y-4 text-gray-700">
+                <p>
+                  <strong>4,5月はDiscordを中心に新歓イベントを開催します！</strong>
+                </p>
+                <p>
+                  このDiscordサーバーに参加すると、プログラミングサークルTNDの<strong>仮加入メンバー</strong>となります。
+                </p>
+                <p>
+                  新入生同士でたくさん交流して、プログラミングの楽しさを一緒に体験しましょう！
+                </p>
+              </div>
+              
+              <div className="mt-8">
+                <a 
+                  href="https://discord.gg/k3qMBEn3CC" 
+                  target="_blank"
+                  className="block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center font-semibold py-3 px-4 rounded-lg transition-colors"
+                >
+                  Discordサーバーに参加する
+                </a>
+                <p className="text-[12px] text-gray-500 mt-2 text-center">
+                  ※もしリンクが切れていたら、お手数ですがお問い合わせください。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ポップアップアニメーションのためのスタイル */}
+      <style jsx>{`
+        @keyframes popup {
+          0% {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+      `}</style>
     </>
   );
 };
