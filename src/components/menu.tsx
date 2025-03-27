@@ -266,7 +266,7 @@ const Menu: React.FC = () => {
       )}
 
       {/* ポップアップアニメーションのためのスタイル */}
-      <style jsx>{`
+      <style>{`
         @keyframes popup {
           0% {
             opacity: 0;

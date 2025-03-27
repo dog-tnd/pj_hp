@@ -6,5 +6,6 @@
     "types": ["@types/react", "@types/react-dom", "@storybook/react"], // 型定義を追加
     "skipLibCheck": true
   },
-  "include": ["src"]
+  "include": [".astro/types.d.ts", "src", "**/*.astro"]
+
 }
