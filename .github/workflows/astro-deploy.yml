@@ -2,7 +2,7 @@ name: Deploy Astro site to GitHub Pages (Organization)
 
 on:
   push:
-    branches: [temp/publish] # メインブランチで動作
+    branches: [temp/publish]
   workflow_dispatch:
 
 permissions:
@@ -14,28 +14,34 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout your repository using git
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8.6.0 # pnpmのバージョンを指定
-          run_install: false # `pnpm install`を別ステップで行う
+          version: 8.6.0
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install
 
-      - name: Install, build, and upload your site
-        uses: withastro/action@v1
+      - name: Build
+        run: pnpm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
         with:
-          package-manager: pnpm@8.6.0
+          path: dist
 
   deploy:
     needs: build
@@ -46,4 +52,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v2
