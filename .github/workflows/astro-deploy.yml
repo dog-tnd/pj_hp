@@ -2,7 +2,7 @@ name: Deploy Astro site to GitHub Pages (Organization)
 
 on:
   push:
-    branches: [temp/publish] # メインブランチで動作
+    branches: main # メインブランチで動作
   workflow_dispatch:
 
 permissions:
