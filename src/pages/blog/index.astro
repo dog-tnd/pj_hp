@@ -1,0 +1,196 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Menu from '../../components/menu';
+import TwoLine from '../../components/TwoLine.astro';
+import NewsCard from '../../components/NewsCard';
+
+// ブログ記事の型定義
+interface BlogPost {
+  frontmatter: {
+    title: string;
+    description: string;
+    author: string;
+    role: string;
+    authorImage: string;
+    date: string;
+    image: string;
+    tags?: string[];
+  };
+  url: string;
+  file: string;
+}
+
+// ブログ記事の取得
+const posts = await Astro.glob<BlogPost>('../../content/blog/*.md');
+const sortedPosts = posts.sort((a, b) => {
+  return new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime();
+});
+
+// すべてのタグを収集
+const allTags = [...new Set(
+  sortedPosts
+    .filter(post => post.frontmatter.tags)
+    .flatMap(post => post.frontmatter.tags || [])
+)];
+
+// 最新の記事を取得
+const featuredPost = sortedPosts[0];
+const recentPosts = sortedPosts.slice(1, 4);
+const remainingPosts = sortedPosts.slice(4);
+
+// 日付をフォーマット
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) {
+    console.error(`Invalid date: ${dateString}`);
+    return 'Invalid date';
+  }
+  return new Intl.DateTimeFormat('ja-JP', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date);
+}
+---
+
+<Layout title="ブログ | プログラミングサークル TND">
+  <header>
+    <TwoLine />
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="container flex flex-col md:flex-row items-center gap-10 relative pt-20">
+      <Menu client:load />
+    </div>
+
+    <!-- ヒーローセクション -->
+    <section id="blog-hero" class="py-16 md:py-24 bg-gradient-to-br from-gray-50 to-blue-50 rounded-3xl mb-16">
+      <div class="container mx-auto px-4 py-10">
+        <div class="max-w-4xl mx-auto text-center animate-fade-in">
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900" style="font-family: 'Rubik Doodle Shadow';">
+            TNDのブログ
+          </h1>
+          <div class="prose prose-lg text-gray-600 mx-auto">
+            <p>
+              プログラミングサークルTNDのブログでは、プログラミングの情報やニュース、<br class="hidden md:block"/>そしてサークルの活動に関する記事を掲載しています。
+            </p>
+          </div>
+          
+          <!-- タグフィルター -->
+          {allTags.length > 0 && (
+            <div class="mt-10">
+              <div class="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto">
+                <a 
+                  href="#all-posts" 
+                  class="inline-block px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors transform hover:scale-105 duration-200"
+                >
+                  すべての記事
+                </a>
+                {allTags.map(tag => (
+                  <a 
+                    href={`/blog/tag/${tag}`} 
+                    class="inline-block px-4 py-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors transform hover:scale-105 duration-200 shadow-sm"
+                  >
+                    #{tag}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <!-- すべての記事 -->
+    <section id="all-posts" class="py-16 animate-fade-in animation-delay-300">
+      <div class="container mx-auto px-4">
+        <h2 class="text-2xl font-bold mb-8 flex items-center">
+          <span class="inline-block w-8 h-8 bg-blue-500 rounded-full mr-3 flex items-center justify-center text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414zM11 12a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+            </svg>
+          </span>
+          すべての記事
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sortedPosts.map((post, index) => {
+            const slug = post.file.split('/').pop()?.replace('.md', '');
+            
+            return (
+              <div class="animate-fade-in" style={`animation-delay: ${0.4 + (index % 6) * 0.1}s`}>
+                <NewsCard
+                  image={post.frontmatter.image}
+                  title={post.frontmatter.title}
+                  description={post.frontmatter.description}
+                  author={post.frontmatter.author}
+                  role={post.frontmatter.role}
+                  authorImage={post.frontmatter.authorImage}
+                  date={post.frontmatter.date}
+                  url={post.url}  // urlがある場合はそれを使用
+                  slug={slug}     // urlがない場合はスラッグを使用
+                  tags={post.frontmatter.tags}
+                  client:load
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="mt-24 border-t border-gray-200 py-8">
+    <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+      <p class="text-sm text-gray-500">© 2024 TND All Rights Reserved.</p>
+    </div>
+  </footer>
+
+<style>
+  /* アニメーション */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+    opacity: 0;
+  }
+  
+  .animation-delay-100 {
+    animation-delay: 0.1s;
+  }
+  
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+  
+  .animation-delay-300 {
+    animation-delay: 0.3s;
+  }
+  
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
+  
+  /* ホバーエフェクト */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* スムーズスクロール */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
