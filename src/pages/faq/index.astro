@@ -275,15 +275,19 @@ import TwoLine from '../../components/TwoLine.astro';
     document.addEventListener('DOMContentLoaded', function() {
       // FAQ トグル機能
       const faqQuestions = document.querySelectorAll('.faq-question');
+      
       faqQuestions.forEach(question => {
         question.addEventListener('click', () => {
-          const answer = question.nextElementSibling;
           const icon = question.querySelector('.faq-icon');
-          answer.classList.toggle('expanded');
-          icon.classList.toggle('rotate-180');
+          const answer = question.nextElementSibling;
+
+          if (icon && answer) {
+            icon.classList.toggle('rotate-180');
+            answer.classList.toggle('expanded');
+          }
         });
       });
-      
+
       // カテゴリフィルタリング機能
       const categoryButtons = document.querySelectorAll('.category-btn');
       const faqItems = document.querySelectorAll('.faq-item');

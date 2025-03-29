@@ -37,8 +37,8 @@ export interface Props {
 }
 
 // 記事データの取得
-export async function getStaticPaths() {
-  const posts = await Astro.glob('../../content/blog/*.md');
+export async function getStaticPaths(): Promise<any[]> {
+  const posts = await Astro.glob<BlogPost>('../../content/blog/*.md');
   
   return posts.map((post, index) => {
     // 前後の記事を取得

@@ -318,18 +318,12 @@ import TwoLine from '../../components/TwoLine.astro';
 
       // タブを切り替える関数
       function activateTab(tabName) {
-        // 全てのコンテンツを非表示にする
-        contents.forEach(content => {
-          content.classList.add('hidden');
-        });
-        // 全てのタブのアクティブクラスを削除する
-        Object.values(tabs).forEach(tab => {
-          tab.classList.remove('bg-blue-100', 'text-blue-700', 'active-tab');
-        });
-        // 選択されたタブに対応するコンテンツを表示
-        document.getElementById(tabName + '-content').classList.remove('hidden');
-        // 選択されたタブにアクティブクラスを追加
-        tabs[tabName].classList.add('bg-blue-100', 'text-blue-700', 'active-tab');
+        const tab = document.querySelector(`[data-tab="${tabName}"]`);
+        const content = document.getElementById(`${tabName}-content`);
+        
+        if (tab && content) {
+          // タブの切り替え処理
+        }
       }
 
       // 各タブにクリックイベントリスナーを設定
