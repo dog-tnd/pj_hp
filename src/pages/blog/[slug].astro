@@ -120,7 +120,7 @@ const generateTableOfContents = () => {
   const headings = document.querySelectorAll('h2, h3, h4');
   headings.forEach(heading => {
     if (heading.textContent) {
-      heading.id = heading.textContent.toLowerCase().replace(/\s+/g, '-');
+      heading.id = (heading.textContent || '').toLowerCase().replace(/\s+/g, '-');
     }
   });
 };
@@ -500,7 +500,8 @@ const generateTableOfContents = () => {
         headings.forEach((heading) => {
           // 見出しにIDを付与（なければ）
           if (!heading.id) {
-            heading.id = heading.textContent.toLowerCase().replace(/\s+/g, '-');
+            heading.id = (heading.textContent || '').toLowerCase().replace(/\s+/g, '-');
+
           }
           
           const link = document.createElement('a');
