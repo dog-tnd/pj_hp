@@ -90,6 +90,7 @@ const latestPosts = sortedPosts.slice(0, 4);
       <div class="container flex flex-col md:flex-row gap-5">
         {latestPosts.map((post) => {
           const slug = post.file.split('/').pop()?.replace('.md', '');
+          const postUrl = `/blog/${slug}`; // ブログ記事のURLを生成
           
           return (
             <NewsCard
@@ -100,8 +101,7 @@ const latestPosts = sortedPosts.slice(0, 4);
               role={post.frontmatter.role}
               authorImage={post.frontmatter.authorImage}
               date={post.frontmatter.date}
-              url={post.url}  // urlがある場合はそれを使用
-              slug={slug}     // urlがない場合はスラッグを使用
+              url={postUrl}  // 生成したURLを渡す
               client:load
             />
           );
