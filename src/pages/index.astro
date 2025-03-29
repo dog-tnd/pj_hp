@@ -5,8 +5,8 @@ import TwoLine from '../components/TwoLine.astro';
 import Menu from '../components/menu';
 import NewsCard from '../components/NewsCard';
 
-// ブログ記事の型定義
-export interface BlogPost {
+// ブログ記事の型定義を修正
+interface BlogPost {
   frontmatter: {
     title: string;
     description: string;
@@ -19,6 +19,7 @@ export interface BlogPost {
   };
   url: string;
   file: string;
+  Content: any;
 }
 
 // ブログ記事の取得
@@ -88,22 +89,24 @@ const latestPosts = sortedPosts.slice(0, 4);
         NEWS
       </h2>
       <div class="container flex flex-col md:flex-row gap-5">
-        {latestPosts.map((post) => {
+        {sortedPosts.map((post, index) => {
           const slug = post.file.split('/').pop()?.replace('.md', '');
-          const postUrl = `/blog/${slug}`; // ブログ記事のURLを生成
+          const postUrl = `/blog/${slug}`;
           
           return (
-            <NewsCard
-              image={post.frontmatter.image}
-              title={post.frontmatter.title}
-              description={post.frontmatter.description}
-              author={post.frontmatter.author}
-              role={post.frontmatter.role}
-              authorImage={post.frontmatter.authorImage}
-              date={post.frontmatter.date}
-              url={postUrl}  // 生成したURLを渡す
-              client:load
-            />
+            <div class="animate-fade-in" style={`animation-delay: ${0.4 + (index % 6) * 0.1}s`}>
+              <NewsCard
+                image={post.frontmatter.image}
+                title={post.frontmatter.title}
+                description={post.frontmatter.description}
+                author={post.frontmatter.author}
+                role={post.frontmatter.role}
+                authorImage={post.frontmatter.authorImage}
+                date={post.frontmatter.date}
+                url={postUrl}
+                client:load
+              />
+            </div>
           );
         })}
       </div>

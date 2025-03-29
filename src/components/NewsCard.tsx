@@ -8,7 +8,7 @@ interface NewsCardProps {
   role: string;
   authorImage: string;
   date: string;
-  url: string; // URLプロパティを追加
+  url: string;
 }
 
 const NewsCard: FC<NewsCardProps> = ({
