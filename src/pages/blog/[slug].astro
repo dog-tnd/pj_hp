@@ -4,6 +4,23 @@ import Menu from '../../components/menu';
 import TwoLine from '../../components/TwoLine.astro';
 import { formatDate } from '../../utils/date';
 
+// 追加：ブログ記事の型定義（共通）
+interface BlogPost {
+  frontmatter: {
+    title: string;
+    description: string;
+    author: string;
+    role: string;
+    authorImage: string;
+    date: string;
+    image: string;
+    tags?: string[];
+  };
+  url: string;
+  file: string;
+  Content: any;
+}
+
 // 型定義
 export interface Props {
   post: {
@@ -36,9 +53,9 @@ export interface Props {
   }>;
 }
 
-// 記事データの取得
+// 記事データの取得（型キャストを追加）
 export async function getStaticPaths(): Promise<any[]> {
-  const posts = await Astro.glob<BlogPost>('../../content/blog/*.md');
+  const posts = await Astro.glob('../../content/blog/*.md') as BlogPost[];
   
   return posts.map((post, index) => {
     // 前後の記事を取得
@@ -55,14 +72,13 @@ export async function getStaticPaths(): Promise<any[]> {
     // 関連記事を取得（同じタグを持つ記事、または最新の記事）
     const relatedPosts = posts
       .filter((p, i) => {
-        // 現在の記事以外で、タグが一致するか、最新の記事を取得
         return i !== index && (
-          (post.frontmatter.tags && p.frontmatter.tags && 
-           post.frontmatter.tags.some(tag => p.frontmatter.tags.includes(tag))) ||
-          i < 3 // 最新の3記事
+          (post.frontmatter.tags && p.frontmatter.tags &&
+           post.frontmatter.tags.some((tag: string) => p.frontmatter.tags!.includes(tag))) ||
+          i < 3
         );
       })
-      .slice(0, 3) // 最大3記事
+      .slice(0, 3)
       .map(p => ({
         url: `/blog/${p.file.split('/').pop()?.replace('.md', '')}`,
         title: p.frontmatter.title,
@@ -91,7 +107,7 @@ export async function getStaticPaths(): Promise<any[]> {
 const { post, prevPost, nextPost, relatedPosts } = Astro.props;
 const { Content } = post;
 
-// 記事の読了時間を計算（平均読速度: 1分あたり500文字）
+// 記事の読了時間を計算（平均読速度: 500文字/分）
 const textContent = post.frontmatter.description || '';
 const wordCount = textContent.length;
 const readingTime = Math.max(1, Math.round(wordCount / 500));
@@ -99,9 +115,14 @@ const readingTime = Math.max(1, Math.round(wordCount / 500));
 // 現在のURLを取得（ソーシャルシェア用）
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-// 目次を生成するための関数（実際の実装はクライアントサイドで行う）
+// 目次を生成するための関数（例）
 const generateTableOfContents = () => {
-  // この関数はクライアントサイドで実行される
+  const headings = document.querySelectorAll('h2, h3, h4');
+  headings.forEach(heading => {
+    if (heading.textContent) {
+      heading.id = heading.textContent.toLowerCase().replace(/\s+/g, '-');
+    }
+  });
 };
 ---
 

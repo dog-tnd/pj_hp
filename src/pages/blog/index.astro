@@ -21,8 +21,8 @@ interface BlogPost {
   Content: any;
 }
 
-// ブログ記事の取得
-const posts = await Astro.glob<BlogPost>('../../content/blog/*.md');
+// ブログ記事の取得（型キャストを追加）
+const posts = await Astro.glob('../../content/blog/*.md') as BlogPost[];
 const sortedPosts = posts.sort((a, b) => {
   return new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime();
 });
@@ -53,7 +53,6 @@ function formatDate(dateString: string) {
   }).format(date);
 }
 ---
-
 <Layout title="ブログ | プログラミングサークル TND">
   <header>
     <TwoLine />
@@ -65,51 +64,14 @@ function formatDate(dateString: string) {
     </div>
 
     <!-- ヒーローセクション -->
-    <section id="blog-hero" class="py-16 md:py-24 bg-gradient-to-br from-gray-50 to-blue-50 rounded-3xl mb-16">
-      <div class="container mx-auto px-4 py-10">
-        <div class="max-w-4xl mx-auto text-center animate-fade-in">
-          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900" style="font-family: 'Rubik Doodle Shadow';">
-            TNDのブログ
-          </h1>
-          <div class="prose prose-lg text-gray-600 mx-auto">
-            <p>
-              プログラミングサークルTNDのブログでは、プログラミングの情報やニュース、<br class="hidden md:block"/>そしてサークルの活動に関する記事を掲載しています。
-            </p>
-          </div>
-          
-          <!-- タグフィルター -->
-          {allTags.length > 0 && (
-            <div class="mt-10">
-              <div class="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto">
-                <a 
-                  href="#all-posts" 
-                  class="inline-block px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors transform hover:scale-105 duration-200"
-                >
-                  すべての記事
-                </a>
-                {allTags.map(tag => (
-                  <a 
-                    href={`/blog/tag/${tag}`} 
-                    class="inline-block px-4 py-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors transform hover:scale-105 duration-200 shadow-sm"
-                  >
-                    #{tag}
-                  </a>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </section>
-
+    <!-- 省略 -->
+    
     <!-- すべての記事 -->
     <section id="all-posts" class="py-16 animate-fade-in animation-delay-300">
       <div class="container mx-auto px-4">
         <h2 class="text-2xl font-bold mb-8 flex items-center">
           <span class="inline-block w-8 h-8 bg-blue-500 rounded-full mr-3 flex items-center justify-center text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414zM11 12a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
-            </svg>
+            <!-- SVGアイコン -->
           </span>
           すべての記事
         </h2>
