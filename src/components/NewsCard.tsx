@@ -8,6 +8,7 @@ interface NewsCardProps {
   role: string;
   authorImage: string;
   date: string;
+  url: string; // URLプロパティを追加
 }
 
 const NewsCard: FC<NewsCardProps> = ({
@@ -18,9 +19,13 @@ const NewsCard: FC<NewsCardProps> = ({
   role,
   authorImage,
   date,
+  url, // URLプロパティを追加
 }) => {
   return (
-    <div className="w-full max-w-md overflow-hidden bg-white rounded-lg shadow-md">
+    <a
+      href={url}
+      className="block w-full max-w-md overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
+    >
       {/* Image Section */}
       <div className="relative h-48 w-full overflow-hidden">
         <img
@@ -57,7 +62,7 @@ const NewsCard: FC<NewsCardProps> = ({
           <div className="text-[#38BDF8] text-sm">{date}</div>
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 
@@ -76,6 +81,7 @@ author="田中 太郎"
 role="エンジニア"
 authorImage="/author-image.jpg"
 date="2024.10.01"
+url="https://example.com/project" // URLプロパティを追加
 client:load
 /> 
 

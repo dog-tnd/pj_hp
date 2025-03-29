@@ -116,6 +116,7 @@ function formatDate(dateString: string) {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sortedPosts.map((post, index) => {
             const slug = post.file.split('/').pop()?.replace('.md', '');
+            const postUrl = `/blog/${slug}`; // ブログ記事のURLを生成
             
             return (
               <div class="animate-fade-in" style={`animation-delay: ${0.4 + (index % 6) * 0.1}s`}>
@@ -127,9 +128,7 @@ function formatDate(dateString: string) {
                   role={post.frontmatter.role}
                   authorImage={post.frontmatter.authorImage}
                   date={post.frontmatter.date}
-                  url={post.url}  // urlがある場合はそれを使用
-                  slug={slug}     // urlがない場合はスラッグを使用
-                  tags={post.frontmatter.tags}
+                  url={postUrl}  // 生成したURLを渡す
                   client:load
                 />
               </div>
