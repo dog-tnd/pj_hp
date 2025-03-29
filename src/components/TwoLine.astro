@@ -2,7 +2,7 @@
 
 <script>
   window.onload = () => {
-    const canvas = document.getElementById("myCanvas");
+    const canvas = document.getElementById("myCanvas") as HTMLCanvasElement;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -11,12 +11,12 @@
     canvas.width = 300;
     canvas.height = 200;
 
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
-
     // 右上の基準点を計算
     const startX = canvas.width - 30;
     const startY = 30;
+
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
 
     // 横線を描画
     ctx.beginPath();
