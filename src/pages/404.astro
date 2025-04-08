@@ -1,0 +1,158 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Menu from '../components/menu';
+import TwoLine from '../components/TwoLine.astro';
+---
+
+<Layout title="ページが見つかりません | プログラミングサークル TND">
+  <header>
+    <TwoLine />
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="container flex flex-col md:flex-row items-center gap-10 relative pt-20">
+      <Menu client:load />
+    </div>
+
+    <div class="min-h-[70vh] flex flex-col items-center justify-center py-16 animate-fade-in">
+      <div class="text-center max-w-3xl mx-auto">
+        <!-- エラーコード -->
+        <div class="mb-8">
+          <h1 class="text-9xl font-bold text-blue-500 mb-2 animate-float" style="font-family: 'Rubik Doodle Shadow';">
+            404
+          </h1>
+          <div class="h-2 w-40 bg-gradient-to-r from-blue-500 to-indigo-600 mx-auto rounded-full"></div>
+        </div>
+        
+        <!-- エラーメッセージ -->
+        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">
+          ページが見つかりません
+        </h2>
+        
+        <p class="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">
+          お探しのページは移動したか、削除された可能性があります。<br>
+          URLが正しく入力されているか確認してください。
+        </p>
+        
+        <!-- イラスト -->
+        <div class="mb-12 relative">
+          <div class="w-64 h-64 mx-auto relative">
+            <div class="absolute inset-0 bg-blue-100 rounded-full opacity-20 animate-pulse"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-blue-500 relative z-10 animate-wiggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M8 15h8"></path>
+              <path d="M9 9h.01"></path>
+              <path d="M15 9h.01"></path>
+            </svg>
+          </div>
+          
+          <!-- 装飾要素 -->
+          <div class="absolute top-0 left-1/4 w-6 h-6 bg-blue-200 rounded-full animate-float animation-delay-100"></div>
+          <div class="absolute bottom-1/4 right-1/4 w-8 h-8 bg-indigo-200 rounded-full animate-float animation-delay-300"></div>
+          <div class="absolute bottom-0 left-1/3 w-4 h-4 bg-blue-300 rounded-full animate-float animation-delay-500"></div>
+        </div>
+        
+        <!-- ナビゲーションボタン -->
+        <!-- <div class="flex flex-wrap justify-center gap-4">
+          <a 
+            href="/" 
+            class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors transform hover:scale-105 duration-200 shadow-md"
+          >
+            ホームに戻る
+          </a>
+          <a 
+            href="/blog" 
+            class="px-8 py-3 bg-white text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors transform hover:scale-105 duration-200 shadow-sm"
+          >
+            ブログを見る
+          </a>
+          <a 
+            href="/about" 
+            class="px-8 py-3 bg-white text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors transform hover:scale-105 duration-200 shadow-sm"
+          >
+            サークル紹介
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- <div class="max-w-2xl mx-auto mt-16 p-6 bg-gray-50 rounded-xl shadow-sm animate-fade-in animation-delay-300">
+      <h3 class="text-xl font-bold mb-4 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+        </svg>
+        お困りですか？
+      </h3>
+      <p class="text-gray-600 mb-4">
+        探しているページが見つからない場合は、以下の方法をお試しください：
+      </p>
+      <ul class="list-disc pl-5 text-gray-600 space-y-2">
+        <li>ナビゲーションメニューから目的のページを探す</li>
+        <li>ホームページから再度探す</li>
+        <li>URLが正しく入力されているか確認する</li>
+        <li>ブラウザの更新ボタンを押してみる</li>
+      </ul>
+      <p class="mt-4 text-gray-600">
+        それでも問題が解決しない場合は、<a href="#" class="text-blue-600 hover:underline">お問い合わせフォーム</a>からご連絡ください。
+      </p>
+    </div> --> 
+  </main>
+    <!-- Footer -->
+    <footer class="mt-24 border-t border-gray-200 py-8">
+        <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <p class="text-sm text-gray-500">© 2025 TND All Rights Reserved.</p>
+        </div>
+      </footer>
+</Layout>
+
+<style>
+  /* アニメーション */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+    opacity: 0;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+  
+  .animate-wiggle {
+    animation: wiggle 5s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(1.05); }
+  }
+  
+  .animate-pulse {
+    animation: pulse 3s ease-in-out infinite;
+  }
+  
+  .animation-delay-100 {
+    animation-delay: 0.1s;
+  }
+  
+  .animation-delay-300 {
+    animation-delay: 0.3s;
+  }
+  
+  .animation-delay-500 {
+    animation-delay: 0.5s;
+  }
+</style>
