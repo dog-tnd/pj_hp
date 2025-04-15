@@ -192,11 +192,12 @@ const generateTableOfContents = () => {
           </div>
         </div>
 
-        <!-- 目次（クライアントサイドで生成） -->
+        <!-- 目次（一時的に非表示）
         <div id="table-of-contents" class="mb-8 p-4 bg-gray-50 rounded-lg hidden">
           <h2 class="text-lg font-semibold mb-2">目次</h2>
           <div id="toc-content"></div>
         </div>
+        -->
 
         <!-- 記事本文 -->
         <div class="prose prose-lg max-w-none">
@@ -381,8 +382,13 @@ const generateTableOfContents = () => {
     margin-bottom: 1.25rem;
   }
   .prose a {
-    color: #2563eb;
-    text-decoration: underline;
+  color: #2563eb;            /* Tailwindの text-blue-600 相当の青色 */
+  text-decoration: underline; /* 下線を追加 */
+  transition: opacity 0.2s, color 0.2s;  /* ホバー時のスムーズな変化 */
+  }
+
+  .prose a:hover {
+  opacity: 0.8; 
   }
   .prose pre {
     background-color: #1f2937;
@@ -485,6 +491,7 @@ const generateTableOfContents = () => {
 <script>
   // 目次の生成
   document.addEventListener('DOMContentLoaded', () => {
+    /* 目次の生成（一時的に無効化）
     const article = document.querySelector('.prose');
     const tocContainer = document.getElementById('table-of-contents');
     const tocContent = document.getElementById('toc-content');
@@ -492,16 +499,12 @@ const generateTableOfContents = () => {
     if (article && tocContainer && tocContent) {
       const headings = article.querySelectorAll('h2, h3, h4');
       
-      // 見出しが3つ以上ある場合のみ目次を表示
       if (headings.length >= 3) {
         tocContainer.classList.remove('hidden');
         
-        // 目次の生成
         headings.forEach((heading) => {
-          // 見出しにIDを付与（なければ）
           if (!heading.id) {
             heading.id = (heading.textContent || '').toLowerCase().replace(/\s+/g, '-');
-
           }
           
           const link = document.createElement('a');
@@ -513,8 +516,9 @@ const generateTableOfContents = () => {
         });
       }
     }
-    
-    // リンクコピー機能
+    */
+
+    // リンクコピー機能（既存のコード）
     const copyButton = document.getElementById('copy-link');
     if (copyButton) {
       copyButton.addEventListener('click', async () => {
