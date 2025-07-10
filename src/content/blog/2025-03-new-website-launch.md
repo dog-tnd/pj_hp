@@ -6,7 +6,7 @@ role: "主宰"
 authorImage: "https://avatars.githubusercontent.com/u/131366102?v=4"
 date: "2025.03.30"
 image: "https://tus-tnd.com/mainCharm.svg"
-# tags: ["お知らせ", "ウェブサイト"]
+tags: ["お知らせ", "ウェブサイト", "新着情報"]
 ---
 
 

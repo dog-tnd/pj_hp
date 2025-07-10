@@ -6,7 +6,7 @@ role: "主宰"
 authorImage: "https://avatars.githubusercontent.com/u/131366102?v=4"
 date: "2025.04.15"
 image: "/blog/2025-04/26083_0.jpg"
-# tags: ["お知らせ", "ウェブサイト"]
+tags: ["新歓", "イベント", "TeX", "お知らせ"]
 ---
 
 
