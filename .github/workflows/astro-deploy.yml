@@ -11,8 +11,8 @@ permissions:
     contents: read
     pages: write
     id-token: write
-    pull-requests: write # PR にコメントするための権限を追加
-    issues: write # issue にコメントするための権限を追加
+    pull-requests: write
+    issues: write
 
 jobs:
     build:
@@ -38,20 +38,30 @@ jobs:
             - name: Build
               run: pnpm run build
 
-            - name: Setup Pages (main branch only)
-              if: github.ref == 'refs/heads/main'
+            - name: Create preview directory structure
+              if: github.event_name == 'pull_request'
+              run: |
+                  mkdir -p preview/pr-${{ github.event.number }}
+                  cp -r dist/* preview/pr-${{ github.event.number }}/
+
+            - name: Setup Pages
               uses: actions/configure-pages@v4
 
-            - name: Upload artifact (main branch only)
+            - name: Upload artifact (main)
               if: github.ref == 'refs/heads/main'
               uses: actions/upload-pages-artifact@v3
               with:
                   path: dist
 
+            - name: Upload artifact (PR preview)
+              if: github.event_name == 'pull_request'
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: preview
+
     deploy:
         needs: build
         runs-on: ubuntu-latest
-        if: github.ref == 'refs/heads/main'
         environment:
             name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
@@ -61,7 +71,7 @@ jobs:
               uses: actions/deploy-pages@v4
 
     pr-comment:
-        needs: build
+        needs: deploy
         runs-on: ubuntu-latest
         if: github.event_name == 'pull_request'
         steps:
@@ -69,9 +79,12 @@ jobs:
               uses: actions/github-script@v7
               with:
                   script: |
+                      const prNumber = context.issue.number;
+                      const previewUrl = `https://dog-tnd.github.io/pj_hp/pr-${prNumber}/`;
+
                       github.rest.issues.createComment({
-                        issue_number: context.issue.number,
+                        issue_number: prNumber,
                         owner: context.repo.owner,
                         repo: context.repo.repo,
-                        body: '✅ ビルドが成功しました！\n\nマージ後に本番環境にデプロイされます。'
+                        body: `🚀 プレビューサイトがデプロイされました！\n\n📖 プレビュー: ${previewUrl}\n\n✅ ビルドが成功しました！マージ後に本番環境にデプロイされます。`
                       })
