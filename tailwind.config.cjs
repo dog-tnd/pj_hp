@@ -4,7 +4,10 @@ module.exports = {
   theme: {
     extend: {},
     screens: {
-      'md': '1280px',
+      // Use standard Tailwind breakpoints
+      'md': '768px',
+      // If you need a custom breakpoint at 1280px, add it with a custom name
+      'custom-md': '1280px',
     },
   },
   plugins: [require("@tailwindcss/typography")],
