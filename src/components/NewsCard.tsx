@@ -24,7 +24,7 @@ const NewsCard: FC<NewsCardProps> = ({
   return (
     <a
       href={url}
-      className="w-full max-w-md h-[360px] overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col"
+      className="w-full max-w-sm h-[360px] overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col mx-auto"
     >
       {/* Image Section */}
       <div className="relative h-48 w-full overflow-hidden flex-shrink-0">
