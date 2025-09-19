@@ -107,10 +107,39 @@ export async function getStaticPaths(): Promise<any[]> {
 const { post, prevPost, nextPost, relatedPosts } = Astro.props;
 const { Content } = post;
 
-// 記事の読了時間を計算（平均読速度: 500文字/分）
-const textContent = post.frontmatter.description || '';
-const wordCount = textContent.length;
-const readingTime = Math.max(1, Math.round(wordCount / 500));
+// 記事の読了時間を計算（平均読速度: 400文字/分）
+// 現在のページのスラッグからファイルパスを特定
+const currentSlug = Astro.params.slug;
+let readingTime = 1; // デフォルト値
+
+try {
+  // 対応するマークダウンファイルを取得
+  const allPosts = await Astro.glob('../../content/blog/*.md');
+  const currentPost = allPosts.find(p => 
+    p.file.split('/').pop()?.replace('.md', '') === currentSlug
+  );
+  
+  if (currentPost && currentPost.rawContent) {
+    // マークダウンの生コンテンツから文字数を計算
+    const textContent = currentPost.rawContent()
+      .replace(/```[\s\S]*?```/g, '') // コードブロックを除去
+      .replace(/`[^`]*`/g, '') // インラインコードを除去
+      .replace(/!\[.*?\]\(.*?\)/g, '') // 画像を除去
+      .replace(/\[.*?\]\(.*?\)/g, '') // リンクを除去
+      .replace(/#{1,6}\s/g, '') // ヘッダーマークダウンを除去
+      .replace(/[*_]{1,2}(.*?)[*_]{1,2}/g, '$1') // 太字・斜体マークダウンを除去
+      .replace(/\n+/g, ' ') // 改行をスペースに変換
+      .trim();
+    
+    const wordCount = textContent.length;
+    readingTime = Math.max(1, Math.round(wordCount / 400)); // 400文字/分で計算
+  }
+} catch (error) {
+  console.warn('読了時間の計算に失敗しました:', error);
+  // フォールバック: タイトル + 説明文から推定
+  const fallbackText = (post.frontmatter.title + ' ' + post.frontmatter.description).length;
+  readingTime = Math.max(1, Math.round(fallbackText / 50)); // より控えめな推定
+}
 
 // 現在のURLを取得（ソーシャルシェア用）
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
