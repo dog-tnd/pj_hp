@@ -196,7 +196,7 @@ import TwoLine from '../../components/TwoLine.astro';
               </button>
               <div class="faq-answer bg-white -mt-1 shadow-md">
                 <p class="text-gray-600">
-                  複数のコースに参加することは可能です！各コースで勉強会やプロジェクト活動を行っており、自分の興味に合わせて複数のコースに参加することができます。
+                  複数の班に参加することは可能です！各コースで勉強会やプロジェクト活動を行っており、自分の興味に合わせて複数のコースに参加することができます。
                 </p>
               </div>
             </div>
@@ -239,7 +239,7 @@ import TwoLine from '../../components/TwoLine.astro';
               </button>
               <div class="faq-answer bg-white -mt-1 shadow-md">
                 <p class="text-gray-600">
-                  TND では学期ごとにチーム開発プロジェクトを実施しています。Web アプリ、モバイルアプリ、データ分析など、幅広いテーマのプロジェクトに参加可能です。プロジェクト開始時に募集を行うほか、自主的に提案することもできます。
+                  TNDではチーム開発プロジェクトを実施しています。Web アプリ、モバイルアプリ、データ分析など、幅広いテーマのプロジェクトに参加可能です。プロジェクト開始時に募集を行うほか、自主的に提案することもできます。
                 </p>
               </div>
             </div>
@@ -266,7 +266,7 @@ import TwoLine from '../../components/TwoLine.astro';
   <!-- Footer -->
   <footer class="mt-24 border-t border-gray-200 py-8">
     <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-      <p class="text-sm text-gray-500">© 2024 TND All Rights Reserved.</p>
+      <p class="text-sm text-gray-500">© 2025 TND All Rights Reserved.</p>
     </div>
   </footer>
 
@@ -275,15 +275,19 @@ import TwoLine from '../../components/TwoLine.astro';
     document.addEventListener('DOMContentLoaded', function() {
       // FAQ トグル機能
       const faqQuestions = document.querySelectorAll('.faq-question');
+      
       faqQuestions.forEach(question => {
         question.addEventListener('click', () => {
-          const answer = question.nextElementSibling;
           const icon = question.querySelector('.faq-icon');
-          answer.classList.toggle('expanded');
-          icon.classList.toggle('rotate-180');
+          const answer = question.nextElementSibling;
+
+          if (icon && answer) {
+            icon.classList.toggle('rotate-180');
+            answer.classList.toggle('expanded');
+          }
         });
       });
-      
+
       // カテゴリフィルタリング機能
       const categoryButtons = document.querySelectorAll('.category-btn');
       const faqItems = document.querySelectorAll('.faq-item');

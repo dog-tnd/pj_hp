@@ -1,18 +1,76 @@
 ---
 interface Props {
   title: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: string;
+  keywords?: string[];
+  author?: string;
+  type?: string;
 }
 
-const { title } = Astro.props;
+const { 
+  title, 
+  description = "「TND」は東京理科大学野田キャンパスで活動するプログラミングサークルです。Web開発やデータサイエンスに挑戦し、メンバーと共に成長を目指しています。",
+  image = "/mainCharm.svg",
+  canonicalURL = Astro.url.href,
+  keywords = ["東京理科大学", "プログラミングサークル", "TND", "Web開発", "データサイエンス", "野田キャンパス"],
+  author = "TND",
+  type = "website"
+} = Astro.props;
+
+const siteURL = "https://tus-tnd.com";
+const fullImageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
 ---
 
 <!doctype html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="「TND」は東京理科大学野田キャンパスで活動するプログラミングサークルです。Web開発やデータサイエンスに挑戦し、メンバーと共に成長を目指しています。" />
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords.join(", ")} />
+    <meta name="author" content={author} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={fullImageURL} />
+    <meta property="og:site_name" content="TND - 東京理科大学プログラミングサークル" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={fullImageURL} />
+    <meta property="twitter:site" content="@TokyorikaND" />
+    
+    <!-- JSON-LD structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "TND",
+        "description": "東京理科大学野田キャンパスで活動するプログラミングサークル",
+        "url": "https://tus-tnd.com",
+        "logo": "https://tus-tnd.com/logo.svg",
+        "sameAs": [
+          "https://x.com/TokyorikaND",
+          "https://discord.gg/k3qMBEn3CC"
+        ],
+        "foundingDate": "2024",
+        "memberOf": {
+          "@type": "Organization",
+          "name": "東京理科大学"
+        }
+      }
+    </script>
+    
     <title>{title}</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik+Doodle+Shadow&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">

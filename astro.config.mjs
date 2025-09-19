@@ -7,6 +7,6 @@ import tailwind from "@astrojs/tailwind";
 export default defineConfig({
   integrations: [react(), tailwind()],
   output: "static",
-  site: "http://tus-tnd.com/",
+  site: "https://tus-tnd.com/",
   base: "",
 });
