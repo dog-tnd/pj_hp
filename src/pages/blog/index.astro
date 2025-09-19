@@ -27,12 +27,14 @@ const sortedPosts = posts.sort((a, b) => {
   return new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime();
 });
 
-// すべてのタグを収集
+// すべてのタグを収集（上位8個まで制限）
 const allTags = [...new Set(
   sortedPosts
     .filter(post => post.frontmatter.tags)
     .flatMap(post => post.frontmatter.tags || [])
-)];
+)]
+.slice(0, 8) // 最大8個のタグに制限
+.sort(); // アルファベット順にソート
 
 // 最新の記事を取得
 const featuredPost = sortedPosts[0];
@@ -59,30 +61,52 @@ function formatDate(dateString: string) {
   </header>
 
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <!-- Hero Section -->
     <div class="container flex flex-col md:flex-row items-center gap-10 relative pt-20">
       <Menu client:load />
+      <section class="mb-16">
+        <h2 class="mb-8 text-gray-900 md:pt-[3rem]" style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 38px; font-style: normal; font-weight: 400; line-height: normal;">Blog</h2>
+        <div class="prose prose-lg max-w-xg text-gray-600 md:max-w-md lg:max-w-xl">
+          <p>
+            TNDメンバーが書いた技術記事や活動報告を紹介しています。プログラミングやWeb開発に関する知見を共有しています。
+          </p>
+        </div>
+        
+        <!-- タグフィルター -->
+        <div class="mt-8">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900">タグで絞り込み</h3>
+          <div class="flex flex-wrap gap-2">
+            <button class="px-3 py-1 bg-blue-500 text-white rounded-full text-sm hover:bg-blue-600 active:bg-blue-700 transition-colors tag-filter active" data-tag="all">
+              すべて
+            </button>
+            {allTags.map(tag => (
+              <button class={`px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors tag-filter`} data-tag={tag}>
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
 
-    <!-- ヒーローセクション -->
-    <!-- 省略 -->
-    
     <!-- すべての記事 -->
     <section id="all-posts" class="py-16 animate-fade-in animation-delay-300">
       <div class="container mx-auto px-4">
         <h2 class="text-2xl font-bold mb-8 flex items-center">
-          <span class="inline-block w-8 h-8 bg-blue-500 rounded-full mr-3 flex items-center justify-center text-white">
-            <!-- SVGアイコン -->
+          <span class="w-8 h-8 bg-blue-500 rounded-full mr-3 flex items-center justify-center text-white">
+            📝
           </span>
           すべての記事
         </h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full" id="posts-container">
           {sortedPosts.map((post, index) => {
             const slug = post.file.split('/').pop()?.replace('.md', '');
             const postUrl = `/blog/${slug}`;
+            const postTags = post.frontmatter.tags || [];
             
             return (
-              <div class="animate-fade-in" style={`animation-delay: ${0.4 + (index % 6) * 0.1}s`}>
+              <div class="animate-fade-in post-card" style={`animation-delay: ${0.4 + (index % 6) * 0.1}s`} data-tags={JSON.stringify(postTags)}>
                 <NewsCard
                   image={post.frontmatter.image}
                   title={post.frontmatter.title}
@@ -107,6 +131,42 @@ function formatDate(dateString: string) {
       <p class="text-sm text-gray-500">© 2025 TND All Rights Reserved.</p>
     </div>
   </footer>
+
+<script is:inline>
+  // タグフィルタリング機能
+  document.addEventListener('DOMContentLoaded', function() {
+    const tagFilters = document.querySelectorAll('.tag-filter');
+    const postCards = document.querySelectorAll('.post-card');
+
+    tagFilters.forEach(filter => {
+      filter.addEventListener('click', function() {
+        const selectedTag = filter.getAttribute('data-tag');
+        
+        // アクティブなボタンのスタイルを更新
+        tagFilters.forEach(f => {
+          f.classList.remove('active', 'bg-blue-500', 'text-white', 'bg-blue-600', 'bg-blue-700');
+          f.classList.add('bg-gray-200', 'text-gray-700');
+        });
+        
+        filter.classList.add('active', 'bg-blue-500', 'text-white');
+        filter.classList.remove('bg-gray-200', 'text-gray-700');
+
+        // 記事をフィルタリング
+        postCards.forEach(card => {
+          const cardTags = JSON.parse(card.getAttribute('data-tags') || '[]');
+          
+          if (selectedTag === 'all' || cardTags.includes(selectedTag)) {
+            card.classList.remove('hidden');
+            card.classList.add('animate-fade-in');
+          } else {
+            card.classList.add('hidden');
+            card.classList.remove('animate-fade-in');
+          }
+        });
+      });
+    });
+  });
+</script>
 
 <style>
   /* アニメーション */
