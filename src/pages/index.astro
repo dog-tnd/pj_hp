@@ -34,26 +34,9 @@ const allTags = [...new Set(
     .flatMap(post => post.frontmatter.tags || [])
 )];
 
-// 最新の記事を取得
-const featuredPost = sortedPosts[0];
-const recentPosts = sortedPosts.slice(1, 4);
-
-// 日付をフォーマット
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) {
-    console.error(`Invalid date: ${dateString}`);
-    return 'Invalid date';
-  }
-  return new Intl.DateTimeFormat('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(date);
-}
-
-// 最新の記事を取得（最大4件）
-const latestPosts = sortedPosts.slice(0, 4);
+// 最新の記事を取得（最大3件）
+const latestPosts = sortedPosts.slice(0, 3);
+const hasMorePosts = sortedPosts.length > 3;
 
 ---
 
@@ -89,13 +72,13 @@ const latestPosts = sortedPosts.slice(0, 4);
       <img src="/mainCharm.svg" alt="mainCharm" class="w-full md:w-auto md:absolute top-[5rem] right-[2rem] max-w-xs md:max-w-md lg:max-w-lg pb-[5rem] opacity-30" />
     </div>
 
-    <div class="container flex flex-col md:flex-row items-center gap-10">
-      <section class="mb-16">
+    <div class="container">
+      <section class="mb-16 w-full">
         <h2 class="mb-8 text-gray-900" style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 30px; font-style: normal; font-weight: 400; line-height: normal;">
           NEWS
         </h2>
-        <div class="container flex flex-col md:flex-row gap-5">
-          {sortedPosts.map((post, index) => {
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {latestPosts.map((post, index) => {
             const slug = post.file.split('/').pop()?.replace('.md', '');
             const postUrl = `/blog/${slug}`;
             
@@ -116,6 +99,19 @@ const latestPosts = sortedPosts.slice(0, 4);
             );
           })}
         </div>
+        {hasMorePosts && (
+          <div class="mt-8 text-center">
+            <a 
+              href="/blog" 
+              class="inline-flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
+            >
+              もっと見る
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+        )}
       </section>
     </div>
   </main>
