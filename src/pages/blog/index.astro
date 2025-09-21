@@ -126,7 +126,7 @@ function formatDate(dateString: string) {
           すべての記事
         </h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full" id="posts-container">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 custom-md:grid-cols-3 gap-6 w-full" id="posts-container">
           {sortedPosts.map((post, index) => {
             const slug = post.file.split('/').pop()?.replace('.md', '');
             const postUrl = `/blog/${slug}`;
