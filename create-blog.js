@@ -93,9 +93,10 @@ async function createBlogPost() {
       const overwrite = await askQuestion(
         `ファイル "${filename}.md" は既に存在します。上書きしますか？ (y/N): `
       );
+      const ans = overwrite.trim().toLowerCase();
       if (
-        overwrite.toLowerCase() !== "y" &&
-        overwrite.toLowerCase() !== "yes"
+        ans !== "y" &&
+        ans !== "yes"
       ) {
         console.log("❌ ファイル作成をキャンセルしました");
         rl.close();
