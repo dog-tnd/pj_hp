@@ -66,8 +66,8 @@ async function createBlogPost() {
       const input = await askQuestion(
         "ファイル名を入力してください（拡張子なし）: "
       );
-      if (validateFilename(input.trim())) {
-        filename = input.trim();
+      if (validateFilename(input.trim().replace(/\.md$/i, ""))) {
+        filename = input.trim().replace(/\.md$/i, "");
       } else {
         console.log("❌ 無効なファイル名です。もう一度入力してください。");
       }
