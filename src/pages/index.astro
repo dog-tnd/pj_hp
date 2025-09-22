@@ -34,30 +34,13 @@ const allTags = [...new Set(
     .flatMap(post => post.frontmatter.tags || [])
 )];
 
-// 最新の記事を取得
-const featuredPost = sortedPosts[0];
-const recentPosts = sortedPosts.slice(1, 4);
-
-// 日付をフォーマット
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) {
-    console.error(`Invalid date: ${dateString}`);
-    return 'Invalid date';
-  }
-  return new Intl.DateTimeFormat('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(date);
-}
-
 // 最新の記事を取得（最大4件）
 const latestPosts = sortedPosts.slice(0, 4);
+const hasMorePosts = sortedPosts.length > 4;
 
 ---
 
-<Layout 
+<Layout
   title="TND - 東京理科大学プログラミングサークル | Web開発・データサイエンス"
   description="TNDは東京理科大学野田キャンパスで活動するプログラミングサークルです。Web開発やデータサイエンスに挑戦し、メンバーと共に成長を目指しています。初心者から上級者まで歓迎！"
   keywords={["東京理科大学", "プログラミングサークル", "TND", "Web開発", "データサイエンス", "野田キャンパス", "大学生", "プログラミング", "React", "TypeScript"]}
@@ -73,13 +56,13 @@ const latestPosts = sortedPosts.slice(0, 4);
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
     <!-- Hero Section -->
 
-    <div class="container flex flex-col md:flex-row items-center gap-10 relative pt-20">
+    <div class="w-full max-w-full md:max-w-full custom-md:max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-10 relative pt-20">
       <Menu client:load />
       <section class="mb-16">
         <h2 class="mb-8 text-gray-900 md:pt-[3rem]" style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 38px; font-style: normal; font-weight: 400; line-height: normal;">What's TND</h2>
         <div class="prose prose-lg max-w-xg text-gray-600 md:max-w-md lg:max-w-xl">
           <p>
-            TNDはweb開発をメインに活動する東京理科大学のプログラミングサークルです。2024年に設立され、現在は20名のメンバーが所属しています。
+            TNDはweb開発をメインに活動する東京理科大学のプログラミングサークルです。2024年に設立され、現在は40名のメンバーが所属しています。
           </p>
           <p>
             フロントエンド、バックエンド、デザイン、データサイエンスなど様々な分野の技術を学び、実践しています。
@@ -89,18 +72,23 @@ const latestPosts = sortedPosts.slice(0, 4);
       <img src="/mainCharm.svg" alt="mainCharm" class="w-full md:w-auto md:absolute top-[5rem] right-[2rem] max-w-xs md:max-w-md lg:max-w-lg pb-[5rem] opacity-30" />
     </div>
 
-    <div class="container flex flex-col md:flex-row items-center gap-10">
-      <section class="mb-16">
+    <div class="w-full max-w-full md:max-w-full custom-md:max-w-7xl mx-auto">
+      <section class="mb-16 w-full">
         <h2 class="mb-8 text-gray-900" style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 30px; font-style: normal; font-weight: 400; line-height: normal;">
           NEWS
         </h2>
-        <div class="container flex flex-col md:flex-row gap-5">
-          {sortedPosts.map((post, index) => {
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 custom-md:grid-cols-3 gap-6 max-w-4xl custom-md:max-w-none mx-auto justify-items-center">
+          {latestPosts.map((post, index) => {
             const slug = post.file.split('/').pop()?.replace('.md', '');
             const postUrl = `/blog/${slug}`;
-            
+
+            // タブレット時は4つ表示、それ以外は3つ表示
+            const isTabletHidden = index >= 3 ? 'md:block custom-md:hidden' : '';
+            const isMobileDesktopHidden = index >= 3 ? 'hidden custom-md:block' : '';
+            const displayClass = index >= 3 ? `${isTabletHidden} ${isMobileDesktopHidden}` : '';
+
             return (
-              <div class="animate-fade-in" style={`animation-delay: ${0.4 + (index % 6) * 0.1}s`}>
+              <div class={`animate-fade-in ${displayClass}`} style={`animation-delay: ${0.4 + (index % 6) * 0.1}s`}>
                 <NewsCard
                   image={post.frontmatter.image}
                   title={post.frontmatter.title}
@@ -115,30 +103,61 @@ const latestPosts = sortedPosts.slice(0, 4);
               </div>
             );
           })}
+
         </div>
+        <!-- もっと見るボタン: スマホ・デスクトップ用（4つ以上で表示） -->
+        {sortedPosts.length > 3 && (
+          <div class="mt-8 text-center md:hidden custom-md:block">
+            <a
+              href="/blog"
+              class="inline-flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
+            >
+              もっと見る
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+        )}
+        <!-- もっと見るボタン: タブレット用（5つ以上で表示） -->
+        {sortedPosts.length > 4 && (
+          <div class="mt-8 text-center hidden md:block custom-md:hidden">
+            <a
+              href="/blog"
+              class="inline-flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
+            >
+              もっと見る
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+        )}
       </section>
     </div>
-    
-    <!-- SNS LOGOs -->
-    <div class="container items-center md:items-start flex md:flex-col flex-row gap-5 md:absolute bottom-40 left-5">
-      <p class="vertical rotate-180" style="font-family: 'Abel';">-Follow-</p>
-      <a href="https://x.com/TokyorikaND" target="_blank" rel="noopener noreferrer">
-        <img 
-          src="/sns-x.png" 
-          alt="XIcon" 
-          class="w-[1rem] h-[1rem] sm:w-[1.5rem] sm:h-[1.5rem] md:w-[2rem] md:h-[2rem] hover:opacity-80 transition-opacity" 
-        />
-      </a>
-      <a href="https://discord.gg/k3qMBEn3CC" target="_blank" rel="noopener noreferrer">
-        <img 
-          src="/sns-discord.svg" 
-          alt="DiscordIcon" 
-          class="w-[1rem] h-[1rem] sm:w-[1.5rem] sm:h-[1.5rem] md:w-[2rem] md:h-[2rem] hover:opacity-80 transition-opacity" 
-        />
-      </a>
-    </div> 
   </main>
-  
+
+  <!-- SNS LOGOs - 固定位置（PC画面のみ） -->
+  <div class="hidden md:flex fixed bottom-4 left-4 z-[9999] flex-col items-center gap-3 bg-white/20 backdrop-blur-sm rounded-lg p-4 shadow-xl border border-gray-200/50" style="position: fixed !important;">
+    <p class="text-xs text-gray-700 font-semibold mb-1">Follow</p>
+    <a href="https://x.com/TokyorikaND" target="_blank" rel="noopener noreferrer" class="block">
+      <img
+        src="/sns-x.png"
+        alt="XIcon"
+        class="w-8 h-8 hover:opacity-70 transition-all duration-300 hover:scale-125 block"
+        style="display: block !important;"
+      />
+    </a>
+    <a href="https://discord.gg/k3qMBEn3CC" target="_blank" rel="noopener noreferrer" class="block">
+      <img
+        src="/sns-discord.svg"
+        alt="DiscordIcon"
+        class="w-8 h-8 hover:opacity-70 transition-all duration-300 hover:scale-125 block"
+        style="display: block !important;"
+      />
+    </a>
+  </div>
+
   <!-- Footer -->
   <footer class="mt-24 border-t border-gray-200 py-8">
     <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">

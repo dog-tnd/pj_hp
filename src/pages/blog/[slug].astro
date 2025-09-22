@@ -107,10 +107,39 @@ export async function getStaticPaths(): Promise<any[]> {
 const { post, prevPost, nextPost, relatedPosts } = Astro.props;
 const { Content } = post;
 
-// 記事の読了時間を計算（平均読速度: 500文字/分）
-const textContent = post.frontmatter.description || '';
-const wordCount = textContent.length;
-const readingTime = Math.max(1, Math.round(wordCount / 500));
+// 記事の読了時間を計算（平均読速度: 400文字/分）
+// 現在のページのスラッグからファイルパスを特定
+const currentSlug = Astro.params.slug;
+let readingTime = 1; // デフォルト値
+
+try {
+  // 対応するマークダウンファイルを取得
+  const allPosts = await Astro.glob('../../content/blog/*.md');
+  const currentPost = allPosts.find(p => 
+    p.file.split('/').pop()?.replace('.md', '') === currentSlug
+  );
+  
+  if (currentPost && currentPost.rawContent) {
+    // マークダウンの生コンテンツから文字数を計算
+    const textContent = currentPost.rawContent()
+      .replace(/```[\s\S]*?```/g, '') // コードブロックを除去
+      .replace(/`[^`]*`/g, '') // インラインコードを除去
+      .replace(/!\[.*?\]\(.*?\)/g, '') // 画像を除去
+      .replace(/\[.*?\]\(.*?\)/g, '') // リンクを除去
+      .replace(/#{1,6}\s/g, '') // ヘッダーマークダウンを除去
+      .replace(/[*_]{1,2}(.*?)[*_]{1,2}/g, '$1') // 太字・斜体マークダウンを除去
+      .replace(/\n+/g, ' ') // 改行をスペースに変換
+      .trim();
+    
+    const wordCount = textContent.length;
+    readingTime = Math.max(1, Math.round(wordCount / 400)); // 400文字/分で計算
+  }
+} catch (error) {
+  console.warn('読了時間の計算に失敗しました:', error);
+  // フォールバック: タイトル + 説明文から推定
+  const fallbackText = (post.frontmatter.title + ' ' + post.frontmatter.description).length;
+  readingTime = Math.max(1, Math.round(fallbackText / 50)); // より控えめな推定
+}
 
 // 現在のURLを取得（ソーシャルシェア用）
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -194,12 +223,12 @@ const generateTableOfContents = () => {
           {post.frontmatter.tags && (
             <div class="flex flex-wrap gap-2 mb-3">
               {post.frontmatter.tags.map((tag: string) => (
-                <a 
-                  href={`/blog/tag/${tag}`} 
-                  class="inline-block px-3 py-1 text-xs font-medium bg-blue-500/80 text-white rounded-full hover:bg-blue-600/80 transition-colors"
+                <span 
+                  class="inline-block px-3 py-1 text-xs font-medium bg-blue-500/80 text-white rounded-full cursor-default select-none"
+                  title={`タグ: ${tag}`}
                 >
                   #{tag}
-                </a>
+                </span>
               ))}
             </div>
           )}
@@ -247,16 +276,16 @@ const generateTableOfContents = () => {
         <div class="mt-10 pt-6 border-t border-gray-200">
           <h3 class="text-lg font-semibold mb-4">この記事をシェアする</h3>
           <div class="flex flex-wrap gap-3">
-            <!-- Twitter -->
+            <!-- X (旧Twitter) -->
             <a 
               href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.frontmatter.title)}&url=${encodeURIComponent(canonicalURL.toString())}`}
               target="_blank" 
               rel="noopener noreferrer"
-              class="inline-flex items-center justify-center w-10 h-10 bg-[#1DA1F2] text-white rounded-full hover:opacity-90 transition-opacity"
-              aria-label="Twitterでシェア"
+              class="inline-flex items-center justify-center w-10 h-10 bg-black text-white rounded-full hover:opacity-90 transition-opacity"
+              aria-label="Xでシェア"
             >
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
               </svg>
             </a>
             
@@ -354,7 +383,21 @@ const generateTableOfContents = () => {
     <!-- 関連記事 -->
     {relatedPosts && relatedPosts.length > 0 && (
       <div class="max-w-5xl mx-auto mt-16">
-        <h2 class="text-2xl font-bold mb-6">関連記事</h2>
+        <div class="flex items-center gap-3 mb-6">
+          <h2 class="text-2xl font-bold">関連記事</h2>
+          {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
+            <div class="flex flex-wrap gap-2">
+              {post.frontmatter.tags.slice(0, 3).map((tag: string) => (
+                <span class="inline-block px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                  #{tag}
+                </span>
+              ))}
+              {post.frontmatter.tags.length > 3 && (
+                <span class="text-xs text-gray-500">+{post.frontmatter.tags.length - 3}</span>
+              )}
+            </div>
+          )}
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           {relatedPosts.map((relatedPost) => (
             <a href={relatedPost.url} class="group">
@@ -384,6 +427,19 @@ const generateTableOfContents = () => {
               </article>
             </a>
           ))}
+        </div>
+        
+        <!-- ブログ一覧へのリンク -->
+        <div class="mt-8 text-center">
+          <a 
+            href="/blog" 
+            class="inline-flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            <span>すべての記事を見る</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
         </div>
       </div>
     )}

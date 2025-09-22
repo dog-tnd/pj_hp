@@ -1,6 +1,6 @@
 ---
-title: "TNDの新ホームページがオープンしました！"
-description: "TNDのホームページが新しくなりました。最新の活動情報やプロジェクトの成果をより分かりやすくお届けします。"
+title: "新ホームページがオープンしました！"
+description: "最新の活動情報やプロジェクトの成果をより分かりやすくお届けします。"
 author: "Ryoma"
 role: "主宰"
 authorImage: "https://avatars.githubusercontent.com/u/131366102?v=4"
