@@ -1,6 +1,6 @@
 ---
-title: "東大松尾研AIengineering講座で優秀生になりました！"
-description: "優秀生になった感想をつづります。"
+title: "東大松尾研AI講座 優秀生に！"
+description: "AI Engineering実践講座2025春で優秀生に選ばれました。感想や学びをまとめます。"
 author: "Joey"
 role: "データサイエンスチームリーダー"
 authorImage: "/blog/2025-09-21/icon.jpg"
