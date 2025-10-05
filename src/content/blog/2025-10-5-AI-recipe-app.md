@@ -6,7 +6,7 @@ role: "Webチームメンバー"
 authorImage: "https://avatars.githubusercontent.com/u/148322666?v=4"
 date: "2025.10.05"
 image: "/blog/2025-10-03/thumbnail.jpg""
-tags: ["Gemini", "React", ""]
+tags: ["Gemini", "React"]
 ---
 
 ## Gemini APIを利用したら驚くほど簡単にアプリができた話
