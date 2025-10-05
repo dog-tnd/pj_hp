@@ -5,7 +5,7 @@ author: "KukimiCan"
 role: "Webチームメンバー"
 authorImage: "https://avatars.githubusercontent.com/u/148322666?v=4"
 date: "2025.10.05"
-image: ""
+image: "/blog/2025-10-03/thumbnail.jpg""
 tags: ["Gemini", "React", ""]
 ---
 
@@ -53,7 +53,7 @@ const response = await result.response;
 レスポンシブデザインになっており，スマートフォンでも快適な使用ができます．
 実際に動作する様子はこちらです．（スマートフォンの画面）
 
-![Alt Text](/public/blog/2025-10-05/sample.gif)
+![スマホでアプリが動いている様子](/blog/2025-10-05/sample.gif)
 
 
 ### おわりに
