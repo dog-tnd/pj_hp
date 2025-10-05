@@ -5,7 +5,7 @@ author: "KukimiCan"
 role: "Webチームメンバー"
 authorImage: "https://avatars.githubusercontent.com/u/148322666?v=4"
 date: "2025.10.05"
-image: "/blog/2025-10-03/thumbnail.jpg""
+image: "/blog/2025-10-03/thumbnail.jpg"
 tags: ["Gemini", "React"]
 ---
 
