@@ -4,7 +4,7 @@ description: "高校時代にWebスクレイピングを行った時の備忘録
 author: "KFugaku"
 role: "Webチームメンバー"
 authorImage: "https://avatars.githubusercontent.com/u/148554669?v=4"
-date: "2025.10.04"
+date: "2025.10.09"
 image: "/blog/2025-10-04/engineer.jpg"
 tags: ["Webスクレイピング", "python", "全自動化", "Selenium"]
 ---
