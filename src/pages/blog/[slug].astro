@@ -116,12 +116,41 @@ const { Content } = post;
 let readingTime = 1; // デフォルト値
 
 try {
-  // 簡易的な読了時間計算 (タイトルと説明文から推定)
-  const fallbackText = `${post.frontmatter.title} ${post.frontmatter.description}`;
-  readingTime = Math.max(1, Math.round(fallbackText.length / 400));
+  // 現在のスラッグから対応するマークダウンファイルを取得
+  const currentSlug = Astro.params.slug;
+  const postModules = import.meta.glob('../../content/blog/*.md', { query: '?raw', import: 'default' });
+
+  // 対応するファイルのパスを構築
+  const filePath = `../../content/blog/${currentSlug}.md`;
+  const rawMarkdown = await postModules[filePath]?.() as string | undefined;
+
+  if (rawMarkdown && typeof rawMarkdown === 'string') {
+    // フロントマターを除いた本文のみを取得
+    const contentWithoutFrontmatter = rawMarkdown.replace(/^---[\s\S]*?---\n/, '');
+
+    // マークダウンの記法を除去してテキストのみを抽出
+    const textContent = contentWithoutFrontmatter
+      .replace(/```[\s\S]*?```/g, '') // コードブロックを除去
+      .replace(/`[^`]*`/g, '') // インラインコードを除去
+      .replace(/!\[.*?\]\(.*?\)/g, '') // 画像を除去
+      .replace(/\[.*?\]\(.*?\)/g, '') // リンクを除去
+      .replace(/#{1,6}\s/g, '') // ヘッダーマークダウンを除去
+      .replace(/[*_]{1,2}(.*?)[*_]{1,2}/g, '$1') // 太字・斜体マークダウンを除去
+      .replace(/\n+/g, ' ') // 改行をスペースに変換
+      .trim();
+
+    const wordCount = textContent.length;
+    readingTime = Math.max(1, Math.round(wordCount / 400)); // 400文字/分で計算
+  } else {
+    // フォールバック: タイトル + 説明文から推定
+    const fallbackText = `${post.frontmatter.title} ${post.frontmatter.description}`;
+    readingTime = Math.max(1, Math.round(fallbackText.length / 100));
+  }
 } catch (error) {
   console.warn('読了時間の計算に失敗しました:', error);
-  readingTime = 3; // デフォルト値
+  // フォールバック: タイトル + 説明文から推定
+  const fallbackText = `${post.frontmatter.title} ${post.frontmatter.description}`;
+  readingTime = Math.max(1, Math.round(fallbackText.length / 100));
 }
 
 // 現在のURLを取得（ソーシャルシェア用）
