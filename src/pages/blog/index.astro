@@ -22,7 +22,10 @@ interface BlogPost {
 }
 
 // ブログ記事の取得（型キャストを追加）
-const posts = await Astro.glob('../../content/blog/*.md') as BlogPost[];
+const postModules = import.meta.glob('../../content/blog/*.md');
+const posts = await Promise.all(
+  Object.values(postModules).map(async (module) => await module())
+) as BlogPost[];
 const sortedPosts = posts.sort((a, b) => {
   return new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime();
 });
@@ -46,24 +49,7 @@ const primaryTags = allTagsSorted.slice(0, 8);
 // 残りのタグ
 const remainingTags = allTagsSorted.slice(8);
 
-// 最新の記事を取得
-const featuredPost = sortedPosts[0];
-const recentPosts = sortedPosts.slice(1, 4);
-const remainingPosts = sortedPosts.slice(4);
 
-// 日付をフォーマット
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) {
-    console.error(`Invalid date: ${dateString}`);
-    return 'Invalid date';
-  }
-  return new Intl.DateTimeFormat('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(date);
-}
 ---
 <Layout title="ブログ | プログラミングサークル TND">
   <header>
@@ -162,7 +148,7 @@ function formatDate(dateString: string) {
 <script is:inline>
   // タグフィルタリング機能
   document.addEventListener('DOMContentLoaded', function() {
-    const tagFilters = document.querySelectorAll('.tag-filter');
+
     const postCards = document.querySelectorAll('.post-card');
     const showAllTagsBtn = document.getElementById('show-all-tags');
     const hideTagsBtn = document.getElementById('hide-tags');
