@@ -9,8 +9,8 @@ interface Props {
   type?: string;
 }
 
-const { 
-  title, 
+const {
+  title,
   description = "「TND」は東京理科大学野田キャンパスで活動するプログラミングサークルです。Web開発やデータサイエンスに挑戦し、メンバーと共に成長を目指しています。",
   image = "/mainCharm.svg",
   canonicalURL = Astro.url.href,
@@ -33,7 +33,7 @@ const fullImageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <link rel="canonical" href={canonicalURL} />
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalURL} />
@@ -41,7 +41,7 @@ const fullImageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
     <meta property="og:description" content={description} />
     <meta property="og:image" content={fullImageURL} />
     <meta property="og:site_name" content="TND - 東京理科大学プログラミングサークル" />
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={canonicalURL} />
@@ -49,9 +49,9 @@ const fullImageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={fullImageURL} />
     <meta property="twitter:site" content="@TokyorikaND" />
-    
+
     <!-- JSON-LD structured data -->
-    <script type="application/ld+json">
+    <script type="application/ld+json" is:inline>
       {
         "@context": "https://schema.org",
         "@type": "Organization",
@@ -70,7 +70,7 @@ const fullImageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
         }
       }
     </script>
-    
+
     <title>{title}</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik+Doodle+Shadow&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
@@ -97,4 +97,3 @@ const fullImageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
     }
     </style>
   </body>
-
