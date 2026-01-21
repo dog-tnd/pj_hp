@@ -46,15 +46,15 @@ develop (開発ブランチ)
 
 ### チーム共有向け
 
-- **EXECUTION_PLAN.md** - スケジュール・フェーズ概要・成功基準
-- **MIGRATION_PLAN.md** - 詳細なタスク手順書
+- [**EXECUTION_PLAN.md**](PROJECT_EXECUTION_PLAN.md) - スケジュール・フェーズ概要・成功基準
+- [**MIGRATION_PLAN.md**](MICROCMS_MIGRATION_PLAN.md) - 詳細なタスク手順書
 
 ## 🚀 実行フロー
 
 1. **初回（計画段階）**
-   - `EXECUTION_PLAN.md` でスケジュール確認
+   - [PROJECT_EXECUTION_PLAN.md](PROJECT_EXECUTION_PLAN.md)でスケジュール確認
 2. **開発中**
-   - `MIGRATION_PLAN.md` で詳細手順確認
+   - [MICROCMS_MIGRATION_PLAN.md](MICROCMS_MIGRATION_PLAN.md)で詳細手順確認
    - `task/*` ブランチでタスク実装
    - PR → develop マージ
 
@@ -68,3 +68,4 @@ develop (開発ブランチ)
 
 - GitHub Pages にテスト環境なし → develop で直接開発
 - ドキュメントはこのフォルダで一元管理
+  [INVESTIGATION/microcms/MICROCMS_MIGRATION_PLAN.md](MICROCMS_MIGRATION_PLAN.md)

@@ -47,7 +47,7 @@ microCMS を導入して以下を実現：
 
 ## 🚀 実行開始
 
-1. **`MICROCMS_MIGRATION_PLAN.md` で詳細タスク確認**
+1. **[MICROCMS_MIGRATION_PLAN.md](MICROCMS_MIGRATION_PLAN.md) で詳細タスク確認**
 
 2. **Task 1.1 から順番に実行**
    - develop ブランチから `task/*` を切る
@@ -91,5 +91,4 @@ microCMS を導入して以下を実現：
 
 ## 📚 ドキュメント
 
-- **MICROCMS_MIGRATION_PLAN.md** - 全15タスク詳細手順書
-- **create_github_issues.sh** - Issue 自動作成スクリプト
+- [**MICROCMS_MIGRATION_PLAN.md**](MICROCMS_MIGRATION_PLAN.md) - 全15タスク詳細手順書
