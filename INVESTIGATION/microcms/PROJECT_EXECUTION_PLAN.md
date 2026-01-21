@@ -49,15 +49,7 @@ microCMS を導入して以下を実現：
 
 1. **`MICROCMS_MIGRATION_PLAN.md` で詳細タスク確認**
 
-2. **初回：Issues を作成**
-
-   ```bash
-   bash create_github_issues.sh
-   # 実行後は削除
-   rm create_github_issues.sh
-   ```
-
-3. **Task 1.1 から順番に実行**
+2. **Task 1.1 から順番に実行**
    - develop ブランチから `task/*` を切る
    - タスク完了後 PR → develop にマージ
    - 全タスク完了後 develop → main

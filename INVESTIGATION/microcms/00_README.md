@@ -46,28 +46,13 @@ develop (開発ブランチ)
 
 ### チーム共有向け
 
-- **ANALYSIS.md** - 分析・現状の課題・解決策
 - **EXECUTION_PLAN.md** - スケジュール・フェーズ概要・成功基準
 - **MIGRATION_PLAN.md** - 詳細なタスク手順書
-
-### 実行用
-
-- **create_github_issues.sh** - Issue 自動作成スクリプト
-  ```bash
-  bash create_github_issues.sh
-  # 実行後は削除
-  rm create_github_issues.sh
-  ```
-
----
 
 ## 🚀 実行フロー
 
 1. **初回（計画段階）**
    - `EXECUTION_PLAN.md` でスケジュール確認
-   - `create_github_issues.sh` で Issue 作成
-   - スクリプト削除
-
 2. **開発中**
    - `MIGRATION_PLAN.md` で詳細手順確認
    - `task/*` ブランチでタスク実装
