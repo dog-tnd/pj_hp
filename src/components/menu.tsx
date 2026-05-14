@@ -115,7 +115,7 @@ const Menu: React.FC = () => {
             </h1>
           </a>
           {/* 右側：ハンバーガーボタン＆ドロップダウン */}
-          <div className="relative" ref={menuRef}>
+          <div className="relative mr-6" ref={menuRef}>
             <button onClick={toggleMenu}>
               <svg
                 className="w-8 h-8"

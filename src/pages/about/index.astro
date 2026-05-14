@@ -9,10 +9,14 @@ import TwoLine from '../../components/TwoLine.astro';
     <TwoLine />
   </header>
 
-  <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-    <div class="container flex flex-col md:flex-row items-center gap-10 relative pt-20">
+  <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 flex flex-col md:flex-row-reverse md:items-start gap-10">
+    <!-- サイドバー：Menuを右側に配置 -->
+    <aside class="w-full md:w-40 shrink-0 md:sticky md:top-24 z-10">
       <Menu client:load />
-    </div>
+    </aside>
+
+    <!-- メインコンテンツ -->
+    <div class="flex-1 w-full min-w-0">
 
     <!-- 「プログラミングサークルTNDとは？」セクション -->
     <section id="about" class="py-20 bg-gray-50">
@@ -298,6 +302,7 @@ import TwoLine from '../../components/TwoLine.astro';
         </div>
       </div>
     </section>
+    </div>
   </main>
 
   <footer class="mt-24 border-t border-gray-200 py-8">
