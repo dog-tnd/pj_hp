@@ -172,8 +172,8 @@ const Menu: React.FC = () => {
         </div>
       </div>
 
-      {/* デスクトップ用メニュー（md以上）：従来の配置 */}
-      <div className="hidden md:block p-0 w-40 md:absolute top-[5rem] right-[0rem] pb-[0rem]">
+      {/* デスクトップ用メニュー（md以上）：通常フロー内に配置（位置は各ページのレイアウトで制御） */}
+      <div className="hidden md:block p-0 w-40">
         <div className="flex flex-col items-center w-full">
           <div className="flex justify-center items-center gap-2 mb-10">
             <a href="/" className="flex items-center gap-2">
