@@ -9,6 +9,8 @@ interface NewsCardProps {
   authorImage: string;
   date: string;
   url: string;
+  // カードの幅・高さを上書きしたい場合に指定（未指定時は従来サイズ）
+  sizeClass?: string;
 }
 
 const NewsCard: FC<NewsCardProps> = ({
@@ -20,11 +22,12 @@ const NewsCard: FC<NewsCardProps> = ({
   authorImage,
   date,
   url, // URLプロパティを追加
+  sizeClass = "w-full max-w-sm custom-md:w-[390px] custom-md:max-w-[390px] h-[360px]",
 }) => {
   return (
     <a
       href={url}
-      className="w-full max-w-sm custom-md:w-[390px] custom-md:max-w-[390px] h-[360px] overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col mx-auto"
+      className={`${sizeClass} overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col mx-auto`}
     >
       {/* Image Section */}
       <div className="relative h-48 w-full overflow-hidden flex-shrink-0">

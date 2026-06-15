@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Menu from '../../components/menu';
+import MenuLayout from '../../components/MenuLayout.astro';
 import TwoLine from '../../components/TwoLine.astro';
 ---
 <Layout title="お問い合わせ | プログラミングサークル TND">
@@ -9,9 +9,7 @@ import TwoLine from '../../components/TwoLine.astro';
   </header>
 
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-    <div class="container flex flex-col md:flex-row items-center gap-10 relative pt-20">
-      <Menu client:load />
-    </div>
+    <MenuLayout>
  <!-- お問い合わせセクション -->
     <section id="contact" class="py-20 bg-gray-50">
       <div class="container mx-auto px-4">
@@ -73,6 +71,7 @@ import TwoLine from '../../components/TwoLine.astro';
         </div>
       </div>
     </section>
+    </MenuLayout>
   </main>
   <footer class="mt-24 border-t border-gray-200 py-8">
     <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">

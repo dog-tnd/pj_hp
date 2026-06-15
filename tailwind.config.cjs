@@ -26,6 +26,7 @@ module.exports = {
     screens: {
       // Use standard Tailwind breakpoints
       'md': '768px',
+      'lg': '1024px',
       // If you need a custom breakpoint at 1280px, add it with a custom name
       'custom-md': '1280px',
     },

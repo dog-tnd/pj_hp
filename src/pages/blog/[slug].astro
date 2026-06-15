@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Menu from '../../components/menu';
+import MenuLayout from '../../components/MenuLayout.astro';
 import TwoLine from '../../components/TwoLine.astro';
 
 
@@ -204,11 +204,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   </header>
 
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-    <div class="container flex flex-col md:flex-row items-center gap-10 relative pt-20">
-      <Menu client:load />
-    </div>
-
-    <article class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+    <MenuLayout>
+      <article class="max-w-3xl w-full mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
       <!-- ヘッダー画像 -->
       <div class="relative h-64 sm:h-80 md:h-96 w-full">
         <img
@@ -332,7 +329,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           </div>
         </div>
       </div>
-    </article>
+      </article>
 
     <!-- 前後の記事へのナビゲーション -->
     <div class="max-w-3xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -447,6 +444,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         </div>
       </div>
     )}
+    </MenuLayout>
   </main>
   <footer class="mt-24 border-t border-gray-200 py-8">
     <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">

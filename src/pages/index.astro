@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import TwoLine from '../components/TwoLine.astro';
-import Menu from '../components/menu';
+import MenuLayout from '../components/MenuLayout.astro';
 import NewsCard from '../components/NewsCard';
 
 // ブログ記事の型定義
@@ -51,8 +51,8 @@ const latestPosts = sortedPosts.slice(0, 4);
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
     <!-- Hero Section -->
 
-    <div class="w-full max-w-full md:max-w-full custom-md:max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-10 relative pt-20">
-      <Menu client:load />
+    <MenuLayout>
+      <div class="relative">
       <section class="mb-16">
         <h2 class="mb-8 text-gray-900 md:pt-[3rem]" style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 38px; font-style: normal; font-weight: 400; line-height: normal;">What's TND</h2>
         <div class="prose prose-lg max-w-xg text-gray-600 md:max-w-md lg:max-w-xl">
@@ -64,8 +64,8 @@ const latestPosts = sortedPosts.slice(0, 4);
           </p>
         </div>
       </section>
-      <img src="/mainCharm.svg" alt="mainCharm" class="w-full md:w-auto md:absolute top-[5rem] right-[2rem] max-w-xs md:max-w-md lg:max-w-lg pb-[5rem] opacity-30" />
-    </div>
+      <img src="/mainCharm.svg" alt="mainCharm" class="w-full md:w-auto md:absolute top-[5rem] right-[2rem] max-w-xs md:max-w-md lg:max-w-lg pb-[5rem] opacity-30 -z-10" />
+      </div>
 
     <div class="w-full max-w-full md:max-w-full custom-md:max-w-7xl mx-auto">
       <section class="mb-16 w-full">
@@ -93,6 +93,7 @@ const latestPosts = sortedPosts.slice(0, 4);
                   authorImage={post.frontmatter.authorImage}
                   date={post.frontmatter.date}
                   url={postUrl}
+                  sizeClass="w-full max-w-sm custom-md:w-[240px] custom-md:max-w-[240px] h-[360px]"
                   client:load
                 />
               </div>
@@ -130,6 +131,7 @@ const latestPosts = sortedPosts.slice(0, 4);
         )}
       </section>
     </div>
+    </MenuLayout>
   </main>
 
   <!-- SNS LOGOs - 固定位置（PC画面のみ） -->

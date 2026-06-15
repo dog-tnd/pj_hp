@@ -95,7 +95,7 @@ const Menu: React.FC = () => {
   return (
     <>
       {/* モバイル用ヘッダー */}
-      <div className="md:hidden w-full px-4 py-4">
+      <div className="lg:hidden w-full px-4 py-4">
         <div className="flex justify-between items-center">
           {/* 左側：TND Logo と TND（左寄せ） */}
           <a href="/" className="flex items-center gap-2">
@@ -115,7 +115,7 @@ const Menu: React.FC = () => {
             </h1>
           </a>
           {/* 右側：ハンバーガーボタン＆ドロップダウン */}
-          <div className="relative" ref={menuRef}>
+          <div className="relative mr-6" ref={menuRef}>
             <button onClick={toggleMenu}>
               <svg
                 className="w-8 h-8"
@@ -172,8 +172,8 @@ const Menu: React.FC = () => {
         </div>
       </div>
 
-      {/* デスクトップ用メニュー（md以上）：従来の配置 */}
-      <div className="hidden md:block p-0 w-40 md:absolute top-[5rem] right-[0rem] pb-[0rem]">
+      {/* デスクトップ用メニュー（lg以上）：通常フロー内に配置（位置は各ページのレイアウトで制御） */}
+      <div className="hidden lg:block p-0 w-40">
         <div className="flex flex-col items-center w-full">
           <div className="flex justify-center items-center gap-2 mb-10">
             <a href="/" className="flex items-center gap-2">
