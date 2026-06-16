@@ -3,32 +3,11 @@ import Layout from '../layouts/Layout.astro';
 import TwoLine from '../components/TwoLine.astro';
 import MenuLayout from '../components/MenuLayout.astro';
 import NewsCard from '../components/NewsCard';
+import { getAllPosts, getDisplayDate, getAuthorImageUrl } from '../lib/microcms';
+import { formatDotDate } from '../utils/date';
 
-// ブログ記事の型定義
-interface BlogPost {
-  frontmatter: {
-    title: string;
-    description: string;
-    author: string;
-    role: string;
-    authorImage: string;
-    date: string;
-    image: string;
-    tags?: string[];
-  };
-  url: string;
-  file: string;
-  Content: any;
-}
-
-// ブログ記事の取得（型キャストを追加）
-const postModules = import.meta.glob('../content/blog/*.md');
-const posts = await Promise.all(
-  Object.values(postModules).map(async (module) => await module())
-) as BlogPost[];
-const sortedPosts = posts.sort((a, b) => {
-  return new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime();
-});
+// ブログ記事の取得（microCMS から公開済み記事を全件取得、publishedAt 降順）
+const sortedPosts = await getAllPosts();
 
 // 最新の記事を取得（最大4件）
 const latestPosts = sortedPosts.slice(0, 4);
@@ -74,8 +53,7 @@ const latestPosts = sortedPosts.slice(0, 4);
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 custom-md:grid-cols-3 gap-6 max-w-4xl custom-md:max-w-none mx-auto justify-items-center">
           {latestPosts.map((post, index) => {
-            const slug = post.file.split('/').pop()?.replace('.md', '');
-            const postUrl = `/blog/${slug}`;
+            const postUrl = `/blog/${post.id}`;
 
             // タブレット時は4つ表示、それ以外は3つ表示
             const isTabletHidden = index >= 3 ? 'md:block custom-md:hidden' : '';
@@ -85,13 +63,13 @@ const latestPosts = sortedPosts.slice(0, 4);
             return (
               <div class={`animate-fade-in ${displayClass}`} style={`animation-delay: ${0.4 + (index % 6) * 0.1}s`}>
                 <NewsCard
-                  image={post.frontmatter.image}
-                  title={post.frontmatter.title}
-                  description={post.frontmatter.description}
-                  author={post.frontmatter.author}
-                  role={post.frontmatter.role}
-                  authorImage={post.frontmatter.authorImage}
-                  date={post.frontmatter.date}
+                  image={post.image?.url || '/placeholder.svg'}
+                  title={post.title}
+                  description={post.description}
+                  author={post.author}
+                  role={post.role}
+                  authorImage={getAuthorImageUrl(post)}
+                  date={formatDotDate(getDisplayDate(post))}
                   url={postUrl}
                   sizeClass="w-full max-w-sm custom-md:w-[240px] custom-md:max-w-[240px] h-[360px]"
                   client:load
