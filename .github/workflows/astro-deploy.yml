@@ -6,6 +6,8 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+  repository_dispatch: # microCMS の Webhook からのトリガー（記事の公開・更新時）
+    types: [microcms-publish]
 
 permissions:
   contents: read
@@ -37,11 +39,16 @@ jobs:
 
       - name: Astro check
         run: pnpm astro check
+        env:
+          MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
+          MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
 
       - name: Build
         run: pnpm run build
         env:
           NODE_ENV: production
+          MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
+          MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
 
       - name: Setup Pages (main branch only)
         if: github.ref == 'refs/heads/main'
