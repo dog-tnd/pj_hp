@@ -53,14 +53,7 @@ export type BlogPost = MicroCMSBase & {
   tags: Category[];
   // リッチエディタは HTML 文字列で返る
   body: string;
-  // 任意の公開日（日時型）。未入力なら publishedAt（CMS公開日時）にフォールバック
-  publishedDate?: string;
 };
-
-// 表示用の公開日を返す。publishedDate があればそれを、無ければ publishedAt を使う
-export function getDisplayDate(post: BlogPost): string {
-  return post.publishedDate || post.publishedAt;
-}
 
 // 著者画像の URL を返す（コンテンツ参照のネストを吸収）。無ければプレースホルダー
 export function getAuthorImageUrl(post: BlogPost): string {

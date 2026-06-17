@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import MenuLayout from '../../components/MenuLayout.astro';
 import TwoLine from '../../components/TwoLine.astro';
-import { getAllPosts, getDisplayDate, getAuthorImageUrl, type BlogPost } from '../../lib/microcms';
+import { getAllPosts, getAuthorImageUrl, type BlogPost } from '../../lib/microcms';
 import { formatDotDate } from '../../utils/date';
 
 // 記事データの取得（microCMS から公開済み記事を全件取得、publishedAt 降順）
@@ -36,7 +36,7 @@ export async function getStaticPaths() {
         title: p.title,
         description: p.description,
         image: p.image?.url || '/placeholder.svg',
-        date: formatDotDate(getDisplayDate(p))
+        date: formatDotDate(p.publishedAt)
       }));
 
     return {
@@ -61,9 +61,8 @@ interface Props {
 
 const { post, prevPost, nextPost, relatedPosts } = Astro.props as Props;
 
-// 公開日（YYYY.MM.DD 形式）。publishedDate 優先、無ければ publishedAt
-const displayDate = getDisplayDate(post);
-const publishedDate = formatDotDate(displayDate);
+// 公開日（YYYY.MM.DD 形式）。microCMS の publishedAt を表示に使う
+const publishedDate = formatDotDate(post.publishedAt);
 
 // 記事の読了時間を計算（平均読速度: 400文字/分）
 // microCMS の body は HTML なのでタグを除去してテキスト量を計算
@@ -122,7 +121,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           url: "https://tus-tnd.com/logo.svg",
         },
       },
-      datePublished: new Date(displayDate).toISOString(),
+      datePublished: new Date(post.publishedAt).toISOString(),
       dateModified: new Date(post.updatedAt).toISOString(),
       mainEntityOfPage: {
         "@type": "WebPage",

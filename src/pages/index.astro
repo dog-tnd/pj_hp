@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import TwoLine from '../components/TwoLine.astro';
 import MenuLayout from '../components/MenuLayout.astro';
 import NewsCard from '../components/NewsCard';
-import { getAllPosts, getDisplayDate, getAuthorImageUrl } from '../lib/microcms';
+import { getAllPosts, getAuthorImageUrl } from '../lib/microcms';
 import { formatDotDate } from '../utils/date';
 
 // ブログ記事の取得（microCMS から公開済み記事を全件取得、publishedAt 降順）
@@ -65,7 +65,7 @@ const latestPosts = sortedPosts.slice(0, 4);
                   author={post.author}
                   role={post.role}
                   authorImage={getAuthorImageUrl(post)}
-                  date={formatDotDate(getDisplayDate(post))}
+                  date={formatDotDate(post.publishedAt)}
                   url={postUrl}
                   client:load
                 />
