@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import MenuLayout from '../../components/MenuLayout.astro';
 import TwoLine from '../../components/TwoLine.astro';
-import { getAllPosts, getAuthorImageUrl, type BlogPost } from '../../lib/microcms';
+import { getAllPosts, getImageUrl, getAuthorImageUrl, type BlogPost } from '../../lib/microcms';
 import { formatDotDate } from '../../utils/date';
 
 // 記事データの取得（microCMS から公開済み記事を全件取得、publishedAt 降順）
@@ -35,7 +35,7 @@ export async function getStaticPaths() {
         url: `/blog/${p.id}`,
         title: p.title,
         description: p.description,
-        image: p.image?.url || '/placeholder.svg',
+        image: getImageUrl(p),
         date: formatDotDate(p.publishedAt)
       }));
 
@@ -90,7 +90,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <Layout
   title={`${post.title} | TND - 東京理科大学プログラミングサークル`}
   description={post.description}
-  image={post.image?.url || '/placeholder.svg'}
+  image={getImageUrl(post)}
   canonicalURL={canonicalURL.href}
   keywords={post.tags ? ["TND", "東京理科大学", "プログラミングサークル", ...post.tags.map((tag) => tag.name)] : ["TND", "東京理科大学", "プログラミングサークル"]}
   author={post.author}
@@ -106,7 +106,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       "@type": "BlogPosting",
       headline: post.title,
       description: post.description,
-      image: post.image?.url || '/placeholder.svg',
+      image: getImageUrl(post),
       author: {
         "@type": "Person",
         name: post.author,
@@ -140,7 +140,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <!-- ヘッダー画像 -->
       <div class="relative h-64 sm:h-80 md:h-96 w-full">
         <img
-          src={post.image?.url || '/placeholder.svg'}
+          src={getImageUrl(post)}
           alt={post.title}
           class="w-full h-full object-cover"
         />
@@ -334,7 +334,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
               <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow h-full flex flex-col">
                 <div class="aspect-video overflow-hidden">
                   <img
-                    src={relatedPost.image || '/placeholder.svg'}
+                    src={relatedPost.image || '/thumbnail_sample.jpg'}
                     alt={relatedPost.title}
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />

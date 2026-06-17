@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import MenuLayout from '../../components/MenuLayout.astro';
 import TwoLine from '../../components/TwoLine.astro';
 import NewsCard from '../../components/NewsCard';
-import { getAllPosts, getAuthorImageUrl } from '../../lib/microcms';
+import { getAllPosts, getImageUrl, getAuthorImageUrl } from '../../lib/microcms';
 import { formatDotDate } from '../../utils/date';
 
 // ブログ記事の取得（microCMS から公開済み記事を全件取得、publishedAt 降順）
@@ -97,7 +97,7 @@ const remainingTags = allTagsSorted.slice(8);
             return (
               <div class="animate-fade-in post-card" style={`animation-delay: ${0.4 + (index % 6) * 0.1}s`} data-tags={JSON.stringify(postTags)}>
                 <NewsCard
-                  image={post.image?.url || '/placeholder.svg'}
+                  image={getImageUrl(post)}
                   title={post.title}
                   description={post.description}
                   author={post.author}
