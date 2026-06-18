@@ -75,6 +75,18 @@ export async function getAllPosts(): Promise<BlogPost[]> {
   return data.contents.filter((post) => Boolean(post.publishedAt));
 }
 
+// 下書きプレビュー用に1記事を取得（draftKey 付きで下書きも取得可能）
+export async function getPreviewPost(
+  contentId: string,
+  draftKey: string
+): Promise<BlogPost> {
+  return client.getListDetail<BlogPost>({
+    endpoint: "blog",
+    contentId,
+    queries: { draftKey },
+  });
+}
+
 // カテゴリ（タグ）を全件取得
 export async function getAllCategories(): Promise<Category[]> {
   const data = await client.getList<Category>({
