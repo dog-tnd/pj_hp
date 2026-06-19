@@ -10,12 +10,16 @@ const defaultAllowedIframeHostnames = [
   'codepen.io',
 ];
 
+function isValidHostname(hostname: string): boolean {
+  return /^[a-z0-9.-]+$/i.test(hostname) && hostname.includes('.');
+}
+
 const allowedIframeHostnames = [
   ...defaultAllowedIframeHostnames,
   ...(import.meta.env.PUBLIC_MICROCMS_ALLOWED_IFRAME_HOSTNAMES
     ?.split(',')
-    .map((hostname: string) => hostname.trim())
-    .filter(Boolean) ?? []),
+    .map((hostname: string) => hostname.trim().toLowerCase())
+    .filter((hostname: string) => isValidHostname(hostname)) ?? []),
 ];
 
 const allowedTags = [
@@ -39,7 +43,7 @@ export function sanitizeBlogHtml(html: string): string {
       ...sanitizeHtml.defaults.allowedAttributes,
       a: ['href', 'name', 'target', 'rel'],
       img: ['src', 'srcset', 'alt', 'title', 'width', 'height', 'loading'],
-      iframe: ['src', 'title', 'width', 'height', 'allow', 'allowfullscreen'],
+      iframe: ['src', 'title', 'width', 'height', 'allowfullscreen'],
       code: ['class'],
       pre: ['class'],
       h1: ['id'],
@@ -54,6 +58,25 @@ export function sanitizeBlogHtml(html: string): string {
       img: ['https', 'data'],
     },
     allowedIframeHostnames,
+    transformTags: {
+      a: (tagName, attribs) => {
+        if (attribs.target !== '_blank') {
+          return { tagName, attribs };
+        }
+
+        const relValues = new Set((attribs.rel ?? '').split(/\s+/).filter(Boolean));
+        relValues.add('noopener');
+        relValues.add('noreferrer');
+
+        return {
+          tagName,
+          attribs: {
+            ...attribs,
+            rel: Array.from(relValues).join(' '),
+          },
+        };
+      },
+    },
     parser: {
       lowerCaseTags: true,
     },
