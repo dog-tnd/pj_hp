@@ -39,7 +39,7 @@ export function sanitizeBlogHtml(html: string): string {
       ...sanitizeHtml.defaults.allowedAttributes,
       a: ['href', 'name', 'target', 'rel'],
       img: ['src', 'srcset', 'alt', 'title', 'width', 'height', 'loading'],
-      iframe: ['src', 'title', 'width', 'height', 'allow', 'allowfullscreen', 'frameborder'],
+      iframe: ['src', 'title', 'width', 'height', 'allow', 'allowfullscreen'],
       code: ['class'],
       pre: ['class'],
       h1: ['id'],
@@ -49,9 +49,9 @@ export function sanitizeBlogHtml(html: string): string {
       h5: ['id'],
       h6: ['id'],
     },
-    allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+    allowedSchemes: ['https', 'mailto', 'tel'],
     allowedSchemesByTag: {
-      img: ['http', 'https', 'data'],
+      img: ['https', 'data'],
     },
     allowedIframeHostnames,
     parser: {
