@@ -17,15 +17,16 @@ const draftKey = Astro.url.searchParams.get('draftKey');
 let post: BlogPost | null = null;
 let errorMessage: string | null = null;
 
-if (contentId && draftKey) {
+if (contentId) {
   try {
-    post = await getPreviewPost(contentId, draftKey);
+    // draftKey があれば下書き、無ければ公開済みを取得
+    post = await getPreviewPost(contentId, draftKey ?? undefined);
   } catch (e) {
     console.error('プレビュー取得失敗:', e);
-    errorMessage = 'プレビューの取得に失敗しました。URL（contentId / draftKey）を確認してください。';
+    errorMessage = 'プレビューの取得に失敗しました。下書きの場合は draftKey が必要です。URLを確認してください。';
   }
 } else {
-  errorMessage = 'プレビュー対象が指定されていません（contentId と draftKey が必要です）。';
+  errorMessage = 'プレビュー対象が指定されていません（contentId が必要です）。';
 }
 
 const pageTitle = post ? `【プレビュー】${post.title}` : 'プレビュー';

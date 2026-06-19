@@ -75,15 +75,17 @@ export async function getAllPosts(): Promise<BlogPost[]> {
   return data.contents.filter((post) => Boolean(post.publishedAt));
 }
 
-// 下書きプレビュー用に1記事を取得（draftKey 付きで下書きも取得可能）
+// プレビュー用に1記事を取得する。
+// draftKey があれば下書きを、無ければ公開済み記事を取得する
+// （microCMS は公開済み記事を draftKey なしで返すため、公開済みのプレビューにも対応）。
 export async function getPreviewPost(
   contentId: string,
-  draftKey: string
+  draftKey?: string
 ): Promise<BlogPost> {
   return client.getListDetail<BlogPost>({
     endpoint: "blog",
     contentId,
-    queries: { draftKey },
+    queries: draftKey ? { draftKey } : {},
   });
 }
 
