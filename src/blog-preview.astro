@@ -30,10 +30,14 @@ if (contentId) {
 }
 
 const pageTitle = post ? `【プレビュー】${post.title}` : 'プレビュー';
+
+// canonical / og:url に draftKey を載せないよう、クエリ無しのURLに固定する
+const canonicalURL = new URL(contentId ? `/blog/${contentId}` : '/blog', Astro.site).href;
 ---
 
 <Layout
   title={pageTitle}
+  canonicalURL={canonicalURL}
   noindex={true}
 >
   <header>
