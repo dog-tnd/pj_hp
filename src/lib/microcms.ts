@@ -26,7 +26,8 @@ type MicroCMSBase = {
   id: string;
   createdAt: string;
   updatedAt: string;
-  publishedAt: string;
+  // 下書き（未公開）では null になり得る
+  publishedAt: string | null;
   revisedAt: string;
 };
 
@@ -85,7 +86,7 @@ export async function getPreviewPost(
   return client.getListDetail<BlogPost>({
     endpoint: "blog",
     contentId,
-    queries: draftKey ? { draftKey } : {},
+    queries: draftKey ? { draftKey } : undefined,
   });
 }
 

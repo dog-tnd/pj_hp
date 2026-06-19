@@ -99,7 +99,7 @@ const canonicalURL = new URL(`/blog/${post.id}`, Astro.site);
           url: "https://tus-tnd.com/logo.svg",
         },
       },
-      datePublished: new Date(post.publishedAt).toISOString(),
+      datePublished: new Date(post.publishedAt!).toISOString(),
       dateModified: new Date(post.updatedAt).toISOString(),
       mainEntityOfPage: {
         "@type": "WebPage",
