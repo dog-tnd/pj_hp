@@ -1,5 +1,23 @@
 import sanitizeHtml from 'sanitize-html';
 
+const defaultAllowedIframeHostnames = [
+  'www.youtube.com',
+  'youtube.com',
+  'youtu.be',
+  'player.vimeo.com',
+  'speakerdeck.com',
+  'www.slideshare.net',
+  'codepen.io',
+];
+
+const allowedIframeHostnames = [
+  ...defaultAllowedIframeHostnames,
+  ...(import.meta.env.PUBLIC_MICROCMS_ALLOWED_IFRAME_HOSTNAMES
+    ?.split(',')
+    .map((hostname: string) => hostname.trim())
+    .filter(Boolean) ?? []),
+];
+
 const allowedTags = [
   ...sanitizeHtml.defaults.allowedTags,
   'img',
@@ -24,12 +42,18 @@ export function sanitizeBlogHtml(html: string): string {
       iframe: ['src', 'title', 'width', 'height', 'allow', 'allowfullscreen', 'frameborder'],
       code: ['class'],
       pre: ['class'],
-      '*': ['id'],
+      h1: ['id'],
+      h2: ['id'],
+      h3: ['id'],
+      h4: ['id'],
+      h5: ['id'],
+      h6: ['id'],
     },
-    allowedSchemes: ['http', 'https', 'mailto', 'tel', 'data'],
+    allowedSchemes: ['http', 'https', 'mailto', 'tel'],
     allowedSchemesByTag: {
       img: ['http', 'https', 'data'],
     },
+    allowedIframeHostnames,
     parser: {
       lowerCaseTags: true,
     },
