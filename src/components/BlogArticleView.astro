@@ -2,6 +2,7 @@
 import MenuLayout from './MenuLayout.astro';
 import { getImageUrl, getAuthorImageUrl, type BlogPost } from '../lib/microcms';
 import { formatDotDate } from '../utils/date';
+import { sanitizeBlogHtml } from '../utils/sanitize';
 
 interface Props {
   post: BlogPost;
@@ -40,6 +41,7 @@ try {
 
 // シェア・canonical 用 URL（本番の記事URLを指す）
 const canonicalURL = new URL(`/blog/${post.id}`, Astro.site);
+const sanitizedBody = sanitizeBlogHtml(post.body);
 ---
 
 <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -101,7 +103,7 @@ const canonicalURL = new URL(`/blog/${post.id}`, Astro.site);
       </div>
 
       <!-- 記事本文（microCMS のリッチエディタ HTML） -->
-      <div class="prose prose-lg max-w-none" set:html={post.body}></div>
+      <div class="prose prose-lg max-w-none" set:html={sanitizedBody}></div>
 
       <!-- ソーシャルシェアボタン -->
       <div class="mt-10 pt-6 border-t border-gray-200">
