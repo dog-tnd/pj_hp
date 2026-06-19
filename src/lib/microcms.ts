@@ -26,7 +26,8 @@ type MicroCMSBase = {
   id: string;
   createdAt: string;
   updatedAt: string;
-  publishedAt: string;
+  // 下書き（未公開）では null になり得る
+  publishedAt: string | null;
   revisedAt: string;
 };
 
@@ -73,6 +74,20 @@ export async function getAllPosts(): Promise<BlogPost[]> {
   });
   // 下書き（未公開）は publishedAt が付かないため除外する
   return data.contents.filter((post) => Boolean(post.publishedAt));
+}
+
+// プレビュー用に1記事を取得する。
+// draftKey があれば下書きを、無ければ公開済み記事を取得する
+// （microCMS は公開済み記事を draftKey なしで返すため、公開済みのプレビューにも対応）。
+export async function getPreviewPost(
+  contentId: string,
+  draftKey?: string
+): Promise<BlogPost> {
+  return client.getListDetail<BlogPost>({
+    endpoint: "blog",
+    contentId,
+    queries: draftKey ? { draftKey } : undefined,
+  });
 }
 
 // カテゴリ（タグ）を全件取得
