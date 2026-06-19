@@ -11,7 +11,7 @@ const defaultAllowedIframeHostnames = [
 ];
 
 function isValidHostname(hostname: string): boolean {
-  return /^[a-z0-9.-]+$/i.test(hostname) && hostname.includes('.');
+  return /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i.test(hostname);
 }
 
 const allowedIframeHostnames = [
@@ -53,7 +53,7 @@ export function sanitizeBlogHtml(html: string): string {
       h5: ['id'],
       h6: ['id'],
     },
-    allowedSchemes: ['https', 'mailto', 'tel'],
+    allowedSchemes: ['https', 'mailto'],
     allowedSchemesByTag: {
       img: ['https', 'data'],
     },
