@@ -105,7 +105,8 @@ const canonicalURL = new URL(`/blog/${post.id}`, Astro.site);
         "@type": "WebPage",
         "@id": canonicalURL.href,
       },
-    })}
+      // 本文等に "</script>" が含まれても script タグを脱出できないよう < をエスケープ
+    }).replace(/</g, "\\u003c")}
   />
 
   <header>
