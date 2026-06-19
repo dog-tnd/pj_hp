@@ -68,12 +68,13 @@ export function getAuthorImageUrl(post: BlogPost): string {
 
 // 公開済み記事を全件取得（GitHub Pages 用の SSG なのでビルド時に全件取得）
 export async function getAllPosts(): Promise<BlogPost[]> {
-  const data = await client.getList<BlogPost>({
+  // getAllContents は内部で自動ページングし、100件超でも全件取得する
+  const contents = await client.getAllContents<BlogPost>({
     endpoint: "blog",
-    queries: { limit: 100, orders: "-publishedAt" },
+    queries: { orders: "-publishedAt" },
   });
   // 下書き（未公開）は publishedAt が付かないため除外する
-  return data.contents.filter((post) => Boolean(post.publishedAt));
+  return contents.filter((post) => Boolean(post.publishedAt));
 }
 
 // プレビュー用に1記事を取得する。
