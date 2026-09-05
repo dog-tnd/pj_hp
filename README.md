@@ -99,11 +99,3 @@ pnpm astro check
 `/blog/preview` の SSR プレビューは Vercel でホスティングしており、
 **現在は Ryoma0101 が個人アカウントで管理**しています。
 本番（GitHub Pages）とは独立しているため、Vercel 側が停止しても本番サイトには影響しません。
-
-## Storybook の起動
-
-```bash
-pnpm storybook
-```
-
-ポート 6006 で Storybook の開発サーバーが起動します。
