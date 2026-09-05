@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
+import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel";
 
@@ -29,7 +30,17 @@ function blogPreviewRoute() {
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react(), tailwind(), blogPreviewRoute()],
+  integrations: [
+    react(),
+    tailwind(),
+    blogPreviewRoute(),
+    // ビルドされた全ページ（microCMS の記事を含む）から sitemap を自動生成する
+    sitemap({
+      // 本番に存在しないルート（SSRプレビュー・dev限定ページ）は載せない
+      filter: (page) =>
+        !page.includes("/blog/preview") && !page.includes("/dev/"),
+    }),
+  ],
   output: "static",
   site: "https://tus-tnd.com/",
   base: "",
