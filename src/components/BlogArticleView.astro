@@ -3,6 +3,7 @@ import MenuLayout from './MenuLayout.astro';
 import { getImageUrl, getAuthorImageUrl, type BlogPost } from '../lib/microcms';
 import { formatDotDate } from '../utils/date';
 import { sanitizeBlogHtml } from '../utils/sanitize';
+import { convertInlineCode } from '../utils/inline-code';
 import { highlightCodeBlocks } from '../utils/highlight';
 
 interface Props {
@@ -42,9 +43,11 @@ try {
 
 // シェア・canonical 用 URL（本番の記事URLを指す）
 const canonicalURL = new URL(`/blog/${post.id}`, Astro.site);
-// 本文の整形: サニタイズ → コードブロックのハイライト。
+// 本文の整形: サニタイズ → インラインコード変換 → コードブロックのハイライト。
 // Shiki はインラインstyleで着色するため、必ずサニタイズより後に適用する
-const bodyHtml = await highlightCodeBlocks(sanitizeBlogHtml(post.body));
+const bodyHtml = await highlightCodeBlocks(
+  convertInlineCode(sanitizeBlogHtml(post.body))
+);
 ---
 
 <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
