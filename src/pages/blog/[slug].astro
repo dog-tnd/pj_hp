@@ -63,6 +63,10 @@ const { post, prevPost, nextPost, relatedPosts } = Astro.props as Props;
 
 // 現在のURLを取得（canonical / 構造化データ用）
 const canonicalURL = new URL(`/blog/${post.id}`, Astro.site);
+
+// 構造化データの画像は絶対URLである必要がある。
+// microCMS の画像は既に絶対URL、フォールバック画像は相対パスなのでここで揃える
+const toAbsoluteUrl = (url: string) => new URL(url, Astro.site).href;
 ---
 
 <Layout
@@ -84,11 +88,11 @@ const canonicalURL = new URL(`/blog/${post.id}`, Astro.site);
       "@type": "BlogPosting",
       headline: post.title,
       description: post.description,
-      image: getImageUrl(post),
+      image: toAbsoluteUrl(getImageUrl(post)),
       author: {
         "@type": "Person",
         name: post.author,
-        image: getAuthorImageUrl(post),
+        image: toAbsoluteUrl(getAuthorImageUrl(post)),
         jobTitle: post.role,
       },
       publisher: {
