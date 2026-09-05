@@ -94,6 +94,12 @@ pnpm astro check
 - `main` への push、または **microCMS の Webhook**（記事の公開・更新・削除）で GitHub Actions が走り、GitHub Pages へ自動デプロイされます
 - Webhook を取りこぼした場合の保険として、**6 時間ごとの定期リビルド**も設定されています
 
+## プレビュー環境（Vercel）について
+
+`/blog/preview` の SSR プレビューは Vercel でホスティングしており、
+**現在は Ryoma0101 が個人アカウントで管理**しています。
+本番（GitHub Pages）とは独立しているため、Vercel 側が停止しても本番サイトには影響しません。
+
 ## Storybook の起動
 
 ```bash
