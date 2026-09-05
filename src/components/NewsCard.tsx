@@ -22,9 +22,9 @@ const NewsCard: FC<NewsCardProps> = ({
   authorImage,
   date,
   url, // URLプロパティを追加
-  // 高さは「画像192 + タイトル2行56 + 説明2行48 + 余白・著者情報」が収まるよう 420px にしている。
+  // 高さは「画像192 + タイトル2行56 + 説明3行72 + 余白・著者情報」が収まるよう 440px にしている。
   // タイトルや説明の行数を増やすときは、ここも合わせて広げないと下が隠れる
-  sizeClass = "w-full max-w-sm custom-md:w-[390px] custom-md:max-w-[390px] h-[420px]",
+  sizeClass = "w-full max-w-sm custom-md:w-[390px] custom-md:max-w-[390px] h-[440px]",
 }) => {
   return (
     <a
@@ -44,7 +44,7 @@ const NewsCard: FC<NewsCardProps> = ({
       <div className="p-4 flex flex-col flex-grow">
         {/* Title with 16px padding - 2行に制限 */}
         <h2
-          className="text-xl font-bold mb-4 px-4 overflow-hidden"
+          className="text-xl font-bold mb-2 px-4 overflow-hidden"
           style={{
             display: "-webkit-box",
             WebkitLineClamp: 2,
@@ -53,12 +53,12 @@ const NewsCard: FC<NewsCardProps> = ({
         >
           {title}
         </h2>
-        {/* Description with 16px padding on sides - 2行に制限 */}
+        {/* Description with 16px padding on sides - 3行に制限 */}
         <p
-          className="text-gray-600 mb-4 px-4 overflow-hidden"
+          className="text-gray-600 mb-3 px-4 overflow-hidden"
           style={{
             display: "-webkit-box",
-            WebkitLineClamp: 2,
+            WebkitLineClamp: 3,
             WebkitBoxOrient: "vertical",
           }}
         >
