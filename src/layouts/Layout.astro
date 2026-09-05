@@ -79,6 +79,9 @@ const fullImageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
+
+    <!-- 各ページ固有の head 要素（記事ページの構造化データなど）を受け取る -->
+    <slot name="head" />
   </head>
   <body class="bg-gray-50">
     <div class="relative min-h-screen overflow-hidden">
