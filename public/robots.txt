@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://tus-tnd.com/sitemap.xml
+Sitemap: https://tus-tnd.com/sitemap-index.xml
 
 # Disallow specific paths if needed
 # Disallow: /admin/

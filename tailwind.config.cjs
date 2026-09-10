@@ -6,6 +6,9 @@ module.exports = {
       typography: {
         DEFAULT: {
           css: {
+            // Tailwind Typography は既定でインラインコードの前後にバッククォートを描画するため打ち消す
+            'code::before': { content: '""' },
+            'code::after': { content: '""' },
             'a': {
               color: '#0070f3',
               textDecoration: 'underline',
@@ -26,6 +29,7 @@ module.exports = {
     screens: {
       // Use standard Tailwind breakpoints
       'md': '768px',
+      'lg': '1024px',
       // If you need a custom breakpoint at 1280px, add it with a custom name
       'custom-md': '1280px',
     },

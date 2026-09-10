@@ -1,42 +1,20 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Menu from '../../components/menu';
+import MenuLayout from '../../components/MenuLayout.astro';
 import TwoLine from '../../components/TwoLine.astro';
 import NewsCard from '../../components/NewsCard';
+import { getAllPosts, getImageUrl, getAuthorImageUrl } from '../../lib/microcms';
+import { formatDotDate } from '../../utils/date';
 
-// ブログ記事の型定義
-interface BlogPost {
-  frontmatter: {
-    title: string;
-    description: string;
-    author: string;
-    role: string;
-    authorImage: string;
-    date: string;
-    image: string;
-    tags?: string[];
-  };
-  url: string;
-  file: string;
-  Content: any;
-}
+// ブログ記事の取得（microCMS から公開済み記事を全件取得、publishedAt 降順）
+const sortedPosts = await getAllPosts();
 
-// ブログ記事の取得（型キャストを追加）
-const postModules = import.meta.glob('../../content/blog/*.md');
-const posts = await Promise.all(
-  Object.values(postModules).map(async (module) => await module())
-) as BlogPost[];
-const sortedPosts = posts.sort((a, b) => {
-  return new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime();
-});
-
-// すべてのタグを収集（使用頻度順）
-const tagCounts = new Map();
+// すべてのタグを収集（使用頻度順）。tags は categories 参照なので name を集計
+const tagCounts = new Map<string, number>();
 sortedPosts
-  .filter(post => post.frontmatter.tags)
-  .flatMap(post => post.frontmatter.tags || [])
+  .flatMap(post => post.tags || [])
   .forEach(tag => {
-    tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+    tagCounts.set(tag.name, (tagCounts.get(tag.name) || 0) + 1);
   });
 
 // 使用頻度順にソートされた全タグ
@@ -58,8 +36,7 @@ const remainingTags = allTagsSorted.slice(8);
 
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
     <!-- Hero Section -->
-    <div class="w-full max-w-full md:max-w-full custom-md:max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-10 relative pt-20">
-      <Menu client:load />
+    <MenuLayout>
       <section class="mb-16">
         <h2 class="mb-8 text-gray-900 md:pt-[3rem]" style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 38px; font-style: normal; font-weight: 400; line-height: normal;">Blog</h2>
         <div class="prose prose-lg max-w-xg text-gray-600 md:max-w-md lg:max-w-xl">
@@ -100,7 +77,7 @@ const remainingTags = allTagsSorted.slice(8);
           </div>
         </div>
       </section>
-    </div>
+    </MenuLayout>
 
     <!-- すべての記事 -->
     <section id="all-posts" class="py-16 animate-fade-in animation-delay-300">
@@ -114,20 +91,19 @@ const remainingTags = allTagsSorted.slice(8);
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 custom-md:grid-cols-3 gap-6 w-full" id="posts-container">
           {sortedPosts.map((post, index) => {
-            const slug = post.file.split('/').pop()?.replace('.md', '');
-            const postUrl = `/blog/${slug}`;
-            const postTags = post.frontmatter.tags || [];
+            const postUrl = `/blog/${post.id}`;
+            const postTags = (post.tags || []).map(tag => tag.name);
 
             return (
               <div class="animate-fade-in post-card" style={`animation-delay: ${0.4 + (index % 6) * 0.1}s`} data-tags={JSON.stringify(postTags)}>
                 <NewsCard
-                  image={post.frontmatter.image}
-                  title={post.frontmatter.title}
-                  description={post.frontmatter.description}
-                  author={post.frontmatter.author}
-                  role={post.frontmatter.role}
-                  authorImage={post.frontmatter.authorImage}
-                  date={post.frontmatter.date}
+                  image={getImageUrl(post)}
+                  title={post.title}
+                  description={post.description}
+                  author={post.author}
+                  role={post.role}
+                  authorImage={getAuthorImageUrl(post)}
+                  date={formatDotDate(post.publishedAt)}
                   url={postUrl}
                   client:load
                 />
@@ -141,7 +117,7 @@ const remainingTags = allTagsSorted.slice(8);
 
   <footer class="mt-24 border-t border-gray-200 py-8">
     <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-      <p class="text-sm text-gray-500">© 2025 TND All Rights Reserved.</p>
+      <p class="text-sm text-gray-500">© 2026 TND All Rights Reserved.</p>
     </div>
   </footer>
 

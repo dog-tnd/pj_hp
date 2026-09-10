@@ -14,14 +14,19 @@
   "dependencies": {
     "@astrojs/check": "^0.9.6",
     "@astrojs/react": "^4.4.2",
+    "@astrojs/sitemap": "^3.7.4",
     "@astrojs/tailwind": "^6.0.2",
     "@tailwindcss/typography": "^0.5.15",
     "astro": "^5.16.11",
+    "microcms-js-sdk": "^3.4.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "sanitize-html": "^2.17.5",
+    "shiki": "^4.4.3",
     "typescript": "^5.6.2"
   },
   "devDependencies": {
+    "@astrojs/vercel": "^8.2.11",
     "@chromatic-com/storybook": "^1.9.0",
     "@storybook/addon-essentials": "^8.3.4",
     "@storybook/addon-interactions": "^8.3.4",
@@ -34,6 +39,7 @@
     "@storybook/test": "^8.3.4",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
+    "@types/sanitize-html": "^2.16.1",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "storybook": "^8.3.4",

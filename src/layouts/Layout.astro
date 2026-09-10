@@ -7,6 +7,7 @@ interface Props {
   keywords?: string[];
   author?: string;
   type?: string;
+  noindex?: boolean;
 }
 
 const {
@@ -16,7 +17,8 @@ const {
   canonicalURL = Astro.url.href,
   keywords = ["東京理科大学", "プログラミングサークル", "TND", "Web開発", "データサイエンス", "野田キャンパス"],
   author = "TND",
-  type = "website"
+  type = "website",
+  noindex = false
 } = Astro.props;
 
 const siteURL = "https://tus-tnd.com";
@@ -31,8 +33,9 @@ const fullImageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
     <meta name="keywords" content={keywords.join(", ")} />
     <meta name="author" content={author} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content={type} />
@@ -58,7 +61,7 @@ const fullImageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
         "name": "TND",
         "description": "東京理科大学野田キャンパスで活動するプログラミングサークル",
         "url": "https://tus-tnd.com",
-        "logo": "https://tus-tnd.com/logo.svg",
+        "logo": "https://tus-tnd.com/logo.png",
         "sameAs": [
           "https://x.com/TokyorikaND",
           "https://discord.gg/k3qMBEn3CC"
@@ -76,6 +79,9 @@ const fullImageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
+
+    <!-- 各ページ固有の head 要素（記事ページの構造化データなど）を受け取る -->
+    <slot name="head" />
   </head>
   <body class="bg-gray-50">
     <div class="relative min-h-screen overflow-hidden">
