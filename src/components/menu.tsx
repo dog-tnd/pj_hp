@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./../index.css";
 
-const Logo = "/logo.svg";
+const Logo = "/logo.png";
 
 interface Link {
   href: string;
