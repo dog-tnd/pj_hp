@@ -1,4 +1,6 @@
 ---
+import HeaderMobile from "../components/HeaderMobile.astro";
+
 interface Props {
   title: string;
   description?: string;
@@ -84,12 +86,14 @@ const fullImageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
     <slot name="head" />
   </head>
   <body class="bg-gray-50">
+    <!-- PC版 Header.astro（PR #61）はこの直後に追加予定。現時点では未導入 -->
+    <HeaderMobile />
     <div class="relative min-h-screen overflow-hidden">
       <!-- Gradient shape -->
       <div class="absolute right-0 top-0 -z-10">
         <div class="h-[600px] w-[600px] rotate-12 transform rounded-[40%] bg-gradient-to-br from-blue-400 to-teal-300 opacity-20 blur-3xl"></div>
       </div>
-      <main>
+      <main class="pb-24 lg:pb-0">
         <slot />
       </main>
     </div>
