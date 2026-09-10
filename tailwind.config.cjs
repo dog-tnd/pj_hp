@@ -6,6 +6,9 @@ module.exports = {
       typography: {
         DEFAULT: {
           css: {
+            // Tailwind Typography は既定でインラインコードの前後にバッククォートを描画するため打ち消す
+            'code::before': { content: '""' },
+            'code::after': { content: '""' },
             'a': {
               color: '#0070f3',
               textDecoration: 'underline',
