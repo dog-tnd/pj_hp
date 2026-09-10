@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Menu from '../../components/menu';
 import TwoLine from '../../components/TwoLine.astro';
 import NewsCard from '../../components/NewsCard';
 
@@ -58,18 +57,17 @@ const remainingTags = allTagsSorted.slice(8);
 
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
     <!-- Hero Section -->
-    <div class="w-full max-w-full md:max-w-full custom-md:max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-10 relative pt-20">
-      <Menu client:load />
-      <section class="mb-16">
+    <div class="w-full max-w-7xl mx-auto pt-8 lg:pt-12">
+      <section class="mb-16 max-w-4xl">
         <h2 class="mb-8 text-gray-900 md:pt-[3rem]" style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 38px; font-style: normal; font-weight: 400; line-height: normal;">Blog</h2>
-        <div class="prose prose-lg max-w-xg text-gray-600 md:max-w-md lg:max-w-xl">
+        <div class="prose prose-lg text-gray-600 max-w-2xl">
           <p>
             TNDメンバーが書いた技術記事や活動報告を紹介しています。プログラミングやWeb開発に関する知見を共有しています。
           </p>
         </div>
 
         <!-- タグフィルター -->
-        <div class="mt-8 md:mr-44 custom-md:mr-0">
+        <div class="mt-8">
           <h3 class="text-lg font-semibold mb-4 text-gray-900">タグで絞り込み</h3>
           <div class="flex flex-wrap gap-2">
             <button class="px-3 py-1 bg-blue-500 text-white rounded-full text-sm hover:bg-blue-600 active:bg-blue-700 transition-colors tag-filter active" data-tag="all">

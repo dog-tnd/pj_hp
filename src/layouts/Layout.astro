@@ -1,4 +1,6 @@
 ---
+import Header from '../components/Header.astro';
+
 interface Props {
   title: string;
   description?: string;
@@ -78,6 +80,7 @@ const fullImageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
     <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
   </head>
   <body class="bg-gray-50">
+    <Header />
     <div class="relative min-h-screen overflow-hidden">
       <!-- Gradient shape -->
       <div class="absolute right-0 top-0 -z-10">

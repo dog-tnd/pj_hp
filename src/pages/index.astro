@@ -1,7 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import TwoLine from '../components/TwoLine.astro';
-import Menu from '../components/menu';
 import NewsCard from '../components/NewsCard';
 
 // ブログ記事の型定義
@@ -51,11 +50,10 @@ const latestPosts = sortedPosts.slice(0, 4);
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
     <!-- Hero Section -->
 
-    <div class="w-full max-w-full md:max-w-full custom-md:max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-10 relative pt-20">
-      <Menu client:load />
-      <section class="mb-16">
+    <div class="w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-10 relative pt-8 lg:pt-12">
+      <section class="mb-16 max-w-2xl">
         <h2 class="mb-8 text-gray-900 md:pt-[3rem]" style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 38px; font-style: normal; font-weight: 400; line-height: normal;">What's TND</h2>
-        <div class="prose prose-lg max-w-xg text-gray-600 md:max-w-md lg:max-w-xl">
+        <div class="prose prose-lg text-gray-600 max-w-2xl">
           <p>
             TNDはweb開発をメインに活動する東京理科大学のプログラミングサークルです。2024年に設立され、現在は40名のメンバーが所属しています。
           </p>

@@ -1,0 +1,268 @@
+---
+const pathname = Astro.url.pathname;
+
+const links = [
+  { href: '/about', label: '私たちについて' },
+  { href: '/blog', label: 'テックブログ' },
+  { href: '/faq', label: 'よくある質問' },
+  { href: '/contact', label: 'お問い合わせ' },
+];
+
+const isCurrent = (href: string) =>
+  href === '/blog' ? pathname.startsWith('/blog') : pathname === href || pathname === `${href}/`;
+---
+
+<header class="site-header" data-header>
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="TND ホーム">
+      <img src="/logo.svg" alt="" width="48" height="48" />
+      <span>TND</span>
+    </a>
+
+    <nav aria-label="メインナビゲーション">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          class:list={['nav-link', { current: isCurrent(link.href) }]}
+          aria-current={isCurrent(link.href) ? 'page' : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <span class="divider" aria-hidden="true"></span>
+    <button class="join-button" type="button" data-open-join>入会申し込み</button>
+  </div>
+</header>
+
+<dialog class="join-dialog" data-join-dialog aria-labelledby="join-dialog-title">
+  <div class="dialog-header">
+    <h2 id="join-dialog-title">Discordに参加しよう！</h2>
+    <button type="button" class="close-button" data-close-join aria-label="閉じる">×</button>
+  </div>
+  <div class="dialog-body">
+    <img src="/sns-discord.svg" alt="" width="64" height="64" />
+    <p><strong>4、5月はDiscordを中心に新歓イベントを開催します！</strong></p>
+    <p>Discordサーバーに参加すると、プログラミングサークルTNDの仮加入メンバーとなります。</p>
+    <a href="https://discord.gg/k3qMBEn3CC" target="_blank" rel="noopener noreferrer">Discordサーバーに参加する</a>
+  </div>
+</dialog>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const dialog = document.querySelector<HTMLDialogElement>('[data-join-dialog]');
+  const openButton = document.querySelector<HTMLButtonElement>('[data-open-join]');
+  const closeButton = document.querySelector<HTMLButtonElement>('[data-close-join]');
+
+  const updateHeader = () => header?.classList.toggle('scrolled', window.scrollY > 26);
+  updateHeader();
+  window.addEventListener('scroll', updateHeader, { passive: true });
+
+  openButton?.addEventListener('click', () => dialog?.showModal());
+  closeButton?.addEventListener('click', () => dialog?.close());
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+</script>
+
+<style>
+  .site-header,
+  .join-dialog {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: block;
+      height: 80px;
+      background: rgba(249, 250, 251, 0.9);
+      transition: height 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .site-header.scrolled {
+      height: 64px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 1px 0 rgba(17, 24, 39, 0.08), 0 8px 24px rgba(17, 24, 39, 0.06);
+      backdrop-filter: blur(12px);
+    }
+
+    .header-inner {
+      width: min(100%, 1440px);
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      color: #111827;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 48px;
+      height: 48px;
+      transition: width 180ms ease, height 180ms ease;
+    }
+
+    .scrolled .brand img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .brand span {
+      font-family: 'Rubik Doodle Shadow', system-ui;
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    nav {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .nav-link {
+      position: relative;
+      padding: 8px 0;
+      color: #111827;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 2px;
+      left: 0;
+      height: 2px;
+      background: #3b82f6;
+      opacity: 0;
+      transform: scaleX(0.5);
+      transition: opacity 150ms ease, transform 150ms ease;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.current::after {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    .nav-link.current {
+      font-weight: 700;
+    }
+
+    .nav-link:focus-visible,
+    .join-button:focus-visible {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+      border-radius: 8px;
+    }
+
+    .divider {
+      width: 1px;
+      height: 32px;
+      margin: 0 24px;
+      background: #d1d5db;
+    }
+
+    .join-button {
+      height: 44px;
+      padding: 0 24px;
+      border: 0;
+      border-radius: 10px;
+      background: #f5bf48;
+      box-shadow: 0 8px 16px rgba(245, 191, 72, 0.28);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    }
+
+    .join-button:hover {
+      background: linear-gradient(94deg, #f5bf48 0%, #f7bc5b 42%, #efa169 100%);
+      box-shadow: 0 10px 20px rgba(239, 161, 105, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .join-dialog {
+      width: min(440px, calc(100% - 48px));
+      padding: 0;
+      border: 0;
+      border-radius: 16px;
+      background: white;
+      color: #1f2937;
+      box-shadow: 0 24px 64px rgba(15, 23, 42, 0.24);
+    }
+
+    .join-dialog[open] {
+      display: block;
+    }
+
+    .join-dialog::backdrop {
+      background: rgba(15, 23, 42, 0.52);
+    }
+
+    .dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      background: linear-gradient(90deg, #2563eb, #4338ca);
+      color: white;
+    }
+
+    .dialog-header h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .close-button {
+      border: 0;
+      background: transparent;
+      color: white;
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .dialog-body {
+      padding: 24px;
+      text-align: center;
+    }
+
+    .dialog-body img {
+      margin: 0 auto 20px;
+    }
+
+    .dialog-body p {
+      margin: 0 0 14px;
+      line-height: 1.8;
+    }
+
+    .dialog-body a {
+      display: block;
+      margin-top: 24px;
+      padding: 12px 18px;
+      border-radius: 10px;
+      background: #4f46e5;
+      color: white;
+      font-weight: 700;
+      text-decoration: none;
+    }
+  }
+</style>

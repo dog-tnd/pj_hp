@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Menu from '../../components/menu';
 import TwoLine from '../../components/TwoLine.astro';
 ---
 
@@ -10,10 +9,6 @@ import TwoLine from '../../components/TwoLine.astro';
   </header>
 
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-    <div class="container flex flex-col md:flex-row items-center gap-10 relative pt-20">
-      <Menu client:load />
-    </div>
-
     <!-- 「プログラミングサークルTNDとは？」セクション -->
     <section id="about" class="py-20 bg-gray-50">
       <div class="container mx-auto px-4 py-10">
