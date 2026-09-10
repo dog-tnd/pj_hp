@@ -1,6 +1,4 @@
 // @ts-check
-import { existsSync, readdirSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
@@ -29,36 +27,9 @@ function blogPreviewRoute() {
   };
 }
 
-// src/dev-pages/*.astro を /dev/<ファイル名> として dev 時のみ注入する開発用テスト環境。
-// dev 限定なので本番(Pages)にも Vercel にも一切含まれない。
-// 確認用ページを増やしたいときは src/dev-pages/ に .astro を置くだけでよい。
-function devPagesRoutes() {
-  return {
-    name: "dev-pages-routes",
-    hooks: {
-      "astro:config:setup": ({ command, injectRoute }) => {
-        if (command !== "dev") return;
-
-        const dir = fileURLToPath(new URL("./src/dev-pages/", import.meta.url));
-        if (!existsSync(dir)) return;
-
-        for (const file of readdirSync(dir)) {
-          if (!file.endsWith(".astro")) continue;
-          const name = file.replace(/\.astro$/, "");
-          injectRoute({
-            // index.astro は /dev を一覧ページにする
-            pattern: name === "index" ? "/dev" : `/dev/${name}`,
-            entrypoint: `./src/dev-pages/${file}`,
-          });
-        }
-      },
-    },
-  };
-}
-
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react(), tailwind(), blogPreviewRoute(), devPagesRoutes()],
+  integrations: [react(), tailwind(), blogPreviewRoute()],
   output: "static",
   site: "https://tus-tnd.com/",
   base: "",
