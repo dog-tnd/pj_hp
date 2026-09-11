@@ -54,7 +54,7 @@ const isCurrent = (href: string) =>
   data-menu
   class="w-screen h-dvh max-w-none max-h-none m-0 p-0 border-0 bg-[#111827] text-white"
 >
-  <div class="flex h-14 items-center justify-between pl-4 pr-3 md:pl-8 md:pr-6">
+  <div class="flex h-14 items-center justify-between pl-4 pr-[calc(0.75rem_+_var(--scrollbar-width,0px))] md:pl-8 md:pr-[calc(1.5rem_+_var(--scrollbar-width,0px))]">
     <a href="/" aria-label="TND ホーム" class="flex items-center gap-2">
       <img src="/logo.png" alt="" class="w-7 h-7 rounded-full" />
       <span
@@ -123,7 +123,7 @@ const isCurrent = (href: string) =>
 <button
   type="button"
   data-open-join
-  class="lg:hidden fixed right-4 bottom-7 z-40 h-[52px] px-[22px] rounded-full bg-[#F5BF48] text-white text-[15px] font-bold shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)]"
+  class="lg:hidden fixed right-[calc(1rem_+_var(--scrollbar-width,0px))] bottom-7 z-40 h-[52px] px-[22px] rounded-full bg-[#F5BF48] text-white text-[15px] font-bold shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)]"
 >
   入会申し込み
 </button>
@@ -196,12 +196,22 @@ const isCurrent = (href: string) =>
   const closeJoinButton = document.querySelector("[data-close-join]") as HTMLButtonElement;
   const openJoinButtons = document.querySelectorAll("[data-open-join]");
 
-  // 背景スクロール固定は個々の open/close で直接書かず、常にダイアログの開閉状態から導出する
+  const root = document.documentElement;
+
+  // 背景スクロール固定は個々の open/close で直接書かず、常にダイアログの開閉状態から導出する。
+  // スクロールバーが消えると画面幅が変わりハンバーガーと×がずれるため、消えた幅をページと×の両方で補正する
   const syncScrollLock = () => {
-    document.documentElement.classList.toggle(
-      "overflow-hidden",
-      menu.open || join.open
-    );
+    const locked = menu.open || join.open;
+    if (locked && !root.classList.contains("overflow-hidden")) {
+      const scrollbarWidth = window.innerWidth - root.clientWidth;
+      root.style.setProperty("--scrollbar-width", `${scrollbarWidth}px`);
+      root.style.paddingRight = `${scrollbarWidth}px`;
+    }
+    if (!locked) {
+      root.style.removeProperty("--scrollbar-width");
+      root.style.paddingRight = "";
+    }
+    root.classList.toggle("overflow-hidden", locked);
   };
 
   openMenuButton.addEventListener("click", () => {
