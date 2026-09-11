@@ -174,6 +174,15 @@ const isCurrent = (href: string) =>
     #mobile-menu[open] [data-menu-cta] {
       animation: menu-rise 280ms ease-out;
     }
+
+    /* 閉じるときは逆再生でふわっと戻す。forwards で終了状態を保ち、close() までのちらつきを防ぐ */
+    #mobile-menu[open][data-closing] {
+      animation: menu-fade-out 280ms ease-in forwards;
+    }
+    #mobile-menu[open][data-closing] nav,
+    #mobile-menu[open][data-closing] [data-menu-cta] {
+      animation: menu-sink 280ms ease-in forwards;
+    }
   }
 
   @keyframes menu-fade {
@@ -184,6 +193,16 @@ const isCurrent = (href: string) =>
   @keyframes menu-rise {
     from { transform: translateY(8px); }
     to { transform: translateY(0); }
+  }
+
+  @keyframes menu-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @keyframes menu-sink {
+    from { transform: translateY(0); }
+    to { transform: translateY(8px); }
   }
 </style>
 
@@ -197,6 +216,7 @@ const isCurrent = (href: string) =>
   const openJoinButtons = document.querySelectorAll("[data-open-join]");
 
   const root = document.documentElement;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   // 背景スクロール固定は個々の open/close で直接書かず、常にダイアログの開閉状態から導出する。
   // スクロールバーが消えると画面幅が変わりハンバーガーと×がずれるため、消えた幅をページと×の両方で補正する
@@ -214,14 +234,34 @@ const isCurrent = (href: string) =>
     root.classList.toggle("overflow-hidden", locked);
   };
 
+  // メニューはフェードアウトを再生してから閉じる。視差効果を減らす設定ならすぐ閉じる
+  let finishClosing: ((e: AnimationEvent) => void) | null = null;
+  const closeMenu = () => {
+    if (!menu.open || finishClosing) return;
+    if (reduceMotion.matches) {
+      menu.close();
+      return;
+    }
+    // 子要素のアニメーション終了もバブリングしてくるので、dialog 自身のものだけ拾う
+    finishClosing = (e) => {
+      if (e.target === menu) menu.close();
+    };
+    menu.addEventListener("animationend", finishClosing);
+    menu.setAttribute("data-closing", "");
+  };
+
   openMenuButton.addEventListener("click", () => {
     menu.showModal();
     openMenuButton.setAttribute("aria-expanded", "true");
     syncScrollLock();
   });
 
-  closeMenuButton.addEventListener("click", () => {
-    menu.close();
+  closeMenuButton.addEventListener("click", closeMenu);
+
+  // Escape でもフェードアウトさせる（既定の即時クローズを止める）
+  menu.addEventListener("cancel", (e) => {
+    e.preventDefault();
+    closeMenu();
   });
 
   openJoinButtons.forEach((button) => {
@@ -238,6 +278,10 @@ const isCurrent = (href: string) =>
 
   // Escapeキーで閉じた場合も close イベントで拾えるので、ここで状態を戻す
   menu.addEventListener("close", () => {
+    // フェードアウト途中に入会ボタンなど別経路で閉じられても、次に開いたとき即閉じないよう必ず初期化する
+    if (finishClosing) menu.removeEventListener("animationend", finishClosing);
+    finishClosing = null;
+    menu.removeAttribute("data-closing");
     openMenuButton.setAttribute("aria-expanded", "false");
     syncScrollLock();
   });
@@ -246,10 +290,11 @@ const isCurrent = (href: string) =>
     syncScrollLock();
   });
 
-  // backdropクリックで閉じる
-  [menu, join].forEach((dialog) => {
-    dialog.addEventListener("click", (e) => {
-      if (e.target === dialog) dialog.close();
-    });
+  // 余白（dialog 自身）のクリックで閉じる
+  menu.addEventListener("click", (e) => {
+    if (e.target === menu) closeMenu();
+  });
+  join.addEventListener("click", (e) => {
+    if (e.target === join) join.close();
   });
 </script>
