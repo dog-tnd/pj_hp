@@ -1,100 +1,153 @@
-# モバイル/タブレットナビ 2b — 実装仕様
+# モバイル/タブレットナビ 2b — 完成報告書
 
-対象：`lg`(1024px) 未満。PC版（`Header.astro` / PR #61）は 1024px 以上のみ描画するため重複しない。
-
-## 方針
-
-- 新規 `src/components/HeaderMobile.astro` を作る。**`Header.astro` は触らない**（PR #61 の修正と衝突させない）
-- スタイルは **Tailwind ユーティリティ**。他の `.astro` と同じ書き味に揃える
-- `Layout.astro` に `<HeaderMobile />` を `<Header />` の直後（`overflow-hidden` の div の外）に追加
-- メニューと入会モーダルは `<dialog>` + `showModal()`。フォーカストラップ・Escape・背景の inert がブラウザ任せになる
-- **`sm:` は使えない**（`tailwind.config.cjs` の `screens` が `theme` 直下で上書きされ、`md`/`lg`/`custom-md` のみ）
-
-## 構成（4パート）
-
-```
-<header class="lg:hidden sticky top-0 z-50 ...">   ロゴ + ハンバーガー
-<dialog data-menu>                                  全画面メニュー
-<button class="lg:hidden fixed ...">                追従CTA
-<dialog data-join>                                  入会モーダル
-```
-
-## 1. ヘッダー（閉じた状態）
-
-| 要素 | 指定 |
+| 項目 | 内容 |
 | --- | --- |
-| 外枠 | `lg:hidden sticky top-0 z-50 h-14 bg-gray-50/85 backdrop-blur-md` |
-| 内側 | `flex h-full items-center justify-between pl-4 pr-3 md:pl-8 md:pr-6` |
-| ロゴ画像 | `/logo.png` を `w-7 h-7 rounded-full`、`alt=""` |
-| ロゴ文字 | `TND` / `font-family:'Rubik Doodle Shadow', system-ui` / `text-2xl leading-none` / `#111827` |
-| ロゴ全体 | `<a href="/" aria-label="TND ホーム" class="flex items-center gap-2">` |
-| ハンバーガー | `w-11 h-11 rounded-[10px] flex flex-col items-center justify-center gap-1.5` |
-| 線3本 | `h-0.5 bg-gray-900 rounded-sm`、幅は `w-[22px] / w-[22px] / w-[14px]`（下段だけ短い） |
+| 報告日 | 2026-09-11 |
+| ブランチ | `feature/nav-mobile`（`develop` 起点・未 push） |
+| 対象 | `lg`(1024px) 未満。スマホ・タブレット共通 |
+| デザイン | Claude Design「C案 / 2b 全画面オーバーレイ ＋ 追従CTA」 |
+| 設計時の仕様 | このファイルの初版（コミット `7c00d6f`）。差分は §4 |
 
-**`/logo.svg` は develop に存在しない**（`archive/unused-assets/` へ退避済み）。必ず `/logo.png` を使う。
+---
 
-ボタン属性：`type="button"` `aria-label="メニューを開く"` `aria-expanded="false"` `aria-controls="mobile-menu"` `data-open-menu`
+## 1. 概要
 
-## 2. 全画面メニュー（`<dialog id="mobile-menu" data-menu>`）
+`lg` 未満の共通ナビゲーションを新規実装した。PC版（`Header.astro` / PR #61）は 1024px 以上だけを描画するため、表示は重ならない。
 
-dialog の既定スタイルを潰す：`w-screen h-screen max-w-none max-h-none m-0 p-0 border-0 bg-[#111827] text-white`
-`open:` バリアントは不要（`showModal()` 済みのみ表示される）。`::backdrop` は全面不透明なので指定不要。
+- ヘッダーはロゴとハンバーガーだけに絞り、画面上端に固定（sticky）
+- メニューは画面全体を暗転して覆う全画面オーバーレイ。開閉ともにフェードする
+- 「入会申し込み」は右下の追従ボタンとして常に表示し、メニュー内にも置いた
+- スタイルは Tailwind。アニメーションの keyframes だけ scoped `<style>` に書いた
 
-| 要素 | 指定 |
+## 2. 変更ファイル
+
+| ファイル | 内容 |
 | --- | --- |
-| 上部バー | `flex h-14 items-center justify-between pl-4 pr-3 md:pl-8 md:pr-6`（閉じた状態と同位置） |
-| ロゴ文字 | 同じだが `text-white` |
-| 閉じるボタン | `w-11 h-11` / `×` / `text-white text-2xl` / `aria-label="メニューを閉じる"` / `data-close-menu` |
-| リスト外枠 | `px-6 md:px-8 pt-[76px]`（上部バー56px + 76px ＝ デザインの上から132px） |
-| リスト | `md:max-w-[520px] md:mx-auto` |
-| 行 | `flex h-[72px] items-center gap-4 border-b border-white/10` |
-| 番号 | `w-6 font-mono text-xs`。現在地 `#93C5FD` / それ以外 `#9CA3AF` |
-| ラベル | `text-[28px] leading-tight`。現在地 `font-bold text-white` / それ以外 `font-medium text-gray-100` |
-| 現在地の点 | `ml-auto w-2 h-2 rounded-full bg-[#93C5FD]`（現在地の行のみ） |
+| `src/components/HeaderMobile.astro` | 新規（300行）。ヘッダー・全画面メニュー・追従CTA・入会モーダル・開閉スクリプト |
+| `src/layouts/Layout.astro` | `<HeaderMobile />` を `<body>` 直下（`overflow-hidden` の div の外）に追加。`<main>` に `pb-24 lg:pb-0` |
+| `.claude/launch.json` | dev サーバーの起動設定（プレビュー確認用） |
 
-リンクは4つ。`01 私たちについて /about` `02 テックブログ /blog` `03 よくある質問 /faq` `04 お問い合わせ /contact`
+`Header.astro`（PR #61）には触れていない。
 
-**現在地判定は `Header.astro` と同じロジックを使う**（`/blog` のみ `startsWith`、他は完全一致＋末尾スラッシュ許容）。現在地の行に `aria-current="page"`。
-
-### メニュー下部のCTA
-`absolute inset-x-6 bottom-9 md:max-w-[520px] md:mx-auto md:inset-x-0`
-- ボタン：`h-[60px] w-full rounded-[14px] bg-[#F5BF48] text-white text-lg font-bold`
-- 注記：`mt-3 text-center text-xs text-gray-400` / 「Discord への案内が開きます」
-
-## 3. 追従CTA
-
-`lg:hidden fixed right-4 bottom-7 z-40 h-13 px-[22px] rounded-full bg-[#F5BF48] text-white text-[15px] font-bold`
-※ `h-13` は無いので `h-[52px]`
-影：`shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)]`
-
-本文と重ならないよう **`Layout.astro` の `<main>` に `pb-24 lg:pb-0`** を付ける（92px確保）。
-
-## 4. 入会モーダル（`<dialog data-join>`）
-
-PC版と同じ見た目を Tailwind で再現する。PC版の dialog は `@media (min-width:1024px)` の中にあり 1024px 未満では機能しないため、**モバイル側は自前で持つ**（将来 `JoinDialog.astro` に統合するのが望ましい。PR #61 と衝突するので今回はやらない）。
-
-- 外枠：`w-[min(440px,calc(100%-48px))] p-0 border-0 rounded-2xl bg-white text-gray-800`
-- backdrop：`backdrop:bg-slate-900/50`
-- ヘッダー：`flex items-center justify-between px-6 py-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white`、`h2` は `text-xl font-bold`「Discordに参加しよう！」
-- 本文：`p-6 text-center`、`/sns-discord.svg` を `w-16 h-16 mx-auto mb-5`
-- 参加ボタン：`block mt-6 py-3 px-[18px] rounded-[10px] bg-indigo-600 text-white font-bold`、`href="https://discord.gg/k3qMBEn3CC"` `target="_blank"` `rel="noopener noreferrer"`
-- 閉じるボタン：`aria-label="閉じる"`
-
-## 5. スクリプト
+コミット：
 
 ```
-開く：  data-open-menu → menu.showModal() + aria-expanded="true"
-閉じる：data-close-menu / dialog の close イベント → aria-expanded="false"
-入会：  追従CTA と メニュー内CTA の両方 → menu が開いていれば close してから join.showModal()
+a20d439 feat(nav): ✨ モバイル/タブレット用ナビゲーションを追加
+cc6d1e9 feat(nav): ✨ メニュー展開時のフェードインを追加
+b8c771d fix(nav): 🐛 メニュー開閉時のボタン位置ずれを修正
+c342d5c feat(nav): ✨ メニューを閉じるときのフェードアウトを追加
 ```
 
-- 背景スクロール固定：どちらかの dialog が開いている間 `document.documentElement.classList.add('overflow-hidden')`、両方閉じたら外す。**個々の open/close で直接書かず、`menu.open || join.open` から導出する**
-- dialog の `close` イベントで状態を戻す（Escape で閉じた場合も拾えるため）
-- backdrop クリックで閉じる：`dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close() })`
-- `<script>` は Astro が自動でバンドル・重複排除するのでそのまま書いてよい
+---
 
-## やらないこと
+## 3. 実装内容
 
-- `Header.astro` の変更
-- `menu.tsx` への言及（PR #61 で削除済み）
-- PC版のスタイル方式（素のCSS）に合わせること。こちらは Tailwind で書く
+### ヘッダー（閉じた状態）
+
+| 要素 | 実装値 |
+| --- | --- |
+| 外枠 | `lg:hidden sticky top-0 z-50 h-14`（56px）/ `bg-gray-50/85 backdrop-blur-md` |
+| 余白 | `pl-4 pr-3`、`md` 以上は `pl-8 pr-6` |
+| ロゴ | `/logo.png` 28px 円形 ＋ `TND`（Rubik Doodle Shadow / 24px）。ホームへのリンク |
+| ハンバーガー | タップ領域 44×44 / 線3本 22・22・14px（下段だけ短い） |
+
+### 全画面メニュー（`<dialog id="mobile-menu">`）
+
+| 要素 | 実装値 |
+| --- | --- |
+| 背景 | `#111827` 全面 / `w-screen h-dvh` |
+| 上部バー | ヘッダーと同じ位置にロゴ（白）と × ボタン（44×44） |
+| リスト | 上から 132px / 行の高さ 72px / 文字 28px / 区切り線 `white/10` |
+| 番号 | `01`〜`04` / mono 12px / 通常 `#9CA3AF`・現在地 `#93C5FD` |
+| 現在地 | 太字・白 ＋ 右端に 8px の点（`#93C5FD`）＋ `aria-current="page"` |
+| 下部CTA | 高さ 60px・全幅・角丸 14px / 下端から 36px |
+| タブレット | `md` 以上でリストと CTA を幅 520px に収めて中央寄せ |
+
+現在地は `Astro.url.pathname` で判定する。`/blog` だけ前方一致なので、記事詳細でも「テックブログ」が現在地になる。
+
+### 追従CTA
+
+右 16px・下 28px に固定 / 高さ 52px / 角丸 full / `#F5BF48` / 黄色の影。本文の下端には `pb-24`（96px）を確保しており、最後の要素がボタンに隠れない。
+
+### 入会モーダル（`<dialog id="join-dialog">`）
+
+PC版と同じ見た目（青のグラデーションヘッダー・Discord アイコン・参加ボタン）を Tailwind で再現した。PC版のモーダルは `@media (min-width:1024px)` の中にあって 1024px 未満では動かないため、モバイル側で別に持っている。
+
+### 動き
+
+| 操作 | 挙動 |
+| --- | --- |
+| ハンバーガー | メニューが 280ms でフェードイン。リストと CTA は 8px 下から浮き上がる |
+| ×・Escape・余白タップ | 逆再生でフェードアウトしてから閉じる（280ms） |
+| メニュー内の入会申し込み | メニューは即座に閉じ、入会モーダルに切り替わる |
+| 追従CTA | 入会モーダルを開く |
+| 「視差効果を減らす」設定 | アニメーションなしで即時に開閉する |
+
+### アクセシビリティ
+
+- メニュー・モーダルは `<dialog>` + `showModal()`。フォーカストラップと背景の操作不可（inert）はブラウザの既定動作に任せている
+- ハンバーガーに `aria-label` / `aria-expanded` / `aria-controls`。`aria-expanded` は開閉に連動する
+- メニューを開くと × ボタンにフォーカスが当たる（`autofocus`）
+- 入会申し込みは `<a href="#">` ではなく `<button>`
+
+### 背景スクロールの固定
+
+メニューかモーダルが開いている間は `<html>` に `overflow-hidden` を付ける。個々の開閉処理では書かず、`menu.open || join.open` から毎回判定する（二重に開閉しても状態が食い違わない）。
+
+スクロールバーが幅を取る環境（PC ブラウザを狭めた場合など）では、スクロールバーが消える分だけ画面幅が広がり、× がハンバーガーより右にずれていた。固定する直前にスクロールバーの幅を測り、`--scrollbar-width` として `<html>` の右余白・× の右余白・追従CTAの位置に加えて打ち消している。スマホ実機はスクロールバーが幅を取らないので、補正値は 0 になる。
+
+---
+
+## 4. 設計時の仕様からの変更点
+
+| 項目 | 設計時 | 実装 | 理由 |
+| --- | --- | --- | --- |
+| メニューの高さ | `h-screen` | `h-dvh` | スマホのアドレスバー分だけ下端の CTA が隠れるため |
+| 開くアニメーション | 150ms | 280ms | 「ふわっと」見せたいという要望 |
+| 閉じるアニメーション | なし | 280ms のフェードアウト | 要望。Escape と余白タップも同じ動きにそろえた |
+| CTA下の注記 | 「Discord への案内が開きます」 | 削除 | 要望 |
+| 初期フォーカス | 指定なし | × ボタン | ロゴに当たって白い枠が出ていたため |
+| `<nav>` の `aria-label` | なし | 「メインナビゲーション」 | PC版にそろえた |
+| スクロールバー補正 | なし | 追加 | 開閉時に × とハンバーガーがずれたため |
+
+---
+
+## 5. 検証結果
+
+| 項目 | 結果 |
+| --- | --- |
+| `pnpm astro check` | エラー 0 |
+| `pnpm build` | 17 ページ成功 |
+| 見た目（375×812） | デザイン 2b と一致。閉じた状態・開いた状態を確認 |
+| 見た目（768×1024） | リストと CTA が 520px 幅で中央寄せになることを確認 |
+| 開閉の状態 | 開く：`open` / `aria-expanded="true"` / スクロール固定がそろって切り替わる |
+| 閉じるフェード | × を押して 0.12 秒後は不透明度 0.77 で消えている途中、0.5 秒後に閉じてスクロール固定も解除 |
+| Escape | フェードアウトしてから閉じる |
+| 位置ずれ | スクロールバー 15px の環境で、ハンバーガーと × の右端がどちらも 729px で一致。追従CTAも開閉中に動かない（737px） |
+| メニュー → 入会モーダル | 切り替え中もスクロール固定が外れない。その後メニューを開き直しても勝手に閉じない |
+
+検証は Chromium（プレビュー画面）で、ビューポートをエミュレートして行った。
+
+## 6. 未検証・既知の制限
+
+- **実機（iOS Safari / Android Chrome）では未確認。** `h-dvh`・`backdrop-blur`・`<dialog>` の見え方は実機で一度見ておきたい
+- **PR #61 と組み合わせた状態は未確認。** 下の §7 の衝突があり、試しのマージが通らなかった
+- 固定ヘッダー（56px）の下にページ内リンクの着地点が隠れる可能性がある。`scroll-padding-top` は未設定（PC版も同じ）
+- 入会モーダルには開閉アニメーションがない
+- メニュー内の入会申し込みを押したときの切り替えは、フォーカスの移動で不具合が出やすいので意図的に即時にしている
+
+---
+
+## 7. 引き継ぎ・残課題
+
+### PR #61（PC版）側
+
+1. **ロゴが表示されない。** `Header.astro` は `/logo.svg` を参照しているが、develop では `archive/unused-assets/` に退避済みで存在しない。`/logo.png` に変える必要がある
+2. **develop と衝突する。** PR #61 の分岐元は `192f1b0`（main を取り込む前の develop）。試しのマージでは 8 ファイル（`Layout.astro` と全ページ）が衝突した。修正の前に develop の取り込みが必要
+3. PR #61 がマージされるまで、develop には旧 `menu.tsx` のモバイルヘッダーが残っている。このブランチを先にマージすると、**モバイルでヘッダーが2つ表示される**
+
+### マージ後の片付け
+
+- 入会モーダルが PC版とモバイル版で2つある。`JoinDialog.astro` にまとめて両方から呼ぶ形が望ましい
+- `Layout.astro` の「PC版はこの直後に追加予定。現時点では未導入」のコメントを削除する
+- PR #61 との衝突は `Layout.astro` の1ファイルだけ。`<Header />` と `<HeaderMobile />` を並べれば解決する
