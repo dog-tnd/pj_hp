@@ -41,7 +41,7 @@ Layout.astro
 
 ### レスポンシブ
 - 境界は `lg`（1024px）の1つだけ。未満がモバイル版、以上が PC 版
-- 条件を書く場所は `SiteHeader.astro` のみ。`HeaderMobile.astro` の中からは `lg:hidden` を外す
+- 条件を書く場所は `SiteHeader.astro` のみ。`HeaderMobile.astro` の中の `lg:hidden` 2か所（上部バーの `<header>` と追従ボタン）は外す
 - 例外：`Layout.astro` の `<main>` の `pb-24 lg:pb-0`（追従ボタンと本文の重なり防止。`<main>` の余白はヘッダー側から付けられないため）
 
 ### 動き
@@ -64,6 +64,14 @@ Layout.astro
 - 入会モーダルを開きたいボタンには `data-open-join` 属性を付けるだけ。クリック処理は書かない
 - `JoinDialog.astro` がページ内の `[data-open-join]` をすべて拾って開く
 - 背景スクロールの固定は `scroll-lock.ts` に集約する。`data-scroll-lock` を持つ `<dialog>` のどれかが開いていれば固定する。スクロールバーの幅の補正（`--scrollbar-width`）もここで行う
+  - `scroll-lock.ts` は `syncScrollLock()` を1つだけ公開する
+  - 固定したい `<dialog>` には `data-scroll-lock` を付ける（メニューと入会モーダルの2つ）
+  - 各コンポーネントは、`showModal()` の直後と、その dialog の `close` イベントで `syncScrollLock()` を呼ぶ。開閉のたびに自分で `overflow` を書き換えない
+
+### メニュー内の「入会申し込み」の分担
+- ボタンには `data-open-join` を付ける。モーダルを開くのは `JoinDialog` の担当
+- `HeaderMobile` は同じボタンに自分でもクリック処理を付け、メニューを**即時に**閉じる（フェードなし。フォーカスの移動で不具合が出やすいため、現行と同じ）
+- 2つのクリック処理はどちらが先に動いても結果が同じになる（メニューが閉じ、モーダルが開き、スクロール固定は途切れない）
 
 ## 既存コードとの関係
 - `src/layouts/Layout.astro`：`<HeaderMobile />` を `<SiteHeader />` に置き換える。PR #61 向けの古いコメントを削除
@@ -71,8 +79,9 @@ Layout.astro
   - `src/pages/index.astro`、`blog/index.astro`（ヒーローだけ包んでいた）
   - `src/pages/about/index.astro`、`faq/index.astro`、`contact/index.astro`、`404.astro`（ページ全体を包んでいた）
   - `src/components/BlogArticleView.astro`（記事ページ）
+- `tsconfig.json`：`exclude` に `archive` を足す。`include` の `"**/*.astro"` が src の外にも効くため、退避した `.astro` が型チェックの対象に残り続けるのを防ぐ
 - 退避（`git mv` で `archive/unused-assets/` へ。README に理由を追記）：
-  - `src/components/menu.tsx`、`src/components/MenuLayout.astro`
+  - `src/components/menu.tsx`、`src/components/MenuLayout.astro`（`MenuLayout` は `pt-20` の上余白を持っていたので、撤去で本文が 80px 上に詰まる。決定済み）
   - `src/index.css`（`menu.tsx` だけが読み込んでいた。フォントは `Layout.astro` の `<link>` で読み込み済み、定義している `font-noto-*` クラスは未使用）
 - `docs/design/nav-mobile-2b/report.md`：入会モーダルの記述が古くなるので、この spec への参照を1行追記する
 - PR #61（PC版）とは `Layout.astro` と各ページで衝突する。#61 は閉じて、この PR のマージ後に develop から作り直してもらう方針
