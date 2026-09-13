@@ -9,6 +9,8 @@ interface NewsCardProps {
   authorImage: string;
   date: string;
   url: string;
+  // カードの幅・高さを上書きしたい場合に指定（未指定時は従来サイズ）
+  sizeClass?: string;
 }
 
 const NewsCard: FC<NewsCardProps> = ({
@@ -20,11 +22,14 @@ const NewsCard: FC<NewsCardProps> = ({
   authorImage,
   date,
   url, // URLプロパティを追加
+  // 高さは「画像192 + タイトル2行56 + 説明3行72 + 余白・著者情報」が収まるよう 440px にしている。
+  // タイトルや説明の行数を増やすときは、ここも合わせて広げないと下が隠れる
+  sizeClass = "w-full max-w-sm custom-md:w-[390px] custom-md:max-w-[390px] h-[440px]",
 }) => {
   return (
     <a
       href={url}
-      className="w-full max-w-sm custom-md:w-[390px] custom-md:max-w-[390px] h-[360px] overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col mx-auto"
+      className={`${sizeClass} overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col mx-auto`}
     >
       {/* Image Section */}
       <div className="relative h-48 w-full overflow-hidden flex-shrink-0">
@@ -37,23 +42,23 @@ const NewsCard: FC<NewsCardProps> = ({
 
       {/* Content Section with specific padding */}
       <div className="p-4 flex flex-col flex-grow">
-        {/* Title with 16px padding - 1行に制限 */}
+        {/* Title with 16px padding - 2行に制限 */}
         <h2
-          className="text-xl font-bold mb-4 px-4 overflow-hidden"
+          className="text-xl font-bold mb-2 px-4 overflow-hidden"
           style={{
             display: "-webkit-box",
-            WebkitLineClamp: 1,
+            WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
           }}
         >
           {title}
         </h2>
-        {/* Description with 16px padding on sides - 2行に制限 */}
+        {/* Description with 16px padding on sides - 3行に制限 */}
         <p
-          className="text-gray-600 mb-4 px-4 overflow-hidden"
+          className="text-gray-600 mb-3 px-4 overflow-hidden"
           style={{
             display: "-webkit-box",
-            WebkitLineClamp: 2,
+            WebkitLineClamp: 3,
             WebkitBoxOrient: "vertical",
           }}
         >

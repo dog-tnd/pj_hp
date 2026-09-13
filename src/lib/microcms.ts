@@ -1,0 +1,101 @@
+import { createClient } from "microcms-js-sdk";
+
+const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
+const apiKey = import.meta.env.MICROCMS_API_KEY;
+
+if (!serviceDomain || !apiKey) {
+  throw new Error(
+    "MICROCMS_SERVICE_DOMAIN と MICROCMS_API_KEY を .env に設定してください。"
+  );
+}
+
+export const client = createClient({
+  serviceDomain,
+  apiKey,
+});
+
+// microCMS の画像フィールドの型
+export type MicroCMSImage = {
+  url: string;
+  height?: number;
+  width?: number;
+};
+
+// microCMS が自動付与するフィールド
+type MicroCMSBase = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  // 下書き（未公開）では null になり得る
+  publishedAt: string | null;
+  revisedAt: string;
+};
+
+// categories エンドポイント（タグ/カテゴリ）のコンテンツ型
+export type Category = MicroCMSBase & {
+  name: string;
+};
+
+// authorImage は別エンドポイントへのコンテンツ参照。
+// 参照先コンテンツ内の image 型フィールド（フィールドID も authorImage）に画像が入る
+export type AuthorImageRef = MicroCMSBase & {
+  authorImage: MicroCMSImage;
+};
+
+// blog エンドポイントのコンテンツ型
+export type BlogPost = MicroCMSBase & {
+  title: string;
+  description: string;
+  author: string;
+  role: string;
+  authorImage?: AuthorImageRef;
+  image: MicroCMSImage;
+  // tags は categories への複数コンテンツ参照。取得時は Category オブジェクトの配列で返る
+  tags: Category[];
+  // リッチエディタは HTML 文字列で返る
+  body: string;
+};
+
+// サムネイル画像の URL を返す。未入力ならサンプル画像にフォールバック
+export function getImageUrl(post: BlogPost): string {
+  return post.image?.url || '/thumbnail_sample.jpg';
+}
+
+// 著者画像の URL を返す（コンテンツ参照のネストを吸収）。無ければサンプル画像
+export function getAuthorImageUrl(post: BlogPost): string {
+  return post.authorImage?.authorImage?.url || '/icon_sample.jpg';
+}
+
+// 公開済み記事を全件取得（GitHub Pages 用の SSG なのでビルド時に全件取得）
+export async function getAllPosts(): Promise<BlogPost[]> {
+  // getAllContents は内部で自動ページングし、100件超でも全件取得する
+  const contents = await client.getAllContents<BlogPost>({
+    endpoint: "blog",
+    queries: { orders: "-publishedAt" },
+  });
+  // 下書き（未公開）は publishedAt が付かないため除外する
+  return contents.filter((post) => Boolean(post.publishedAt));
+}
+
+// プレビュー用に1記事を取得する。
+// draftKey があれば下書きを、無ければ公開済み記事を取得する
+// （microCMS は公開済み記事を draftKey なしで返すため、公開済みのプレビューにも対応）。
+export async function getPreviewPost(
+  contentId: string,
+  draftKey?: string
+): Promise<BlogPost> {
+  return client.getListDetail<BlogPost>({
+    endpoint: "blog",
+    contentId,
+    queries: draftKey ? { draftKey } : undefined,
+  });
+}
+
+// カテゴリ（タグ）を全件取得
+export async function getAllCategories(): Promise<Category[]> {
+  const data = await client.getList<Category>({
+    endpoint: "categories",
+    queries: { limit: 100 },
+  });
+  return data.contents;
+}

@@ -24,10 +24,10 @@
     ctx.lineTo(startX + 120, startY);
     ctx.stroke();
 
-    // 縦線を描画
+    // 縦線を描画（下方向はメニューと被らないよう短めにする）
     ctx.beginPath();
     ctx.moveTo(startX, startY - 100);
-    ctx.lineTo(startX, startY + 100);
+    ctx.lineTo(startX, startY + 40);
     ctx.stroke();
   }
 </script>

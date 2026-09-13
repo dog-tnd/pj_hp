@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// 同ディレクトリの .astro を列挙して一覧にする。
+// 新しい確認用ページを追加すると自動でここに並ぶ（読み込みはせずパスだけ使う）
+const pages = Object.keys(import.meta.glob('./*.astro'))
+  .map((path) => path.replace(/^\.\//, '').replace(/\.astro$/, ''))
+  .filter((name) => name !== 'index')
+  .sort();
+---
+
+<Layout title="開発用テストページ一覧（dev限定）" noindex={true}>
+  <main class="mx-auto max-w-3xl px-4 py-12">
+    <div
+      class="mb-8 rounded border border-yellow-300 bg-yellow-100 px-4 py-2 text-sm text-yellow-800"
+    >
+      開発時のみ表示されるページです（本番ビルドには含まれません）
+    </div>
+
+    <h1 class="mb-6 text-2xl font-bold text-gray-900">開発用テストページ</h1>
+
+    {pages.length === 0 ? (
+      <p class="text-gray-600">
+        まだテストページがありません。<code>src/dev-pages/</code> に .astro を追加してください。
+      </p>
+    ) : (
+      <ul class="space-y-2">
+        {pages.map((name) => (
+          <li>
+            <a class="text-blue-600 underline" href={`/dev/${name}`}>/dev/{name}</a>
+          </li>
+        ))}
+      </ul>
+    )}
+
+    <p class="mt-10 text-sm text-gray-500">
+      追加方法: <code>src/dev-pages/&lt;name&gt;.astro</code> を作成すると
+      <code>/dev/&lt;name&gt;</code> で開けるようになります。
+    </p>
+  </main>
+</Layout>

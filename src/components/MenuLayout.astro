@@ -1,0 +1,18 @@
+---
+// メインコンテンツを中央カラムに、メニューを右カラム（ヒーローの横）に配置する共通レイアウト。
+// lg 未満では縦積み（メニューのハンバーガーヘッダーが上部）になる。
+import Menu from "./menu";
+---
+
+<div
+  class="pt-20 lg:grid lg:grid-cols-[10rem_minmax(0,1fr)_10rem] lg:gap-10 lg:items-start"
+>
+  <!-- 右カラム：メニュー（lg以上） / 上部ヘッダー（lg未満） -->
+  <div class="lg:col-start-3 lg:row-start-1">
+    <Menu client:load />
+  </div>
+  <!-- 中央カラム：メインコンテンツ -->
+  <div class="lg:col-start-2 lg:row-start-1 min-w-0">
+    <slot />
+  </div>
+</div>

@@ -1,0 +1,89 @@
+---
+import Layout from './layouts/Layout.astro';
+import TwoLine from './components/TwoLine.astro';
+import BlogArticleView from './components/BlogArticleView.astro';
+import NewsCard from './components/NewsCard';
+import { getPreviewPost, getImageUrl, getAuthorImageUrl, type BlogPost } from './lib/microcms';
+import { formatDotDate } from './utils/date';
+
+// このページは astro.config.mjs の injectRoute で /blog/preview として
+// Vercel ビルド時と dev 時のみ注入される（本番=GitHub Pages の静的ビルドには含めない）。
+// そのため常に SSR でよい。
+export const prerender = false;
+
+const contentId = Astro.url.searchParams.get('contentId');
+const draftKey = Astro.url.searchParams.get('draftKey');
+
+let post: BlogPost | null = null;
+let errorMessage: string | null = null;
+
+if (contentId) {
+  try {
+    // draftKey があれば下書き、無ければ公開済みを取得
+    post = await getPreviewPost(contentId, draftKey ?? undefined);
+  } catch (e) {
+    console.error('プレビュー取得失敗:', e);
+    errorMessage = 'プレビューの取得に失敗しました。下書きの場合は draftKey が必要です。URLを確認してください。';
+  }
+} else {
+  errorMessage = 'プレビュー対象が指定されていません（contentId が必要です）。';
+}
+
+const pageTitle = post ? `【プレビュー】${post.title}` : 'プレビュー';
+
+// canonical / og:url に draftKey を載せないよう、クエリ無しのURLに固定する
+const canonicalURL = new URL(contentId ? `/blog/${contentId}` : '/blog', Astro.site).href;
+---
+
+<Layout
+  title={pageTitle}
+  canonicalURL={canonicalURL}
+  noindex={true}
+>
+  <header>
+    <TwoLine />
+  </header>
+
+  {post ? (
+    <>
+      {/* プレビュー中バナー */}
+      <div class="bg-yellow-100 border-b border-yellow-300 text-yellow-800 text-center text-sm py-2">
+        これは下書きのプレビューです（公開サイトには表示されません）
+      </div>
+
+      {/* 一覧カードの見え方 */}
+      <section class="mx-auto max-w-7xl px-4 pt-12 sm:px-6 lg:px-8">
+        <h2 class="text-xl font-bold mb-6 text-gray-900">一覧カードの見え方</h2>
+        <div class="flex justify-center">
+          <NewsCard
+            image={getImageUrl(post)}
+            title={post.title}
+            description={post.description}
+            author={post.author}
+            role={post.role}
+            authorImage={getAuthorImageUrl(post)}
+            date={formatDotDate(post.publishedAt)}
+            url="#"
+            client:load
+          />
+        </div>
+      </section>
+
+      {/* 記事ページの見え方 */}
+      <section class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+        <h2 class="text-xl font-bold text-gray-900">記事ページの見え方</h2>
+      </section>
+      <BlogArticleView post={post} />
+    </>
+  ) : (
+    <main class="mx-auto max-w-3xl px-4 py-24 text-center">
+      <p class="text-gray-600">{errorMessage}</p>
+    </main>
+  )}
+
+  <footer class="mt-24 border-t border-gray-200 py-8">
+    <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+      <p class="text-sm text-gray-500">© 2025 TND All Rights Reserved.</p>
+    </div>
+  </footer>
+</Layout>
