@@ -1,0 +1,64 @@
+---
+// 入会モーダル。全ページで1つだけ置く（SiteHeader.astro から呼ぶ）。
+// 開くボタン側は data-open-join を付けるだけでよく、クリック処理はここでまとめて付ける。
+---
+
+<dialog
+  id="join-dialog"
+  data-scroll-lock
+  class="w-[min(440px,calc(100%-48px))] p-0 border-0 rounded-2xl bg-white text-gray-800 backdrop:bg-slate-900/50"
+>
+  <div class="flex items-center justify-between px-6 py-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+    <h2 class="text-xl font-bold">Discordに参加しよう！</h2>
+    <button
+      type="button"
+      aria-label="閉じる"
+      data-close-join
+      class="w-8 h-8 flex items-center justify-center text-white text-2xl"
+    >
+      ×
+    </button>
+  </div>
+  <div class="p-6 text-center">
+    <img src="/sns-discord.svg" alt="" class="w-16 h-16 mx-auto mb-5" />
+    <p>
+      <strong>4,5月はDiscordを中心に新歓イベントを開催します！</strong>
+    </p>
+    <p>
+      このDiscordサーバーに参加すると、プログラミングサークルTNDの<strong>仮加入メンバー</strong>となります。
+    </p>
+    <p>新入生同士でたくさん交流して、プログラミングの楽しさを一緒に体験しましょう！</p>
+    <a
+      href="https://discord.gg/k3qMBEn3CC"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="block mt-6 py-3 px-[18px] rounded-[10px] bg-indigo-600 text-white font-bold"
+    >
+      Discordサーバーに参加する
+    </a>
+  </div>
+</dialog>
+<script>
+  import { syncScrollLock } from "../scripts/scroll-lock";
+
+  const join = document.getElementById("join-dialog") as HTMLDialogElement;
+  const closeButton = join.querySelector("[data-close-join]") as HTMLButtonElement;
+
+  document.querySelectorAll("[data-open-join]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!join.open) join.showModal();
+      syncScrollLock();
+    });
+  });
+
+  closeButton.addEventListener("click", () => {
+    join.close();
+  });
+
+  join.addEventListener("close", syncScrollLock);
+
+  // 余白（dialog 自身）のクリックで閉じる
+  join.addEventListener("click", (e) => {
+    if (e.target === join) join.close();
+  });
+</script>

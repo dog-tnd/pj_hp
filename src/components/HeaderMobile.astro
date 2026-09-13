@@ -1,6 +1,6 @@
 ---
 // モバイル/タブレット用ヘッダー。どの画面幅で表示するかは SiteHeader.astro が決める。
-// 全画面メニューと入会モーダルは <dialog> + showModal() で実装し、
+// 全画面メニューは <dialog> + showModal() で実装し、
 // フォーカストラップ・Escapeキー・背景の inert 化はブラウザの既定動作に任せる。
 interface Link {
   href: string;
@@ -128,42 +128,6 @@ const isCurrent = (href: string) =>
   入会申し込み
 </button>
 
-<dialog
-  id="join-dialog"
-  data-join
-  data-scroll-lock
-  class="w-[min(440px,calc(100%-48px))] p-0 border-0 rounded-2xl bg-white text-gray-800 backdrop:bg-slate-900/50"
->
-  <div class="flex items-center justify-between px-6 py-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
-    <h2 class="text-xl font-bold">Discordに参加しよう！</h2>
-    <button
-      type="button"
-      aria-label="閉じる"
-      data-close-join
-      class="w-8 h-8 flex items-center justify-center text-white text-2xl"
-    >
-      ×
-    </button>
-  </div>
-  <div class="p-6 text-center">
-    <img src="/sns-discord.svg" alt="" class="w-16 h-16 mx-auto mb-5" />
-    <p>
-      <strong>4,5月はDiscordを中心に新歓イベントを開催します！</strong>
-    </p>
-    <p>
-      このDiscordサーバーに参加すると、プログラミングサークルTNDの<strong>仮加入メンバー</strong>となります。
-    </p>
-    <p>新入生同士でたくさん交流して、プログラミングの楽しさを一緒に体験しましょう！</p>
-    <a
-      href="https://discord.gg/k3qMBEn3CC"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="block mt-6 py-3 px-[18px] rounded-[10px] bg-indigo-600 text-white font-bold"
-    >
-      Discordサーバーに参加する
-    </a>
-  </div>
-</dialog>
 
 <style>
   /* メニュー展開時、背景の暗転をふわっと見せる。Tailwind に keyframes が無いためここだけ CSS */
@@ -210,13 +174,11 @@ const isCurrent = (href: string) =>
 <script>
   import { syncScrollLock } from "../scripts/scroll-lock";
 
-  // メニュー・入会モーダルの開閉制御
+  // メニューの開閉制御（入会モーダルは JoinDialog.astro が担当）
   const menu = document.getElementById("mobile-menu") as HTMLDialogElement;
-  const join = document.getElementById("join-dialog") as HTMLDialogElement;
   const openMenuButton = document.querySelector("[data-open-menu]") as HTMLButtonElement;
   const closeMenuButton = document.querySelector("[data-close-menu]") as HTMLButtonElement;
-  const closeJoinButton = document.querySelector("[data-close-join]") as HTMLButtonElement;
-  const openJoinButtons = document.querySelectorAll("[data-open-join]");
+  const menuJoinButton = menu.querySelector("[data-open-join]") as HTMLButtonElement;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -250,16 +212,10 @@ const isCurrent = (href: string) =>
     closeMenu();
   });
 
-  openJoinButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      if (menu.open) menu.close();
-      join.showModal();
-      syncScrollLock();
-    });
-  });
-
-  closeJoinButton.addEventListener("click", () => {
-    join.close();
+  // メニュー内の「入会申し込み」。モーダルは JoinDialog が開くので、ここではメニューを即時に閉じるだけ。
+  // フェードさせないのは、モーダルへのフォーカス移動と重なって不具合が出やすいため
+  menuJoinButton.addEventListener("click", () => {
+    if (menu.open) menu.close();
   });
 
   // Escapeキーで閉じた場合も close イベントで拾えるので、ここで状態を戻す
@@ -272,15 +228,8 @@ const isCurrent = (href: string) =>
     syncScrollLock();
   });
 
-  join.addEventListener("close", () => {
-    syncScrollLock();
-  });
-
   // 余白（dialog 自身）のクリックで閉じる
   menu.addEventListener("click", (e) => {
     if (e.target === menu) closeMenu();
-  });
-  join.addEventListener("click", (e) => {
-    if (e.target === join) join.close();
   });
 </script>
