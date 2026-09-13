@@ -52,6 +52,7 @@ const isCurrent = (href: string) =>
 <dialog
   id="mobile-menu"
   data-menu
+  data-scroll-lock
   class="w-screen h-dvh max-w-none max-h-none m-0 p-0 border-0 bg-[#111827] text-white"
 >
   <div class="flex h-14 items-center justify-between pl-4 pr-[calc(0.75rem_+_var(--scrollbar-width,0px))] md:pl-8 md:pr-[calc(1.5rem_+_var(--scrollbar-width,0px))]">
@@ -131,6 +132,7 @@ const isCurrent = (href: string) =>
 <dialog
   id="join-dialog"
   data-join
+  data-scroll-lock
   class="w-[min(440px,calc(100%-48px))] p-0 border-0 rounded-2xl bg-white text-gray-800 backdrop:bg-slate-900/50"
 >
   <div class="flex items-center justify-between px-6 py-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
@@ -207,6 +209,8 @@ const isCurrent = (href: string) =>
 </style>
 
 <script>
+  import { syncScrollLock } from "../scripts/scroll-lock";
+
   // メニュー・入会モーダルの開閉制御
   const menu = document.getElementById("mobile-menu") as HTMLDialogElement;
   const join = document.getElementById("join-dialog") as HTMLDialogElement;
@@ -215,24 +219,7 @@ const isCurrent = (href: string) =>
   const closeJoinButton = document.querySelector("[data-close-join]") as HTMLButtonElement;
   const openJoinButtons = document.querySelectorAll("[data-open-join]");
 
-  const root = document.documentElement;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-  // 背景スクロール固定は個々の open/close で直接書かず、常にダイアログの開閉状態から導出する。
-  // スクロールバーが消えると画面幅が変わりハンバーガーと×がずれるため、消えた幅をページと×の両方で補正する
-  const syncScrollLock = () => {
-    const locked = menu.open || join.open;
-    if (locked && !root.classList.contains("overflow-hidden")) {
-      const scrollbarWidth = window.innerWidth - root.clientWidth;
-      root.style.setProperty("--scrollbar-width", `${scrollbarWidth}px`);
-      root.style.paddingRight = `${scrollbarWidth}px`;
-    }
-    if (!locked) {
-      root.style.removeProperty("--scrollbar-width");
-      root.style.paddingRight = "";
-    }
-    root.classList.toggle("overflow-hidden", locked);
-  };
 
   // メニューはフェードアウトを再生してから閉じる。視差効果を減らす設定ならすぐ閉じる
   let finishClosing: ((e: AnimationEvent) => void) | null = null;
