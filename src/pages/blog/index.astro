@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import MenuLayout from '../../components/MenuLayout.astro';
 import TwoLine from '../../components/TwoLine.astro';
 import NewsCard from '../../components/NewsCard';
 import { getAllPosts, getImageUrl, getAuthorImageUrl } from '../../lib/microcms';
@@ -36,7 +35,6 @@ const remainingTags = allTagsSorted.slice(8);
 
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
     <!-- Hero Section -->
-    <MenuLayout>
       <section class="mb-16">
         <h2 class="mb-8 text-gray-900 md:pt-[3rem]" style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 38px; font-style: normal; font-weight: 400; line-height: normal;">Blog</h2>
         <div class="prose prose-lg max-w-xg text-gray-600 md:max-w-md lg:max-w-xl">
@@ -77,7 +75,6 @@ const remainingTags = allTagsSorted.slice(8);
           </div>
         </div>
       </section>
-    </MenuLayout>
 
     <!-- すべての記事 -->
     <section id="all-posts" class="py-16 animate-fade-in animation-delay-300">

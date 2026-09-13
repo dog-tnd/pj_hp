@@ -1,7 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import TwoLine from '../components/TwoLine.astro';
-import MenuLayout from '../components/MenuLayout.astro';
 import NewsCard from '../components/NewsCard';
 import { getAllPosts, getImageUrl, getAuthorImageUrl } from '../lib/microcms';
 import { formatDotDate } from '../utils/date';
@@ -30,7 +29,6 @@ const latestPosts = sortedPosts.slice(0, 4);
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
     <!-- Hero Section -->
 
-    <MenuLayout>
       <div class="relative">
       <section class="mb-16">
         <h2 class="mb-8 text-gray-900 md:pt-[3rem]" style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 38px; font-style: normal; font-weight: 400; line-height: normal;">What's TND</h2>
@@ -45,7 +43,6 @@ const latestPosts = sortedPosts.slice(0, 4);
       </section>
       <img src="/mainCharm.svg" alt="mainCharm" class="w-full md:w-auto md:absolute top-[5rem] right-[2rem] max-w-xs md:max-w-md lg:max-w-lg pb-[5rem] opacity-30 -z-10" />
       </div>
-    </MenuLayout>
 
     <div class="w-full max-w-full md:max-w-full custom-md:max-w-7xl mx-auto">
       <section class="mb-16 w-full">

@@ -1,5 +1,4 @@
 ---
-import MenuLayout from './MenuLayout.astro';
 import { getImageUrl, getAuthorImageUrl, type BlogPost } from '../lib/microcms';
 import { formatDotDate } from '../utils/date';
 import { sanitizeBlogHtml } from '../utils/sanitize';
@@ -51,7 +50,6 @@ const bodyHtml = await highlightCodeBlocks(
 ---
 
 <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-  <MenuLayout>
     <article class="max-w-3xl w-full mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
     <!-- ヘッダー画像 -->
     <div class="relative h-64 sm:h-80 md:h-96 w-full">
@@ -282,7 +280,6 @@ const bodyHtml = await highlightCodeBlocks(
       </div>
     </div>
   )}
-  </MenuLayout>
 </main>
 
 <style>
