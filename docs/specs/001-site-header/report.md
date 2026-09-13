@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 | --- | --- |
-| 報告日 | 2026-09-15 |
+| 報告日 | 2026-09-14 |
 | ブランチ / PR | `feature/nav-mobile` / PR #63 |
 | spec | 同じディレクトリの `requirements.md` / `design.md` / `tasks.md` |
 | フロー | トラック B・規模 L（B2 デザインは省略） |
