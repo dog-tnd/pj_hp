@@ -9,7 +9,9 @@ const links = [
 ];
 
 const isCurrent = (href: string) =>
-  href === '/blog' ? pathname.startsWith('/blog') : pathname === href || pathname === `${href}/`;
+  href === '/blog'
+    ? pathname.startsWith('/blog')
+    : pathname === href || pathname === `${href}/`;
 ---
 
 <header class="site-header" data-header>
@@ -44,8 +46,12 @@ const isCurrent = (href: string) =>
   <div class="dialog-body">
     <img src="/sns-discord.svg" alt="" width="64" height="64" />
     <p><strong>4、5月はDiscordを中心に新歓イベントを開催します！</strong></p>
-    <p>Discordサーバーに参加すると、プログラミングサークルTNDの仮加入メンバーとなります。</p>
-    <a href="https://discord.gg/k3qMBEn3CC" target="_blank" rel="noopener noreferrer">Discordサーバーに参加する</a>
+    <p>
+      Discordサーバーに参加すると、プログラミングサークルTNDの仮加入メンバーとなります。
+    </p>
+    <a href="https://discord.gg/k3qMBEn3CC" target="_blank" rel="noopener noreferrer">
+      Discordサーバーに参加する
+    </a>
   </div>
 </dialog>
 
@@ -56,11 +62,13 @@ const isCurrent = (href: string) =>
   const closeButton = document.querySelector<HTMLButtonElement>('[data-close-join]');
 
   const updateHeader = () => header?.classList.toggle('scrolled', window.scrollY > 26);
+
   updateHeader();
   window.addEventListener('scroll', updateHeader, { passive: true });
 
   openButton?.addEventListener('click', () => dialog?.showModal());
   closeButton?.addEventListener('click', () => dialog?.close());
+
   dialog?.addEventListener('click', (event) => {
     if (event.target === dialog) dialog.close();
   });
@@ -80,13 +88,18 @@ const isCurrent = (href: string) =>
       display: block;
       height: 80px;
       background: rgba(249, 250, 251, 0.9);
-      transition: height 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+      transition:
+        height 180ms ease,
+        background-color 180ms ease,
+        box-shadow 180ms ease;
     }
 
     .site-header.scrolled {
       height: 64px;
       background: rgba(255, 255, 255, 0.96);
-      box-shadow: 0 1px 0 rgba(17, 24, 39, 0.08), 0 8px 24px rgba(17, 24, 39, 0.06);
+      box-shadow:
+        0 1px 0 rgba(17, 24, 39, 0.08),
+        0 8px 24px rgba(17, 24, 39, 0.06);
       backdrop-filter: blur(12px);
     }
 
@@ -128,14 +141,14 @@ const isCurrent = (href: string) =>
       margin-left: auto;
       display: flex;
       align-items: center;
-      gap: 40px;
+      gap: 32px;
     }
 
     .nav-link {
       position: relative;
       padding: 8px 0;
-      color: #111827;
-      font-size: 14px;
+      color: #4b5563;
+      font-size: 15px;
       font-weight: 500;
       text-decoration: none;
       white-space: nowrap;
@@ -148,10 +161,12 @@ const isCurrent = (href: string) =>
       bottom: 2px;
       left: 0;
       height: 2px;
-      background: #3b82f6;
+      background: #bfdbfe;
       opacity: 0;
       transform: scaleX(0.5);
-      transition: opacity 150ms ease, transform 150ms ease;
+      transition:
+        opacity 150ms ease,
+        transform 150ms ease;
     }
 
     .nav-link:hover::after,
@@ -166,15 +181,16 @@ const isCurrent = (href: string) =>
 
     .nav-link:focus-visible,
     .join-button:focus-visible {
-      outline: 2px solid #3b82f6;
-      outline-offset: 2px;
+      outline: 2px solid white;
+      outline-offset: 4px;
+      box-shadow: 0 0 0 4px #3b82f6;
       border-radius: 8px;
     }
 
     .divider {
       width: 1px;
-      height: 32px;
-      margin: 0 24px;
+      height: 20px;
+      margin: 0 20px;
       background: #d1d5db;
     }
 
@@ -184,16 +200,26 @@ const isCurrent = (href: string) =>
       border: 0;
       border-radius: 10px;
       background: #f5bf48;
-      box-shadow: 0 8px 16px rgba(245, 191, 72, 0.28);
+      box-shadow:
+        0 1px 2px rgba(17, 24, 39, 0.1),
+        0 6px 16px rgba(245, 191, 72, 0.28);
       color: white;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      transition: background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+      transition:
+        background 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
     }
 
     .join-button:hover {
-      background: linear-gradient(94deg, #f5bf48 0%, #f7bc5b 42%, #efa169 100%);
+      background: linear-gradient(
+        94deg,
+        #f5bf48 0%,
+        #f7bc5b 42%,
+        #efa169 100%
+      );
       box-shadow: 0 10px 20px rgba(239, 161, 105, 0.28);
       transform: translateY(-1px);
     }
