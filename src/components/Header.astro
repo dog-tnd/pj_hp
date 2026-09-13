@@ -17,7 +17,7 @@ const isCurrent = (href: string) =>
 <header class="site-header" data-header>
   <div class="header-inner">
     <a class="brand" href="/" aria-label="TND ホーム">
-      <img src="/logo.svg" alt="" width="48" height="48" />
+      <img src="/logo.svg" alt="" width="40" height="40" />
       <span>TND</span>
     </a>
 
@@ -43,13 +43,21 @@ const isCurrent = (href: string) =>
     <h2 id="join-dialog-title">Discordに参加しよう！</h2>
     <button type="button" class="close-button" data-close-join aria-label="閉じる">×</button>
   </div>
+
   <div class="dialog-body">
     <img src="/sns-discord.svg" alt="" width="64" height="64" />
+
     <p><strong>4、5月はDiscordを中心に新歓イベントを開催します！</strong></p>
+
     <p>
       Discordサーバーに参加すると、プログラミングサークルTNDの仮加入メンバーとなります。
     </p>
-    <a href="https://discord.gg/k3qMBEn3CC" target="_blank" rel="noopener noreferrer">
+
+    <a
+      href="https://discord.gg/k3qMBEn3CC"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       Discordサーバーに参加する
     </a>
   </div>
@@ -61,7 +69,9 @@ const isCurrent = (href: string) =>
   const openButton = document.querySelector<HTMLButtonElement>('[data-open-join]');
   const closeButton = document.querySelector<HTMLButtonElement>('[data-close-join]');
 
-  const updateHeader = () => header?.classList.toggle('scrolled', window.scrollY > 26);
+  const updateHeader = () => {
+    header?.classList.toggle('scrolled', window.scrollY > 26);
+  };
 
   updateHeader();
   window.addEventListener('scroll', updateHeader, { passive: true });
@@ -70,7 +80,9 @@ const isCurrent = (href: string) =>
   closeButton?.addEventListener('click', () => dialog?.close());
 
   dialog?.addEventListener('click', (event) => {
-    if (event.target === dialog) dialog.close();
+    if (event.target === dialog) {
+      dialog.close();
+    }
   });
 </script>
 
@@ -121,14 +133,8 @@ const isCurrent = (href: string) =>
     }
 
     .brand img {
-      width: 48px;
-      height: 48px;
-      transition: width 180ms ease, height 180ms ease;
-    }
-
-    .scrolled .brand img {
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
     }
 
     .brand span {
@@ -147,7 +153,7 @@ const isCurrent = (href: string) =>
     .nav-link {
       position: relative;
       padding: 8px 0;
-      color: #4b5563;
+      color: #4B5563;
       font-size: 15px;
       font-weight: 500;
       text-decoration: none;
@@ -161,7 +167,7 @@ const isCurrent = (href: string) =>
       bottom: 2px;
       left: 0;
       height: 2px;
-      background: #bfdbfe;
+      background: #BFDBFE;
       opacity: 0;
       transform: scaleX(0.5);
       transition:
@@ -169,14 +175,20 @@ const isCurrent = (href: string) =>
         transform 150ms ease;
     }
 
-    .nav-link:hover::after,
-    .nav-link.current::after {
+    .nav-link:hover::after {
       opacity: 1;
       transform: scaleX(1);
     }
 
+    .nav-link.current::after {
+      opacity: 1;
+      transform: scaleX(1);
+      background: #3B82F6;
+    }
+
     .nav-link.current {
       font-weight: 700;
+      color: #111827;
     }
 
     .nav-link:focus-visible,
@@ -190,7 +202,7 @@ const isCurrent = (href: string) =>
     .divider {
       width: 1px;
       height: 20px;
-      margin: 0 20px;
+      margin: 0 28px;
       background: #d1d5db;
     }
 
