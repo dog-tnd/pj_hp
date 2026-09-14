@@ -1,0 +1,29 @@
+---
+// サイト共通ヘッダー。画面幅での出し分けはこのファイルだけで行う（境界は lg = 1024px）。
+// 各ヘッダーは、自分がどの幅で表示されるかを知らない。
+// 枠を display: contents にしているのは、普通の div で包むと
+// 中のヘッダーの position: sticky が枠の中でしか効かなくなるため。
+import HeaderMobile from "./HeaderMobile.astro";
+import JoinDialog from "./JoinDialog.astro";
+---
+
+<div class="contents lg:hidden">
+  <HeaderMobile />
+</div>
+
+<div class="hidden lg:contents">
+  <!-- PC版ヘッダーはここに置く（未実装） -->
+</div>
+
+<!-- 入会モーダルは幅に関係なく使うので、枠の外に置く -->
+<JoinDialog />
+
+<script>
+  // モバイルのメニューを開いたまま lg 以上になると、枠が display: none になり
+  // 見えないメニューが画面操作を塞ぎ続けるため閉じる。1024px は tailwind の lg と揃える
+  const desktop = window.matchMedia("(min-width: 1024px)");
+  desktop.addEventListener("change", (e) => {
+    const menu = document.getElementById("mobile-menu") as HTMLDialogElement | null;
+    if (e.matches && menu?.open) menu.close();
+  });
+</script>
