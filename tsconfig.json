@@ -9,5 +9,4 @@
   "include": [".astro/types.d.ts", "src", "**/*.astro"],
   // archive/ は退避したファイル置き場。"**/*.astro" が src の外にも効くため除外する（dist は継承元の既定値）
   "exclude": ["dist", "archive"]
-
 }

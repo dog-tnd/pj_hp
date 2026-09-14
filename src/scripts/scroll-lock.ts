@@ -4,7 +4,8 @@
 // 消えた幅を --scrollbar-width として公開し、<html> の右余白でも打ち消す。
 export const syncScrollLock = () => {
   const root = document.documentElement;
-  const locked = document.querySelector("dialog[data-scroll-lock][open]") !== null;
+  const locked =
+    document.querySelector("dialog[data-scroll-lock][open]") !== null;
 
   if (locked && !root.classList.contains("overflow-hidden")) {
     const scrollbarWidth = window.innerWidth - root.clientWidth;

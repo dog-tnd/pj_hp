@@ -23,7 +23,9 @@ import JoinDialog from "./JoinDialog.astro";
   // 見えないメニューが画面操作を塞ぎ続けるため閉じる。1024px は tailwind の lg と揃える
   const desktop = window.matchMedia("(min-width: 1024px)");
   desktop.addEventListener("change", (e) => {
-    const menu = document.getElementById("mobile-menu") as HTMLDialogElement | null;
+    const menu = document.getElementById(
+      "mobile-menu",
+    ) as HTMLDialogElement | null;
     if (e.matches && menu?.open) menu.close();
   });
 </script>

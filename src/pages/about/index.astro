@@ -1,6 +1,6 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import TwoLine from '../../components/TwoLine.astro';
+import Layout from "../../layouts/Layout.astro";
+import TwoLine from "../../components/TwoLine.astro";
 ---
 
 <Layout title="私たちについて | プログラミングサークル TND">
@@ -9,11 +9,13 @@ import TwoLine from '../../components/TwoLine.astro';
   </header>
 
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-
     <!-- 「プログラミングサークルTNDとは？」セクション -->
     <section id="about" class="py-20 bg-gray-50">
       <div class="container mx-auto px-4 py-10">
-        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12" style="font-family: 'Rubik Doodle Shadow';">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-center mb-12"
+          style="font-family: 'Rubik Doodle Shadow';"
+        >
           プログラミングサークル TNDとは？
         </h2>
         <div class="prose text-gray-600 mx-auto max-w-3xl">
@@ -27,7 +29,10 @@ import TwoLine from '../../components/TwoLine.astro';
     <!-- 活動セクション -->
     <section id="activities" class="py-20">
       <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold text-center mb-6" style="font-family: 'Rubik Doodle Shadow';">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-center mb-6"
+          style="font-family: 'Rubik Doodle Shadow';"
+        >
           活動
         </h2>
         <p class="text-lg text-center text-gray-600 mb-16 max-w-3xl mx-auto">
@@ -37,9 +42,20 @@ import TwoLine from '../../components/TwoLine.astro';
           <!-- 勉強会カード -->
           <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 group hover:-translate-y-2 duration-300">
             <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-blue-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <!-- 例として＋アイコン -->
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
               </svg>
             </div>
             <h3 class="text-xl font-semibold mb-3">勉強会</h3>
@@ -52,8 +68,19 @@ import TwoLine from '../../components/TwoLine.astro';
           <!-- 内部ハッカソンカード -->
           <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 group hover:-translate-y-2 duration-300">
             <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-indigo-200 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-indigo-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
               </svg>
             </div>
             <h3 class="text-xl font-semibold mb-3">内部ハッカソン</h3>
@@ -66,8 +93,19 @@ import TwoLine from '../../components/TwoLine.astro';
           <!-- 外部ハッカソンカード -->
           <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 group hover:-translate-y-2 duration-300">
             <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-purple-200 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-purple-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
               </svg>
             </div>
             <h3 class="text-xl font-semibold mb-3">外部ハッカソン</h3>
@@ -79,8 +117,19 @@ import TwoLine from '../../components/TwoLine.astro';
           <!-- ソーシャルイベントカード -->
           <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 group hover:-translate-y-2 duration-300">
             <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-green-200 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-green-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
               </svg>
             </div>
             <h3 class="text-xl font-semibold mb-3">ソーシャルイベント</h3>
@@ -97,7 +146,10 @@ import TwoLine from '../../components/TwoLine.astro';
     <!-- コースセクション -->
     <section id="teams" class="py-20 bg-gray-50">
       <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold text-center mb-8" style="font-family: 'Rubik Doodle Shadow';">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-center mb-8"
+          style="font-family: 'Rubik Doodle Shadow';"
+        >
           チーム
         </h2>
         <div class="flex justify-center mb-8" x-data="{ activeTab: 'web' }">
@@ -115,11 +167,25 @@ import TwoLine from '../../components/TwoLine.astro';
         </div>
         <div class="space-y-8">
           <!-- ウェブ開発コース -->
-          <div id="web-content" class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-blue-500 course-content">
+          <div
+            id="web-content"
+            class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-blue-500 course-content"
+          >
             <div class="flex items-center mb-4">
               <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6 text-blue-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945"
+                  />
                 </svg>
               </div>
               <h3 class="text-2xl font-bold">ウェブ開発</h3>
@@ -147,11 +213,25 @@ import TwoLine from '../../components/TwoLine.astro';
             </div>
           </div>
           <!-- デザインコース -->
-          <div id="design-content" class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-orange-500 course-content hidden">
+          <div
+            id="design-content"
+            class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-orange-500 course-content hidden"
+          >
             <div class="flex items-center mb-4">
               <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6 text-orange-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343"
+                  />
                 </svg>
               </div>
               <h3 class="text-2xl font-bold">デザイン</h3>
@@ -179,11 +259,25 @@ import TwoLine from '../../components/TwoLine.astro';
             </div>
           </div>
           <!-- データサイエンスコース -->
-          <div id="data-content" class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-green-500 course-content hidden">
+          <div
+            id="data-content"
+            class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-green-500 course-content hidden"
+          >
             <div class="flex items-center mb-4">
               <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6 text-green-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
                 </svg>
               </div>
               <h3 class="text-2xl font-bold">データサイエンス</h3>
@@ -215,20 +309,30 @@ import TwoLine from '../../components/TwoLine.astro';
     </section>
 
     <!-- TNDに参加する理由セクション -->
-    <section id="why-join" class="py-20 bg-gradient-to-r from-blue-400 to-teal-300 text-gray-900">
+    <section
+      id="why-join"
+      class="py-20 bg-gradient-to-r from-blue-400 to-teal-300 text-gray-900"
+    >
       <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold text-center mb-8" style="font-family: 'Rubik Doodle Shadow';">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-center mb-8"
+          style="font-family: 'Rubik Doodle Shadow';"
+        >
           TNDに参加する理由
         </h2>
         <div class="prose text-gray-700 mx-auto max-w-3xl text-center">
           <p>
-            TNDに参加して、実際のプロジェクトを構築し、情熱ある仲間と協力しながら、<br/>実践的なスキルを身につけましょう！
+            TNDに参加して、実際のプロジェクトを構築し、情熱ある仲間と協力しながら、
+            <br />
+            実践的なスキルを身につけましょう！
           </p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
           <div class="bg-white/80 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
             <h3 class="text-xl font-semibold mb-2">実践で学ぶ</h3>
-            <p class="text-gray-600">理論を実践に変えるハンズオンプロジェクト</p>
+            <p class="text-gray-600">
+              理論を実践に変えるハンズオンプロジェクト
+            </p>
           </div>
           <div class="bg-white/80 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
             <h3 class="text-xl font-semibold mb-2">共に成長する</h3>
@@ -236,7 +340,11 @@ import TwoLine from '../../components/TwoLine.astro';
           </div>
           <div class="bg-white/80 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
             <h3 class="text-xl font-semibold mb-2">経験を積む</h3>
-            <p class="text-gray-600">ハッカソンやイベントに参加して、<br/>ポートフォリオを充実させましょう</p>
+            <p class="text-gray-600">
+              ハッカソンやイベントに参加して、
+              <br />
+              ポートフォリオを充実させましょう
+            </p>
           </div>
         </div>
       </div>
@@ -245,11 +353,16 @@ import TwoLine from '../../components/TwoLine.astro';
     <!-- 参加方法セクション -->
     <section id="join" class="py-20">
       <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold text-center mb-8" style="font-family: 'Rubik Doodle Shadow';">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-center mb-8"
+          style="font-family: 'Rubik Doodle Shadow';"
+        >
           参加方法
         </h2>
         <div class="prose text-gray-600 mx-auto max-w-3xl text-center mb-12">
-          <p>募集は毎年4月と5月に行われます。以下の手順に従ってご参加ください。</p>
+          <p>
+            募集は毎年4月と5月に行われます。以下の手順に従ってご参加ください。
+          </p>
         </div>
         <div class="relative max-w-2xl mx-auto">
           <div class="absolute left-8 top-0 h-full w-1 bg-blue-200"></div>
@@ -285,10 +398,14 @@ import TwoLine from '../../components/TwoLine.astro';
         </div>
         <div class="mt-16 text-center">
           <p class="text-lg mb-6">
-            <strong>会費：</strong> 半期2000円(年間4000円)<br>
+            <strong>会費：</strong> 半期2000円(年間4000円)
+            <br />
             <strong>初心者歓迎：</strong> 現メンバーの9割は大学から始めてます！
           </p>
-          <a href="/contact" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition transform hover:scale-105">
+          <a
+            href="/contact"
+            class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition transform hover:scale-105"
+          >
             お問い合わせ
           </a>
         </div>
@@ -303,51 +420,51 @@ import TwoLine from '../../components/TwoLine.astro';
   </footer>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener("DOMContentLoaded", function () {
       // タブ要素を取得（必ず存在すると仮定）
-      const webTab = document.querySelector('.web-tab') as HTMLElement;
-      const designTab = document.querySelector('.design-tab') as HTMLElement;
-      const dataTab = document.querySelector('.data-tab') as HTMLElement;
-      const contents = document.querySelectorAll('.course-content');
-  
+      const webTab = document.querySelector(".web-tab") as HTMLElement;
+      const designTab = document.querySelector(".design-tab") as HTMLElement;
+      const dataTab = document.querySelector(".data-tab") as HTMLElement;
+      const contents = document.querySelectorAll(".course-content");
+
       // 選択中のタブのスタイルを更新する補助関数
       function updateActiveTab(selected: HTMLElement) {
-        [webTab, designTab, dataTab].forEach(tab => {
+        [webTab, designTab, dataTab].forEach((tab) => {
           // アクティブでない状態のスタイル（必要に応じて変更）
-          tab.classList.remove('bg-blue-500', 'text-white');
-          tab.classList.add('bg-white', 'text-gray-700');
+          tab.classList.remove("bg-blue-500", "text-white");
+          tab.classList.add("bg-white", "text-gray-700");
         });
         // 選択されたタブにアクティブ状態のスタイルを追加
-        selected.classList.add('bg-blue-500', 'text-white');
-        selected.classList.remove('bg-white', 'text-gray-700');
+        selected.classList.add("bg-blue-500", "text-white");
+        selected.classList.remove("bg-white", "text-gray-700");
       }
-  
+
       // タブを切り替える関数（コンテンツとタブの両方を更新）
       function activateTab(tabName: string) {
         // すべてのコンテンツを非表示にする
-        contents.forEach(content => content.classList.add('hidden'));
+        contents.forEach((content) => content.classList.add("hidden"));
         const content = document.getElementById(`${tabName}-content`);
         if (content) {
-          content.classList.remove('hidden');
+          content.classList.remove("hidden");
         }
-  
+
         // タブのハイライト更新
-        if (tabName === 'web') {
+        if (tabName === "web") {
           updateActiveTab(webTab);
-        } else if (tabName === 'design') {
+        } else if (tabName === "design") {
           updateActiveTab(designTab);
-        } else if (tabName === 'data') {
+        } else if (tabName === "data") {
           updateActiveTab(dataTab);
         }
       }
-  
+
       // 各タブにクリックイベントリスナーを設定
-      webTab.addEventListener('click', () => activateTab('web'));
-      designTab.addEventListener('click', () => activateTab('design'));
-      dataTab.addEventListener('click', () => activateTab('data'));
-  
+      webTab.addEventListener("click", () => activateTab("web"));
+      designTab.addEventListener("click", () => activateTab("design"));
+      dataTab.addEventListener("click", () => activateTab("data"));
+
       // 初期表示はウェブ開発タブ
-      activateTab('web');
+      activateTab("web");
     });
   </script>
 </Layout>
