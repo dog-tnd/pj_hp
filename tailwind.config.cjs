@@ -7,19 +7,19 @@ module.exports = {
         DEFAULT: {
           css: {
             // Tailwind Typography は既定でインラインコードの前後にバッククォートを描画するため打ち消す
-            'code::before': { content: '""' },
-            'code::after': { content: '""' },
-            'a': {
-              color: '#0070f3',
-              textDecoration: 'underline',
-              textUnderlineOffset: '2px',
-              fontWeight: 'normal',
-              '&:hover': {
-                color: '#0051a3',
-                textDecorationThickness: '2px',
+            "code::before": { content: '""' },
+            "code::after": { content: '""' },
+            a: {
+              color: "#0070f3",
+              textDecoration: "underline",
+              textUnderlineOffset: "2px",
+              fontWeight: "normal",
+              "&:hover": {
+                color: "#0051a3",
+                textDecorationThickness: "2px",
               },
-              '&:visited': {
-                color: '#551A8B',
+              "&:visited": {
+                color: "#551A8B",
               },
             },
           },
@@ -28,10 +28,10 @@ module.exports = {
     },
     screens: {
       // Use standard Tailwind breakpoints
-      'md': '768px',
-      'lg': '1024px',
+      md: "768px",
+      lg: "1024px",
       // If you need a custom breakpoint at 1280px, add it with a custom name
-      'custom-md': '1280px',
+      "custom-md": "1280px",
     },
   },
   plugins: [require("@tailwindcss/typography")],

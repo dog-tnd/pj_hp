@@ -5,7 +5,7 @@ const apiKey = import.meta.env.MICROCMS_API_KEY;
 
 if (!serviceDomain || !apiKey) {
   throw new Error(
-    "MICROCMS_SERVICE_DOMAIN と MICROCMS_API_KEY を .env に設定してください。"
+    "MICROCMS_SERVICE_DOMAIN と MICROCMS_API_KEY を .env に設定してください。",
   );
 }
 
@@ -58,12 +58,12 @@ export type BlogPost = MicroCMSBase & {
 
 // サムネイル画像の URL を返す。未入力ならサンプル画像にフォールバック
 export function getImageUrl(post: BlogPost): string {
-  return post.image?.url || '/thumbnail_sample.jpg';
+  return post.image?.url || "/thumbnail_sample.jpg";
 }
 
 // 著者画像の URL を返す（コンテンツ参照のネストを吸収）。無ければサンプル画像
 export function getAuthorImageUrl(post: BlogPost): string {
-  return post.authorImage?.authorImage?.url || '/icon_sample.jpg';
+  return post.authorImage?.authorImage?.url || "/icon_sample.jpg";
 }
 
 // 公開済み記事を全件取得（GitHub Pages 用の SSG なのでビルド時に全件取得）
@@ -82,7 +82,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 // （microCMS は公開済み記事を draftKey なしで返すため、公開済みのプレビューにも対応）。
 export async function getPreviewPost(
   contentId: string,
-  draftKey?: string
+  draftKey?: string,
 ): Promise<BlogPost> {
   return client.getListDetail<BlogPost>({
     endpoint: "blog",

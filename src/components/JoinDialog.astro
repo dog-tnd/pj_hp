@@ -25,9 +25,12 @@
       <strong>4,5月はDiscordを中心に新歓イベントを開催します！</strong>
     </p>
     <p>
-      このDiscordサーバーに参加すると、プログラミングサークルTNDの<strong>仮加入メンバー</strong>となります。
+      このDiscordサーバーに参加すると、プログラミングサークルTNDの
+      <strong>仮加入メンバー</strong>となります。
     </p>
-    <p>新入生同士でたくさん交流して、プログラミングの楽しさを一緒に体験しましょう！</p>
+    <p>
+      新入生同士でたくさん交流して、プログラミングの楽しさを一緒に体験しましょう！
+    </p>
     <a
       href="https://discord.gg/k3qMBEn3CC"
       target="_blank"
@@ -42,7 +45,9 @@
   import { syncScrollLock } from "../scripts/scroll-lock";
 
   const join = document.getElementById("join-dialog") as HTMLDialogElement;
-  const closeButton = join.querySelector("[data-close-join]") as HTMLButtonElement;
+  const closeButton = join.querySelector(
+    "[data-close-join]",
+  ) as HTMLButtonElement;
 
   document.querySelectorAll("[data-open-join]").forEach((button) => {
     button.addEventListener("click", () => {

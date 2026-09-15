@@ -1,0 +1,11 @@
+# 生成物・依存関係
+dist/
+.astro/
+.vercel/
+pnpm-lock.yaml
+
+# 退避済みファイル
+archive/
+
+# Markdown（ブログ記事の本文を変えないため対象外）
+*.md

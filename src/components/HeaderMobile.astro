@@ -109,7 +109,10 @@ const isCurrent = (href: string) =>
     </ul>
   </nav>
 
-  <div data-menu-cta class="absolute inset-x-6 bottom-9 md:max-w-[520px] md:mx-auto md:inset-x-0">
+  <div
+    data-menu-cta
+    class="absolute inset-x-6 bottom-9 md:max-w-[520px] md:mx-auto md:inset-x-0"
+  >
     <button
       type="button"
       data-open-join
@@ -127,7 +130,6 @@ const isCurrent = (href: string) =>
 >
   入会申し込み
 </button>
-
 
 <style>
   /* メニュー展開時、背景の暗転をふわっと見せる。Tailwind に keyframes が無いためここだけ CSS */
@@ -151,23 +153,39 @@ const isCurrent = (href: string) =>
   }
 
   @keyframes menu-fade {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
   @keyframes menu-rise {
-    from { transform: translateY(8px); }
-    to { transform: translateY(0); }
+    from {
+      transform: translateY(8px);
+    }
+    to {
+      transform: translateY(0);
+    }
   }
 
   @keyframes menu-fade-out {
-    from { opacity: 1; }
-    to { opacity: 0; }
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
   }
 
   @keyframes menu-sink {
-    from { transform: translateY(0); }
-    to { transform: translateY(8px); }
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(8px);
+    }
   }
 </style>
 
@@ -176,9 +194,15 @@ const isCurrent = (href: string) =>
 
   // メニューの開閉制御（入会モーダルは JoinDialog.astro が担当）
   const menu = document.getElementById("mobile-menu") as HTMLDialogElement;
-  const openMenuButton = document.querySelector("[data-open-menu]") as HTMLButtonElement;
-  const closeMenuButton = document.querySelector("[data-close-menu]") as HTMLButtonElement;
-  const menuJoinButton = menu.querySelector("[data-open-join]") as HTMLButtonElement;
+  const openMenuButton = document.querySelector(
+    "[data-open-menu]",
+  ) as HTMLButtonElement;
+  const closeMenuButton = document.querySelector(
+    "[data-close-menu]",
+  ) as HTMLButtonElement;
+  const menuJoinButton = menu.querySelector(
+    "[data-open-join]",
+  ) as HTMLButtonElement;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 

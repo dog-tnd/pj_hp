@@ -25,11 +25,11 @@ export function convertInlineCode(html: string): string {
 
   const converted = protectedHtml.replace(
     TEXT_NODE,
-    (_, text: string) => `>${text.replace(BACKTICK, "<code>$1</code>")}<`
+    (_, text: string) => `>${text.replace(BACKTICK, "<code>$1</code>")}<`,
   );
 
   return converted.replace(
     SKIP_PATTERN,
-    (_, index: string) => skipped[Number(index)]
+    (_, index: string) => skipped[Number(index)],
   );
 }
