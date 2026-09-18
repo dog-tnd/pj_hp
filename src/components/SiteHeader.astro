@@ -4,6 +4,7 @@
 // 枠を display: contents にしているのは、普通の div で包むと
 // 中のヘッダーの position: sticky が枠の中でしか効かなくなるため。
 import HeaderMobile from "./HeaderMobile.astro";
+import HeaderDesktop from "./HeaderDesktop.astro";
 import JoinDialog from "./JoinDialog.astro";
 ---
 
@@ -12,7 +13,7 @@ import JoinDialog from "./JoinDialog.astro";
 </div>
 
 <div class="hidden lg:contents">
-  <!-- PC版ヘッダーはここに置く（未実装） -->
+  <HeaderDesktop />
 </div>
 
 <!-- 入会モーダルは幅に関係なく使うので、枠の外に置く -->
