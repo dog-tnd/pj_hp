@@ -91,7 +91,10 @@ const mailDomain = "gmail.com";
           </p>
 
           <div class="mt-6 flex flex-col gap-4 md:flex-row md:gap-5 lg:mt-7">
-            <div class="flex-1 rounded-[14px] border border-gray-200 bg-white px-5 py-[22px] lg:px-7 lg:py-[26px]">
+            <div
+              data-copy-card
+              class="flex-1 rounded-[14px] border border-gray-200 bg-white px-5 py-[22px] lg:px-7 lg:py-[26px]"
+            >
               <p class="text-xs font-medium tracking-[0.16em] text-gray-500 lg:text-sm lg:tracking-[0.18em]">
                 EMAIL
               </p>
@@ -119,8 +122,14 @@ const mailDomain = "gmail.com";
                     stroke-linecap="round"
                   ></path>
                 </svg>
-                <span data-copy-label>アドレスをコピー</span>
+                アドレスをコピー
               </button>
+              <p
+                data-copy-status
+                role="status"
+                aria-live="polite"
+                class="mt-3 text-[13px] font-medium leading-[1.7] text-blue-700 empty:hidden lg:text-sm"
+              ></p>
               <p class="mt-3 text-[13px] leading-[1.7] text-gray-500 lg:mt-3.5 lg:text-sm">
                 迷惑メール対策のため、記号を置き換えて表示しています。
               </p>
@@ -175,27 +184,31 @@ const mailDomain = "gmail.com";
   document
     .querySelectorAll<HTMLButtonElement>("[data-copy-mail]")
     .forEach((button) => {
-      const label = button.querySelector<HTMLElement>("[data-copy-label]");
-      if (!label) return;
-      const original = label.textContent ?? "";
+      const status = button
+        .closest("[data-copy-card]")
+        ?.querySelector<HTMLElement>("[data-copy-status]");
+      if (!status) return;
       let timer: number | undefined;
 
       button.addEventListener("click", async () => {
         const { mailUser, mailDomain } = button.dataset;
         if (!mailUser || !mailDomain) return;
+        window.clearTimeout(timer);
 
         try {
           await navigator.clipboard.writeText(mailUser + AT + mailDomain);
-          label.textContent = "コピーしました";
+          status.textContent = "アドレスをコピーしました";
+          timer = window.setTimeout(() => {
+            status.textContent = "";
+          }, 4000);
         } catch {
-          // クリップボードが使えない環境（権限拒否・http 接続など）では実アドレスを表示して手で選べるようにする
-          label.textContent = mailUser + AT + mailDomain;
+          // クリップボードが使えない環境（権限拒否・http 接続など）。
+          // アドレスは上に出ているので読み替えを案内する。自動では消さない。
+          status.textContent =
+            "コピーできませんでした。上のアドレスの [at] を " +
+            AT +
+            " に置き換えてご利用ください。";
         }
-
-        window.clearTimeout(timer);
-        timer = window.setTimeout(() => {
-          label.textContent = original;
-        }, 2000);
       });
     });
 </script>
