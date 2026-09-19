@@ -21,49 +21,51 @@ const mailDomain = "gmail.com";
   ]}
   canonicalURL="https://tus-tnd.com/contact/"
 >
-  <div class="mx-auto max-w-[1440px] px-20">
+  <div class="mx-auto max-w-[1440px] px-6 lg:px-20">
     <!-- ヒーロー -->
-    <section class="grid grid-cols-[minmax(0,1fr)_480px] items-end gap-16 pt-[104px]">
+    <section class="grid grid-cols-1 gap-5 pt-[72px] lg:grid-cols-[minmax(0,1fr)_480px] lg:items-end lg:gap-16 lg:pt-[104px]">
       <div>
-        <p class="text-sm font-medium tracking-[0.22em] text-gray-500">
+        <p class="text-[11px] font-medium leading-relaxed tracking-[0.2em] text-gray-500 lg:text-sm lg:tracking-[0.22em]">
           TOKYO UNIVERSITY OF SCIENCE / NODA CAMPUS
         </p>
         <p
-          class="mt-5 text-[92px] leading-none text-blue-500"
+          class="mt-3.5 text-[42px] leading-none text-blue-500 lg:mt-5 lg:text-[92px]"
           style="font-family: 'Rubik Doodle Shadow';"
         >
           CONTACT
         </p>
-        <h1 class="mt-6 text-[30px] font-bold tracking-[0.04em] text-gray-900">
+        <h1 class="mt-4 text-[22px] font-bold tracking-[0.04em] text-gray-900 lg:mt-6 lg:text-[30px]">
           お問い合わせ
         </h1>
       </div>
-      <p class="text-lg leading-loose text-gray-600">
+      <p class="text-[15px] leading-[1.9] text-gray-600 lg:text-lg lg:leading-loose">
         入会・新歓についてのご質問は、ヘッダーの入会申し込みからDiscordへどうぞ。それ以外のご連絡は、こちらのメールかXのDMで受け付けています。
       </p>
     </section>
 
-    <div class="pb-[120px] pt-24">
+    <div class="pb-12 pt-12 lg:pb-[120px] lg:pt-24">
       <!-- 新入生向け -->
-      <section class="grid grid-cols-[280px_minmax(0,1fr)] gap-14 border-t border-gray-200 py-[52px]">
+      <section class="grid grid-cols-1 gap-3.5 border-t border-gray-200 py-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 lg:py-[52px]">
         <div>
           <p
-            class="text-[28px] leading-tight text-blue-500"
+            class="text-2xl leading-tight text-blue-500 lg:text-[28px]"
             style="font-family: 'Rubik Doodle Shadow';"
           >
             FOR NEWCOMERS
           </p>
-          <h2 class="mt-2.5 text-2xl font-bold">入会・新歓について</h2>
+          <h2 class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl">
+            入会・新歓について
+          </h2>
         </div>
         <div>
-          <p class="max-w-[640px] text-lg leading-[1.9] text-gray-600">
+          <p class="max-w-[640px] text-[15px] leading-[1.9] text-gray-600 lg:text-lg">
             新入生の方はDiscordへご案内しています。ページ上部の「入会申し込み」と同じ案内が開きます。
           </p>
           <!-- クリック処理は JoinDialog.astro が data-open-join を拾ってまとめて付ける -->
           <button
             type="button"
             data-open-join
-            class="mt-[26px] inline-flex h-[52px] items-center justify-center rounded-full bg-[#F5BF48] px-7 text-base font-bold text-gray-900 shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-colors hover:bg-[#E9AF2E]"
+            class="mt-[22px] flex h-[52px] w-full items-center justify-center rounded-full bg-[#F5BF48] px-7 text-base font-bold text-gray-900 shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-colors hover:bg-[#E9AF2E] lg:mt-[26px] lg:inline-flex lg:w-auto"
           >
             入会申し込み
           </button>
@@ -71,27 +73,29 @@ const mailDomain = "gmail.com";
       </section>
 
       <!-- 外部の方向け -->
-      <section class="grid grid-cols-[280px_minmax(0,1fr)] gap-14 border-t border-gray-200 pt-[52px]">
+      <section class="grid grid-cols-1 gap-3.5 border-t border-gray-200 pt-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 lg:pt-[52px]">
         <div>
           <p
-            class="text-[28px] leading-tight text-blue-500"
+            class="text-2xl leading-tight text-blue-500 lg:text-[28px]"
             style="font-family: 'Rubik Doodle Shadow';"
           >
             FOR VISITORS
           </p>
-          <h2 class="mt-2.5 text-2xl font-bold">外部の皆様へ</h2>
+          <h2 class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl">
+            外部の皆様へ
+          </h2>
         </div>
         <div>
-          <p class="max-w-[640px] text-lg leading-[1.9] text-gray-600">
+          <p class="max-w-[640px] text-[15px] leading-[1.9] text-gray-600 lg:text-lg">
             TNDに興味をお持ちいただきありがとうございます。イベントの共催や勉強会での登壇、取材のご依頼など、企業・他団体の皆様からのご相談をお受けしています。まずはお気軽にご連絡ください。
           </p>
 
-          <div class="mt-7 flex gap-5">
-            <div class="flex-1 rounded-[14px] border border-gray-200 bg-white px-7 py-[26px]">
-              <p class="text-sm font-medium tracking-[0.18em] text-gray-500">
+          <div class="mt-6 flex flex-col gap-4 lg:mt-7 lg:flex-row lg:gap-5">
+            <div class="flex-1 rounded-[14px] border border-gray-200 bg-white px-5 py-[22px] lg:px-7 lg:py-[26px]">
+              <p class="text-xs font-medium tracking-[0.16em] text-gray-500 lg:text-sm lg:tracking-[0.18em]">
                 EMAIL
               </p>
-              <p class="mt-3 text-xl font-bold">
+              <p class="mt-2.5 break-all text-[17px] font-bold lg:mt-3 lg:text-xl">
                 {mailUser}[at]{mailDomain}
               </p>
               <button
@@ -99,7 +103,7 @@ const mailDomain = "gmail.com";
                 data-copy-mail
                 data-mail-user={mailUser}
                 data-mail-domain={mailDomain}
-                class="mt-[18px] inline-flex h-11 items-center gap-2 rounded-[10px] border border-blue-500 bg-white px-[18px] text-sm font-bold text-blue-700 transition-colors hover:bg-blue-50"
+                class="mt-4 inline-flex h-12 items-center gap-2 rounded-[10px] border border-blue-500 bg-white px-[18px] text-sm font-bold text-blue-700 transition-colors hover:bg-blue-50 lg:mt-[18px] lg:h-11"
               >
                 <svg
                   class="h-4 w-4"
@@ -117,21 +121,23 @@ const mailDomain = "gmail.com";
                 </svg>
                 <span data-copy-label>アドレスをコピー</span>
               </button>
-              <p class="mt-3.5 text-sm leading-[1.7] text-gray-500">
+              <p class="mt-3 text-[13px] leading-[1.7] text-gray-500 lg:mt-3.5 lg:text-sm">
                 迷惑メール対策のため、記号を置き換えて表示しています。
               </p>
             </div>
 
-            <div class="flex-1 rounded-[14px] border border-gray-200 bg-white px-7 py-[26px]">
-              <p class="text-sm font-medium tracking-[0.18em] text-gray-500">
+            <div class="flex-1 rounded-[14px] border border-gray-200 bg-white px-5 py-[22px] lg:px-7 lg:py-[26px]">
+              <p class="text-xs font-medium tracking-[0.16em] text-gray-500 lg:text-sm lg:tracking-[0.18em]">
                 X (TWITTER) DM
               </p>
-              <p class="mt-3 text-xl font-bold">@TokyorikaND</p>
+              <p class="mt-2.5 text-[17px] font-bold lg:mt-3 lg:text-xl">
+                @TokyorikaND
+              </p>
               <a
                 href="https://x.com/TokyorikaND"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="mt-[18px] inline-flex h-11 items-center gap-2 rounded-[10px] border border-blue-500 bg-white px-[18px] text-sm font-bold text-blue-700 transition-colors hover:bg-blue-50"
+                class="mt-4 inline-flex h-12 items-center gap-2 rounded-[10px] border border-blue-500 bg-white px-[18px] text-sm font-bold text-blue-700 transition-colors hover:bg-blue-50 lg:mt-[18px] lg:h-11"
               >
                 <svg
                   class="h-4 w-4"
@@ -145,7 +151,7 @@ const mailDomain = "gmail.com";
                 </svg>
                 DMを送る
               </a>
-              <p class="mt-3.5 text-sm leading-[1.7] text-gray-500">
+              <p class="mt-3 text-[13px] leading-[1.7] text-gray-500 lg:mt-3.5 lg:text-sm">
                 急ぎのご連絡はこちらが早く届きます。
               </p>
             </div>
