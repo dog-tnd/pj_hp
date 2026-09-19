@@ -23,13 +23,13 @@ const mailDomain = "gmail.com";
 >
   <div class="mx-auto max-w-[1440px] px-6 lg:px-20">
     <!-- ヒーロー -->
-    <section class="grid grid-cols-1 gap-5 pt-[72px] lg:grid-cols-[minmax(0,1fr)_480px] lg:items-end lg:gap-16 lg:pt-[104px]">
+    <section class="grid grid-cols-1 gap-5 pt-[72px] lg:pt-[104px] custom-md:grid-cols-[minmax(0,1fr)_480px] custom-md:items-end custom-md:gap-16">
       <div>
         <p class="text-[11px] font-medium leading-relaxed tracking-[0.2em] text-gray-500 lg:text-sm lg:tracking-[0.22em]">
           TOKYO UNIVERSITY OF SCIENCE / NODA CAMPUS
         </p>
         <p
-          class="mt-3.5 text-[42px] leading-none text-blue-500 lg:mt-5 lg:text-[92px]"
+          class="mt-3.5 text-[42px] leading-none text-blue-500 md:text-[64px] lg:mt-5 lg:text-[72px] custom-md:text-[92px]"
           style="font-family: 'Rubik Doodle Shadow';"
         >
           CONTACT
@@ -38,12 +38,12 @@ const mailDomain = "gmail.com";
           お問い合わせ
         </h1>
       </div>
-      <p class="text-[15px] leading-[1.9] text-gray-600 lg:text-lg lg:leading-loose">
+      <p class="max-w-[560px] text-[15px] leading-[1.9] text-gray-600 lg:text-lg lg:leading-loose custom-md:max-w-none">
         入会・新歓についてのご質問は、ヘッダーの入会申し込みからDiscordへどうぞ。それ以外のご連絡は、こちらのメールかXのDMで受け付けています。
       </p>
     </section>
 
-    <div class="pb-12 pt-12 lg:pb-6 lg:pt-24">
+    <div class="pt-12 lg:pb-6 lg:pt-24">
       <!-- 新入生向け -->
       <section class="grid grid-cols-1 gap-3.5 border-t border-gray-200 py-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 lg:py-[52px]">
         <div>
@@ -65,7 +65,7 @@ const mailDomain = "gmail.com";
           <button
             type="button"
             data-open-join
-            class="mt-[22px] flex h-[52px] w-full items-center justify-center rounded-full bg-[#F5BF48] px-7 text-base font-bold text-gray-900 shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-colors hover:bg-[#E9AF2E] lg:mt-[26px] lg:inline-flex lg:w-auto"
+            class="mt-[22px] flex h-[52px] w-full items-center justify-center rounded-full bg-[#F5BF48] px-7 text-base font-bold text-gray-900 shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-colors hover:bg-[#E9AF2E] md:inline-flex md:w-auto lg:mt-[26px]"
           >
             入会申し込み
           </button>
@@ -90,7 +90,7 @@ const mailDomain = "gmail.com";
             TNDに興味をお持ちいただきありがとうございます。イベントの共催や勉強会での登壇、取材のご依頼など、企業・他団体の皆様からのご相談をお受けしています。まずはお気軽にご連絡ください。
           </p>
 
-          <div class="mt-6 flex flex-col gap-4 lg:mt-7 lg:flex-row lg:gap-5">
+          <div class="mt-6 flex flex-col gap-4 md:flex-row md:gap-5 lg:mt-7">
             <div class="flex-1 rounded-[14px] border border-gray-200 bg-white px-5 py-[22px] lg:px-7 lg:py-[26px]">
               <p class="text-xs font-medium tracking-[0.16em] text-gray-500 lg:text-sm lg:tracking-[0.18em]">
                 EMAIL
