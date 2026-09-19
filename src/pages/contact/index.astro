@@ -1,142 +1,195 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import TwoLine from "../../components/TwoLine.astro";
+
+// メールアドレスは HTML に平文で出さない（収集bot対策）。
+// 表示は [at] 表記のまま、コピーだけ下のスクリプトで組み立てる。
+const mailUser = "tokyorikanoda";
+const mailDomain = "gmail.com";
 ---
 
-<Layout title="お問い合わせ | プログラミングサークル TND">
-  <header>
-    <TwoLine />
-  </header>
-
-  <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-    <!-- お問い合わせセクション -->
-    <section id="contact" class="py-20 bg-gray-50">
-      <div class="container mx-auto px-4">
-        <h2
-          class="text-3xl md:text-4xl font-bold text-center mb-12"
+<Layout
+  title="お問い合わせ | プログラミングサークル TND"
+  description="TNDへのお問い合わせ窓口です。入会・新歓についてはDiscordへご案内しています。イベントの共催や勉強会での登壇、取材のご依頼はメールかXのDMで受け付けています。"
+  keywords={[
+    "TND",
+    "お問い合わせ",
+    "東京理科大学",
+    "プログラミングサークル",
+    "協賛",
+    "取材",
+    "登壇",
+  ]}
+  canonicalURL="https://tus-tnd.com/contact/"
+>
+  <div class="mx-auto max-w-[1440px] px-20">
+    <!-- ヒーロー -->
+    <section class="grid grid-cols-[minmax(0,1fr)_480px] items-end gap-16 pt-[104px]">
+      <div>
+        <p class="text-sm font-medium tracking-[0.22em] text-gray-500">
+          TOKYO UNIVERSITY OF SCIENCE / NODA CAMPUS
+        </p>
+        <p
+          class="mt-5 text-[92px] leading-none text-blue-500"
           style="font-family: 'Rubik Doodle Shadow';"
         >
+          CONTACT
+        </p>
+        <h1 class="mt-6 text-[30px] font-bold tracking-[0.04em] text-gray-900">
           お問い合わせ
-        </h2>
-        <div class="prose text-gray-600 mx-auto max-w-3xl text-center mb-12">
-          <p>急ぎの連絡の場合はX(旧Twitter)のDMにお願いします。</p>
+        </h1>
+      </div>
+      <p class="text-lg leading-loose text-gray-600">
+        入会・新歓についてのご質問は、ヘッダーの入会申し込みからDiscordへどうぞ。それ以外のご連絡は、こちらのメールかXのDMで受け付けています。
+      </p>
+    </section>
+
+    <div class="pb-[120px] pt-24">
+      <!-- 新入生向け -->
+      <section class="grid grid-cols-[280px_minmax(0,1fr)] gap-14 border-t border-gray-200 py-[52px]">
+        <div>
+          <p
+            class="text-[28px] leading-tight text-blue-500"
+            style="font-family: 'Rubik Doodle Shadow';"
+          >
+            FOR NEWCOMERS
+          </p>
+          <h2 class="mt-2.5 text-2xl font-bold">入会・新歓について</h2>
         </div>
-        <div class="max-w-lg mx-auto bg-white rounded-xl shadow-lg p-8">
-          <div class="space-y-6">
-            <div class="flex items-center">
-              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+        <div>
+          <p class="max-w-[640px] text-lg leading-[1.9] text-gray-600">
+            新入生の方はDiscordへご案内しています。ページ上部の「入会申し込み」と同じ案内が開きます。
+          </p>
+          <!-- クリック処理は JoinDialog.astro が data-open-join を拾ってまとめて付ける -->
+          <button
+            type="button"
+            data-open-join
+            class="mt-[26px] inline-flex h-[52px] items-center justify-center rounded-full bg-[#F5BF48] px-7 text-base font-bold text-gray-900 shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-colors hover:bg-[#E9AF2E]"
+          >
+            入会申し込み
+          </button>
+        </div>
+      </section>
+
+      <!-- 外部の方向け -->
+      <section class="grid grid-cols-[280px_minmax(0,1fr)] gap-14 border-t border-gray-200 pt-[52px]">
+        <div>
+          <p
+            class="text-[28px] leading-tight text-blue-500"
+            style="font-family: 'Rubik Doodle Shadow';"
+          >
+            FOR VISITORS
+          </p>
+          <h2 class="mt-2.5 text-2xl font-bold">外部の皆様へ</h2>
+        </div>
+        <div>
+          <p class="max-w-[640px] text-lg leading-[1.9] text-gray-600">
+            TNDに興味をお持ちいただきありがとうございます。イベントの共催や勉強会での登壇、取材のご依頼など、企業・他団体の皆様からのご相談をお受けしています。まずはお気軽にご連絡ください。
+          </p>
+
+          <div class="mt-7 flex gap-5">
+            <div class="flex-1 rounded-[14px] border border-gray-200 bg-white px-7 py-[26px]">
+              <p class="text-sm font-medium tracking-[0.18em] text-gray-500">
+                EMAIL
+              </p>
+              <p class="mt-3 text-xl font-bold">
+                {mailUser}[at]{mailDomain}
+              </p>
+              <button
+                type="button"
+                data-copy-mail
+                data-mail-user={mailUser}
+                data-mail-domain={mailDomain}
+                class="mt-[18px] inline-flex h-11 items-center gap-2 rounded-[10px] border border-blue-500 bg-white px-[18px] text-sm font-bold text-blue-700 transition-colors hover:bg-blue-50"
+              >
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6 text-blue-600"
-                  fill="none"
+                  class="h-4 w-4"
                   viewBox="0 0 24 24"
+                  fill="none"
                   stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
                 >
+                  <rect x="9" y="9" width="11" height="11" rx="2"></rect>
                   <path
+                    d="M5 15V5a2 2 0 0 1 2-2h10"
                     stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
+                  ></path>
                 </svg>
-              </div>
-              <div>
-                <h3 class="text-lg font-semibold">メール</h3>
-                <p class="text-gray-600">
-                  tokyorikanoda@(アットマーク)gmail.com
-                </p>
-              </div>
+                <span data-copy-label>アドレスをコピー</span>
+              </button>
+              <p class="mt-3.5 text-sm leading-[1.7] text-gray-500">
+                迷惑メール対策のため、記号を置き換えて表示しています。
+              </p>
             </div>
-            <div class="flex items-center">
-              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+
+            <div class="flex-1 rounded-[14px] border border-gray-200 bg-white px-7 py-[26px]">
+              <p class="text-sm font-medium tracking-[0.18em] text-gray-500">
+                X (TWITTER) DM
+              </p>
+              <p class="mt-3 text-xl font-bold">@TokyorikaND</p>
+              <a
+                href="https://x.com/TokyorikaND"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-[18px] inline-flex h-11 items-center gap-2 rounded-[10px] border border-blue-500 bg-white px-[18px] text-sm font-bold text-blue-700 transition-colors hover:bg-blue-50"
+              >
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6 text-blue-600"
-                  fill="none"
+                  class="h-4 w-4"
                   viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h3 class="text-lg font-semibold">ウェブサイト</h3>
-                <a
-                  href="https://tus-tnd.com/"
-                  class="text-gray-600 hover:underline"
-                >
-                  https://tus-tnd.com/
-                </a>
-              </div>
-            </div>
-            <div class="flex items-center">
-              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6 text-blue-600"
                   fill="none"
-                  viewBox="0 0 24 24"
                   stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
-                  />
+                  <path d="M4 4L20 20M20 4L4 20" stroke-linecap="round"></path>
                 </svg>
-              </div>
-              <div>
-                <h3 class="text-lg font-semibold">ソーシャルメディア</h3>
-                <div class="flex space-x-4 mt-2">
-                  <a
-                    href="https://x.com/TokyorikaND"
-                    class="text-gray-600 hover:text-blue-600"
-                  >
-                    <!-- Twitter -->
-                    <svg
-                      class="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
-                    </svg>
-                  </a>
-                  <a
-                    href="https://github.com/dog-tnd"
-                    class="text-gray-600 hover:text-blue-600"
-                  >
-                    <!-- GitHub -->
-                    <svg
-                      class="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                  </a>
-                </div>
-              </div>
+                DMを送る
+              </a>
+              <p class="mt-3.5 text-sm leading-[1.7] text-gray-500">
+                急ぎのご連絡はこちらが早く届きます。
+              </p>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </div>
+  </div>
+
   <footer class="mt-24 border-t border-gray-200 py-8">
     <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
       <p class="text-sm text-gray-500">© 2026 TND All Rights Reserved.</p>
     </div>
   </footer>
 </Layout>
+
+<script>
+  // 表示は [at] のまま。コピーするときだけ実アドレスを組み立てる。
+  const AT = String.fromCharCode(64);
+
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-copy-mail]")
+    .forEach((button) => {
+      const label = button.querySelector<HTMLElement>("[data-copy-label]");
+      if (!label) return;
+      const original = label.textContent ?? "";
+      let timer: number | undefined;
+
+      button.addEventListener("click", async () => {
+        const { mailUser, mailDomain } = button.dataset;
+        if (!mailUser || !mailDomain) return;
+
+        try {
+          await navigator.clipboard.writeText(mailUser + AT + mailDomain);
+          label.textContent = "コピーしました";
+        } catch {
+          // クリップボードが使えない環境（権限拒否・http 接続など）では実アドレスを表示して手で選べるようにする
+          label.textContent = mailUser + AT + mailDomain;
+        }
+
+        window.clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          label.textContent = original;
+        }, 2000);
+      });
+    });
+</script>
