@@ -126,7 +126,8 @@ const isCurrent = (href: string) =>
 <button
   type="button"
   data-open-join
-  class="fixed right-[calc(1rem_+_var(--scrollbar-width,0px))] bottom-7 z-40 h-[52px] px-[22px] rounded-full bg-[#F5BF48] text-white text-[15px] font-bold shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)]"
+  data-floating-join
+  class="fixed right-[calc(1rem_+_var(--scrollbar-width,0px))] bottom-7 z-40 h-[52px] px-[22px] rounded-full bg-[#F5BF48] text-white text-[15px] font-bold shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-opacity duration-200 motion-reduce:transition-none"
 >
   入会申し込み
 </button>
@@ -256,4 +257,34 @@ const isCurrent = (href: string) =>
   menu.addEventListener("click", (e) => {
     if (e.target === menu) closeMenu();
   });
+
+  // ページ内にも「入会申し込み」がある画面では、両方が重なって見える瞬間ができる。
+  // ページ内のボタンが画面に入っている間だけ追従CTAを消して、重複を避ける。
+  const floatingJoin = document.querySelector<HTMLElement>(
+    "[data-floating-join]",
+  );
+  const inlineJoins = document.querySelectorAll("[data-join-inline]");
+
+  if (
+    floatingJoin &&
+    inlineJoins.length > 0 &&
+    "IntersectionObserver" in window
+  ) {
+    // 複数あっても「1つでも見えていれば隠す」で判定できるよう、見えている要素を集合で持つ
+    const visible = new Set<Element>();
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) visible.add(entry.target);
+        else visible.delete(entry.target);
+      }
+      const hide = visible.size > 0;
+      floatingJoin.classList.toggle("opacity-0", hide);
+      // 透明なだけだと押せてしまうので、クリックとフォーカスの両方を止める
+      floatingJoin.classList.toggle("pointer-events-none", hide);
+      floatingJoin.toggleAttribute("inert", hide);
+    });
+
+    inlineJoins.forEach((element) => observer.observe(element));
+  }
 </script>
