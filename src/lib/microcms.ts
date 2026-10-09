@@ -56,13 +56,27 @@ export type BlogPost = MicroCMSBase & {
   body: string;
 };
 
+// zenn エンドポイントのコンテンツ型
+export type ZennPost = MicroCMSBase & {
+  url: string;
+  title: string;
+  description: string;
+  author: string;
+  zennPublishedAt: string;
+  role: string;
+  authorImage?: AuthorImageRef;
+  image: MicroCMSImage;
+  // tags は categories への複数コンテンツ参照。取得時は Category オブジェクトの配列で返る
+  tags: Category[];
+}
+
 // サムネイル画像の URL を返す。未入力ならサンプル画像にフォールバック
-export function getImageUrl(post: BlogPost): string {
+export function getImageUrl(post: BlogPost | ZennPost): string {
   return post.image?.url || '/thumbnail_sample.jpg';
 }
 
 // 著者画像の URL を返す（コンテンツ参照のネストを吸収）。無ければサンプル画像
-export function getAuthorImageUrl(post: BlogPost): string {
+export function getAuthorImageUrl(post: BlogPost | ZennPost): string {
   return post.authorImage?.authorImage?.url || '/icon_sample.jpg';
 }
 
@@ -72,6 +86,17 @@ export async function getAllPosts(): Promise<BlogPost[]> {
   const contents = await client.getAllContents<BlogPost>({
     endpoint: "blog",
     queries: { orders: "-publishedAt" },
+  });
+  // 下書き（未公開）は publishedAt が付かないため除外する
+  return contents.filter((post) => Boolean(post.publishedAt));
+}
+
+// 公開済みZenn記事を全件取得（GitHub Pages 用の SSG なのでビルド時に全件取得）
+export async function getAllZennPosts(): Promise<ZennPost[]> {
+  // getAllZenPosts は内部で自動ページングし、100件超でも全件取得する
+  const contents = await client.getAllContents<ZennPost>({
+    endpoint: "zenn",
+    queries: { orders: "-publishedAt"},
   });
   // 下書き（未公開）は publishedAt が付かないため除外する
   return contents.filter((post) => Boolean(post.publishedAt));
