@@ -12,7 +12,9 @@
   - 非公開のキャンバスなので、見るには Share での共有が必要
   - 画面：デスクトップ（1440）／モバイル（390）／モバイルで目次シートを開いた状態／タブレット（768、目次バーの開閉を Play で試せる）
 - キャンバスのヘッダーは仮の絵。実装では既存の `HeaderDesktop` / `HeaderMobile` をそのまま使う
-- キャンバスの読了バーは入れない（requirements の Open question 1）
+- キャンバスから変えるもの（requirements の決定事項）
+  - 読了バーは入れない
+  - 本文の後のシェアに Facebook・LinkedIn（アイコンだけ）を足し、4つにする
 
 ### 使用コンポーネント
 - 既存：
@@ -22,7 +24,7 @@
 - 新規：
   - `src/utils/toc.ts` … 本文 HTML から目次の項目を取り出し、`id` の無い見出しに `id` を付ける
   - `src/components/blog/TocList.astro` … 目次のリスト。3つの出し方（右の列・目次バー・シート）で共通に使う
-  - `src/components/blog/ShareButtons.astro` … シェアボタン。アイコンだけ（右の列）とラベル付き（本文の後）の2種類
+  - `src/components/blog/ShareButtons.astro` … シェアボタン4つ。アイコンだけ（右の列）と、X・リンクのコピーだけラベル付き（本文の後）の2種類
   - `src/scripts/article-toc.ts` … 今読んでいる見出しの判定、目次バーの開閉、目次シートの開閉
   - `src/scripts/copy-link.ts` … リンクのコピーと結果の通知
   - `src/dev-pages/blog-article.astro` … 検証用。見出しの数や形が違うサンプル本文で `BlogArticleView` を表示する（dev 限定）
@@ -43,7 +45,7 @@ Layout.astro
       │   ├ <article>（最大 720px）
       │   │   ├ アイキャッチ（16:9）
       │   │   ├ 本文（.prose）
-      │   │   ├ タグとシェア（ラベル付き：ポスト・リンクをコピー）
+      │   │   ├ タグとシェア（4つ。ポスト・リンクをコピーはラベル付き）
       │   │   ├ 書いた人
       │   │   └ 前後の記事（2列、md 未満は縦積み）
       │   └ <aside>（lg 以上のみ。sticky）
@@ -124,7 +126,7 @@ Layout.astro
   - 見出しのテキストは、中のタグを除き、`highlight.ts` の `decodeEntities` で HTML エンティティを戻したもの。空白だけになる見出しは目次から除く
   - `id` が無い、または本文中の他の `id` と重複する場合は `toc-1`, `toc-2` … を付ける。`toc-N` 自体も本文中の既存の `id` とぶつからないことを確かめる
   - 目次に入る見出しには `tabindex="-1"` を付ける（移動後にフォーカスを当てるため）
-  - h1 は目次に含めない
+  - h1 は目次に含めない（本文では h1 を使わない運用。運用前の記事に残る h1 はそのまま表示する）
 
 ## 既存コードとの関係
 - `src/layouts/Layout.astro`：ラッパの `overflow-hidden` を `overflow-clip` に変える（sticky を効かせるため。縦横の切り方は今と同じ）。全ページに影響する。Safari 15 以前は `overflow: clip` を解釈しないので、`overflow-hidden` の後に `overflow-clip` を書いて上書きする形にする（解釈しないブラウザでは今と同じ動作になり、目次の追従だけが効かない）
