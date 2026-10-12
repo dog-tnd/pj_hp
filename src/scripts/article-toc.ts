@@ -1,3 +1,5 @@
+import { syncScrollLock } from "./scroll-lock";
+
 // 記事の目次。今読んでいる見出し（現在地）の判定と、目次の項目を選んだときの移動を扱う。
 // 目次は右の列・目次バー・目次シートの3か所にあり、[data-toc-link] をすべて同時に更新する。
 
@@ -151,4 +153,57 @@ if (bar && barToggle && barPanel) {
   barRange.addEventListener("change", (event) => {
     if (!event.matches) closeBar(false);
   });
+}
+
+// ---- 目次ボタンと目次シート（md 未満）----
+// シートはモーダル。背景のスクロール固定は scroll-lock.ts に任せる（data-scroll-lock）
+const sheet = document.querySelector<HTMLDialogElement>("[data-toc-sheet]");
+const sheetOpen = document.querySelector<HTMLButtonElement>(
+  "[data-toc-sheet-open]",
+);
+const sheetClose = sheet?.querySelector<HTMLButtonElement>(
+  "[data-toc-sheet-close]",
+);
+
+if (sheet && sheetOpen && sheetClose) {
+  // 項目を選んで閉じたときと、幅が変わって閉じたときは、目次ボタンへフォーカスを戻さない
+  let returnFocus = true;
+
+  // close イベントは後から非同期で届くので、自分で閉じるときはその場で固定も解除する
+  const closeSheet = (focusOpenButton: boolean) => {
+    if (!sheet.open) return;
+    returnFocus = focusOpenButton;
+    sheet.close();
+    syncScrollLock();
+  };
+
+  sheetOpen.addEventListener("click", () => {
+    returnFocus = true;
+    sheet.showModal();
+    syncScrollLock();
+  });
+
+  sheetClose.addEventListener("click", () => closeSheet(true));
+
+  // シートの外（dialog 自身＝背景）を押したら閉じる
+  sheet.addEventListener("click", (event) => {
+    if (event.target === sheet) closeSheet(true);
+  });
+
+  // 項目を選んだら、閉じて固定を解除してから見出しへ移動する
+  sheet.addEventListener("toc:before-jump", () => closeSheet(false));
+
+  // Escape で閉じたときも含め、ここで状態を戻す
+  sheet.addEventListener("close", () => {
+    syncScrollLock();
+    if (returnFocus) sheetOpen.focus();
+    returnFocus = true;
+  });
+
+  // シートが表示されない幅になったら閉じる。非表示のボタンへはフォーカスを戻さない
+  window
+    .matchMedia("(min-width: 768px)")
+    .addEventListener("change", (event) => {
+      if (event.matches) closeSheet(false);
+    });
 }
