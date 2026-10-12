@@ -1,0 +1,173 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BlogArticleView from "../components/BlogArticleView.astro";
+import type { BlogPost } from "../lib/microcms";
+
+// microCMS を呼ばずに記事ページ（目次・レイアウト）を確認するためのサンプル。
+// ?case=<名前> で本文を切り替える。固定データなので .env は不要。
+// astro.config.mjs により dev でのみルートが注入される。
+// クエリ（?case=）を読むため、/blog/preview と同じくリクエストごとに描画する
+export const prerender = false;
+
+const paragraph = (n: number) =>
+  Array.from(
+    { length: n },
+    () =>
+      "<p>検証用の段落です。目次から見出しへ移動したときの着地位置と、スクロール中に今読んでいる見出しが正しく切り替わるかを確認するため、ある程度の長さを持たせています。</p>",
+  ).join("\n");
+
+const cases: Record<string, { label: string; body: string }> = {
+  many: {
+    label: "見出し多数（h2・h3、長い本文）",
+    body: [
+      "<h3>h2 より前にある h3</h3>",
+      paragraph(2),
+      '<h2 id="h0000000001">はじめに</h2>',
+      paragraph(3),
+      '<h2 id="h0000000002">環境構築</h2>',
+      paragraph(2),
+      '<h3 id="h0000000003"><strong>Node.js</strong> のインストール</h3>',
+      paragraph(3),
+      '<pre><code class="language-bash">pnpm install\npnpm dev</code></pre>',
+      '<h3 id="h0000000004">エディタの設定 &amp; 拡張機能</h3>',
+      paragraph(3),
+      '<h2 id="h0000000005">実装</h2>',
+      '<p><img src="/blog/2026-3-16/AdjustNews.png" alt="サンプル画像"></p>',
+      paragraph(2),
+      '<h3 id="h0000000006">とても長い見出しが目次バーで1行に収まらず省略記号になることを確認するための見出し</h3>',
+      paragraph(4),
+      '<h3 id="h0000000007">テスト</h3>',
+      paragraph(2),
+      "<table><thead><tr><th>項目</th><th>値</th></tr></thead><tbody><tr><td>A</td><td>1</td></tr></tbody></table>",
+      '<h2 id="h0000000008">まとめ</h2>',
+      paragraph(3),
+      '<h2 id="h0000000009">参考</h2>',
+      paragraph(1),
+      '<h2 id="h0000000010">付録 A</h2>',
+      paragraph(1),
+      '<h2 id="h0000000011">付録 B</h2>',
+      paragraph(6),
+    ].join("\n"),
+  },
+  edge: {
+    label: "id の無い・重複した・空の見出し、本文中の h1",
+    body: [
+      "<h1>本文中の h1（目次に入らない）</h1>",
+      paragraph(1),
+      "<h2>id の無い見出し</h2>",
+      paragraph(2),
+      // 段落の id はサニタイズで消えるため、重複は見出しどうしで作る
+      '<h2 id="dup">id が重複した見出し（1つ目）</h2>',
+      paragraph(1),
+      '<h3 id="dup">id が重複した見出し（2つ目）</h3>',
+      paragraph(2),
+      "<h2><br></h2>",
+      '<h3 id="toc-1">既存の id が toc-1 の見出し</h3>',
+      paragraph(2),
+      "<h2>インライン `code` を含む見出し</h2>",
+      paragraph(3),
+    ].join("\n"),
+  },
+  one: {
+    label: "見出し1つ（目次を出さない）",
+    body: ["<h2>ただ1つの見出し</h2>", paragraph(4)].join("\n"),
+  },
+  none: {
+    label: "見出し0（目次を出さない）",
+    body: paragraph(5),
+  },
+  h3only: {
+    label: "h3 だけ",
+    body: [
+      "<h3>最初の h3</h3>",
+      paragraph(3),
+      "<h3>次の h3</h3>",
+      paragraph(3),
+      "<h3>最後の h3</h3>",
+      paragraph(3),
+    ].join("\n"),
+  },
+};
+
+const caseName = Astro.url.searchParams.get("case") ?? "many";
+const current = cases[caseName] ?? cases.many;
+
+const now = new Date().toISOString();
+const post: BlogPost = {
+  id: "dev-sample",
+  createdAt: now,
+  updatedAt: now,
+  publishedAt: now,
+  revisedAt: now,
+  title: `検証用の記事：${current.label}`,
+  description: "dev 限定の確認用ページです。microCMS は呼び出していません。",
+  author: "TND",
+  role: "メンバー",
+  image: { url: "/blog/2026-3-16/thumbnail.png" },
+  tags: [
+    {
+      id: "dev",
+      name: "検証",
+      createdAt: now,
+      updatedAt: now,
+      publishedAt: now,
+      revisedAt: now,
+    },
+  ],
+  body: current.body,
+};
+
+// 前後・関連の記事は many のときだけ渡し、無い場合の表示も確認できるようにする
+const withNeighbors = caseName === "many" || !(caseName in cases);
+const relatedPosts = withNeighbors
+  ? [
+      {
+        url: "/dev/blog-article?case=edge",
+        title: "関連記事のサンプル 1",
+        description: "関連記事カードの表示確認",
+        image: "/blog/2025-12/LTkai.jpg",
+        date: "2025.12.19",
+      },
+      {
+        url: "/dev/blog-article?case=one",
+        title: "関連記事のサンプル 2",
+        description: "関連記事カードの表示確認",
+        image: "/blog/2025-10-05/thumbnail.jpg",
+        date: "2025.10.05",
+      },
+      {
+        url: "/dev/blog-article?case=none",
+        title: "関連記事のサンプル 3",
+        description: "関連記事カードの表示確認",
+        image: "/blog/2025-09/thumbnail.png",
+        date: "2025.09.19",
+      },
+    ]
+  : undefined;
+---
+
+<Layout title="記事ページのサンプル（dev限定）" noindex={true}>
+  <div class="bg-yellow-100 border-b border-yellow-300 px-4 py-2 text-sm text-yellow-800">
+    開発時のみ表示される確認用ページです（本番ビルドには含まれません）：
+    {Object.entries(cases).map(([name, { label }]) => (
+      <a
+        class="ml-3 underline"
+        href={`/dev/blog-article?case=${name}`}
+        aria-current={name === caseName ? "page" : undefined}
+      >
+        {label}
+      </a>
+    ))}
+  </div>
+
+  <BlogArticleView
+    post={post}
+    prevPost={
+      withNeighbors
+        ? { url: "/dev/blog-article?case=edge", title: "前の記事のサンプル" }
+        : undefined
+    }
+    nextPost={undefined}
+    relatedPosts={relatedPosts}
+  />
+</Layout>

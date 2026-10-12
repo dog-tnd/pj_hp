@@ -4,7 +4,7 @@
 
 - [x] 1. spec（requirements / design / tasks）を追加
 - [x] 2. `src/utils/toc.ts` を追加し（`highlight.ts` の `decodeEntities` を export して使う）、`BlogArticleView` の本文の整形に組み込む（見た目は変えない）
-- [ ] 3. 検証用の dev ページ `src/dev-pages/blog-article.astro` を追加（見出し 0・1・多数、h3 だけ、h2 より前の h3、`id` の無い見出し、`id` の重複、空の見出し、h1 を含むサンプル）
+- [x] 3. 検証用の dev ページ `src/dev-pages/blog-article.astro` を追加（見出し 0・1・多数、h3 だけ、h2 より前の h3、`id` の無い見出し、`id` の重複、空の見出し、h1 を含むサンプル）
 - [ ] 4. `Layout.astro` のラッパを `overflow-clip` に変える
 - [ ] 5. `[slug].astro` の前後の記事の向きを入れ替える
 - [ ] 6. `ShareButtons.astro` と `copy-link.ts` を追加し、既存のシェア欄を置き換える（4つ、`canonicalURL` をコピー、結果を `aria-live` で通知）
