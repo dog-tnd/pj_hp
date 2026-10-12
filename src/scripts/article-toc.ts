@@ -99,3 +99,56 @@ if (headings.length > 0) {
     });
   }
 }
+
+// ---- 目次バー（md 以上 lg 未満）----
+// 背景のスクロールは固定しない（読みながら開閉する軽い操作のため）
+const bar = document.querySelector<HTMLElement>("[data-toc-bar]");
+const barToggle = bar?.querySelector<HTMLButtonElement>(
+  "[data-toc-bar-toggle]",
+);
+const barPanel = bar?.querySelector<HTMLElement>("[data-toc-bar-panel]");
+
+if (bar && barToggle && barPanel) {
+  const isOpen = () => !barPanel.hidden;
+
+  const openBar = () => {
+    barPanel.hidden = false;
+    barToggle.setAttribute("aria-expanded", "true");
+  };
+
+  // returnFocus: フォーカスが目次の中にあれば、バーのボタンへ戻す
+  const closeBar = (returnFocus: boolean) => {
+    if (!isOpen()) return;
+    const focusWasInside = barPanel.contains(document.activeElement);
+    barPanel.hidden = true;
+    barToggle.setAttribute("aria-expanded", "false");
+    if (returnFocus && focusWasInside) barToggle.focus();
+  };
+
+  barToggle.addEventListener("click", () => {
+    if (isOpen()) closeBar(false);
+    else openBar();
+  });
+
+  // 項目を選んだら、閉じてから見出しへ移動する（フォーカスは見出しへ移る）
+  barPanel.addEventListener("toc:before-jump", () => closeBar(false));
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !isOpen()) return;
+    // メニューや入会モーダルが開いているときは、そちらの Escape に任せる
+    if (document.querySelector("dialog[open]")) return;
+    closeBar(true);
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    if (isOpen() && !bar.contains(event.target as Node)) closeBar(false);
+  });
+
+  // バーが表示されない幅になったら閉じる。非表示のボタンへはフォーカスを戻さない
+  const barRange = window.matchMedia(
+    "(min-width: 768px) and (max-width: 1023.98px)",
+  );
+  barRange.addEventListener("change", (event) => {
+    if (!event.matches) closeBar(false);
+  });
+}

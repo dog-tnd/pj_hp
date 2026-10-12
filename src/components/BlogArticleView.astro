@@ -146,6 +146,58 @@ const hasToc = toc.items.length >= 2;
     </div>
   </header>
 
+  <!-- 目次バー（md 以上 lg 未満）。モバイルのヘッダー 56px の直下に追従し、押すと目次をバーの下に開く -->
+  {hasToc && (
+    <div
+      class="sticky top-14 z-40 hidden border-b border-gray-200 bg-white md:block lg:hidden"
+      data-toc-bar
+    >
+      <button
+        type="button"
+        class="group mx-auto flex h-12 w-full max-w-[784px] items-center gap-3 px-8 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-600"
+        aria-expanded="false"
+        aria-controls="toc-bar-panel"
+        data-toc-bar-toggle
+      >
+        <span class="shrink-0 font-['Inter'] text-xs tracking-[0.1em] text-gray-500">
+          目次<span class="sr-only">：</span>
+        </span>
+        <span class="h-4 w-px shrink-0 bg-gray-200" aria-hidden="true" />
+        <span
+          class="min-w-0 flex-1 truncate text-sm font-bold text-gray-900"
+          data-toc-current-label
+        >
+          {toc.items[0].text}
+        </span>
+        <svg
+          class="h-[18px] w-[18px] shrink-0 text-gray-700 transition-transform group-aria-expanded:rotate-180 motion-reduce:transition-none"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+      <div
+        id="toc-bar-panel"
+        class="absolute inset-x-0 top-full border-b border-gray-200 bg-white shadow-[0_16px_32px_rgba(17,24,39,0.12)]"
+        hidden
+        data-toc-bar-panel
+      >
+        <nav
+          aria-label="目次"
+          class="mx-auto max-h-[calc(100vh-128px)] max-w-[784px] overflow-y-auto overscroll-contain px-3 py-2"
+        >
+          <TocList items={toc.items} variant="panel" />
+        </nav>
+      </div>
+    </div>
+  )}
+
   <div
     class:list={[
       "mx-auto flex max-w-[760px] items-start gap-20 px-5 md:max-w-[784px] md:px-8 lg:max-w-[1184px]",
