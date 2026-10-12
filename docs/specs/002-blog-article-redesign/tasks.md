@@ -9,7 +9,7 @@
 - [x] 5. `[slug].astro` の前後の記事の向きを入れ替える
 - [x] 6. `ShareButtons.astro` と `copy-link.ts` を追加し、既存のシェア欄を置き換える（4つ、`canonicalURL` をコピー、結果を `aria-live` で通知）
 - [x] 7. `BlogArticleView` の構成を作り直す（記事ヘッダー・アイキャッチ・本文 720px・本文後のブロック・関連記事の帯。`<main>` の二重を解消。`scroll-behavior` を `prefers-reduced-motion` に対応）
-- [ ] 8. `TocList.astro` を追加し、lg 以上の右の列（sticky）に目次・シェア・ページの先頭へを置く。見出しの `scroll-margin-top` を幅ごとに付ける
+- [x] 8. `TocList.astro` を追加し、lg 以上の右の列（sticky）に目次・シェア・ページの先頭へを置く。見出しの `scroll-margin-top` を幅ごとに付ける
 - [ ] 9. `article-toc.ts` に現在地の判定を追加する（判定線より上の最後の見出し、押した項目を即時に現在地へ）
 - [ ] 10. md〜lg の目次バー（開閉・Escape・外側クリック・項目選択後の処理順・幅をまたいだら閉じる）
 - [ ] 11. md 未満の目次ボタンと目次シート（`<dialog data-scroll-lock>`、項目選択後の処理順、閉じたらフォーカスを戻す）

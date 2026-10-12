@@ -1,0 +1,48 @@
+---
+// 記事の目次のリスト。右の列（sidebar）と、目次バーの展開部分・目次シート（panel）で共通に使う。
+// 今読んでいる見出しは article-toc.ts が aria-current="location" で付け替え、
+// 見た目（太字と点）はその属性から決める（色だけで区別しない）。
+import type { TocItem } from "../../utils/toc";
+
+interface Props {
+  items: TocItem[];
+  variant: "sidebar" | "panel";
+}
+
+const { items, variant } = Astro.props;
+const panel = variant === "panel";
+
+// h3 は、その前に h2 があるときだけ字下げする
+let seenH2 = false;
+const rows = items.map((item) => {
+  if (item.level === 2) seenH2 = true;
+  return { ...item, indent: item.level === 3 && seenH2 };
+});
+---
+
+<ol class="flex flex-col">
+  {rows.map((row) => (
+    <li>
+      <a
+        href={`#${row.id}`}
+        data-toc-link={row.id}
+        class:list={[
+          "group flex items-center gap-2 rounded-md text-gray-600 transition-colors hover:text-gray-900",
+          "aria-[current=location]:font-bold aria-[current=location]:text-gray-900",
+          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-600",
+          panel
+            ? "min-h-[44px] py-2 pr-5 text-[15px] leading-normal"
+            : "min-h-8 py-1.5 text-sm leading-[1.6]",
+          row.indent && (panel ? "pl-10 text-sm" : "pl-4 text-[13px]"),
+          !row.indent && (panel ? "pl-5" : "pl-0"),
+        ]}
+      >
+        <span
+          class="h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600 opacity-0 group-aria-[current=location]:opacity-100"
+          aria-hidden="true"
+        />
+        <span class="min-w-0">{row.text}</span>
+      </a>
+    </li>
+  ))}
+</ol>

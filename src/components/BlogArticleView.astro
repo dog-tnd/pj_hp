@@ -6,6 +6,7 @@ import { convertInlineCode } from "../utils/inline-code";
 import { highlightCodeBlocks } from "../utils/highlight";
 import { buildToc } from "../utils/toc";
 import ShareButtons from "./blog/ShareButtons.astro";
+import TocList from "./blog/TocList.astro";
 
 interface Props {
   post: BlogPost;
@@ -48,6 +49,8 @@ const canonicalURL = new URL(`/blog/${post.id}`, Astro.site);
 // Shiki はインラインstyleで着色するため、必ずサニタイズより後に適用する
 const toc = buildToc(convertInlineCode(sanitizeBlogHtml(post.body)));
 const bodyHtml = await highlightCodeBlocks(toc.html);
+// 見出しが2つ未満の記事では、目次（右の列・目次バー・目次ボタン）を出さない
+const hasToc = toc.items.length >= 2;
 ---
 
 <!--
@@ -301,6 +304,54 @@ const bodyHtml = await highlightCodeBlocks(toc.html);
         )}
       </nav>
     </article>
+
+    <!-- 右の列（lg 以上）。アイキャッチの上端から始まり、スクロール後のヘッダー 64px ＋ 32px の位置で追従する -->
+    <aside
+      class="sticky top-24 hidden w-[280px] shrink-0 lg:block"
+      aria-label="目次とシェア"
+    >
+      {hasToc && (
+        <nav aria-label="目次">
+          <p class="mb-3.5 font-['Inter'] text-xs tracking-[0.1em] text-gray-500">
+            CONTENTS
+          </p>
+          <div class="max-h-[calc(100vh-96px-220px)] overflow-y-auto overscroll-contain">
+            <TocList items={toc.items} variant="sidebar" />
+          </div>
+        </nav>
+      )}
+      <div class:list={["border-gray-200", { "mt-7 border-t pt-5": hasToc }]}>
+        <p class="mb-3 font-['Inter'] text-xs tracking-[0.1em] text-gray-500">
+          SHARE
+        </p>
+        <ShareButtons
+          url={canonicalURL.href}
+          title={post.title}
+          variant="icon"
+        />
+      </div>
+      <div class="mt-5 border-t border-gray-200 pt-3">
+        <a
+          href="#"
+          class="inline-flex min-h-[44px] items-center gap-1.5 text-[13px] text-gray-600 hover:text-gray-900"
+        >
+          <svg
+            class="h-3.5 w-3.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M12 19V5"></path>
+            <path d="M5 12l7-7 7 7"></path>
+          </svg>
+          ページの先頭へ
+        </a>
+      </div>
+    </aside>
   </div>
 
   <!-- 関連記事 -->
