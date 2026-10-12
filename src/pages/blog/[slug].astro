@@ -15,20 +15,20 @@ export async function getStaticPaths() {
   const posts = await getAllPosts();
 
   return posts.map((post, index) => {
-    // 前後の記事を取得
+    // 前後の記事を取得。posts は新しい順なので、前＝1つ古い記事（index + 1）、次＝1つ新しい記事（index - 1）
     const prevPost =
-      index > 0
-        ? {
-            url: `/blog/${posts[index - 1].id}`,
-            title: posts[index - 1].title,
-          }
-        : undefined;
-
-    const nextPost =
       index < posts.length - 1
         ? {
             url: `/blog/${posts[index + 1].id}`,
             title: posts[index + 1].title,
+          }
+        : undefined;
+
+    const nextPost =
+      index > 0
+        ? {
+            url: `/blog/${posts[index - 1].id}`,
+            title: posts[index - 1].title,
           }
         : undefined;
 

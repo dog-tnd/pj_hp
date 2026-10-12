@@ -6,7 +6,7 @@
 - [x] 2. `src/utils/toc.ts` を追加し（`highlight.ts` の `decodeEntities` を export して使う）、`BlogArticleView` の本文の整形に組み込む（見た目は変えない）
 - [x] 3. 検証用の dev ページ `src/dev-pages/blog-article.astro` を追加（見出し 0・1・多数、h3 だけ、h2 より前の h3、`id` の無い見出し、`id` の重複、空の見出し、h1 を含むサンプル）
 - [x] 4. `Layout.astro` のラッパを `overflow-clip` に変える
-- [ ] 5. `[slug].astro` の前後の記事の向きを入れ替える
+- [x] 5. `[slug].astro` の前後の記事の向きを入れ替える
 - [ ] 6. `ShareButtons.astro` と `copy-link.ts` を追加し、既存のシェア欄を置き換える（4つ、`canonicalURL` をコピー、結果を `aria-live` で通知）
 - [ ] 7. `BlogArticleView` の構成を作り直す（記事ヘッダー・アイキャッチ・本文 720px・本文後のブロック・関連記事の帯。`<main>` の二重を解消。`scroll-behavior` を `prefers-reduced-motion` に対応）
 - [ ] 8. `TocList.astro` を追加し、lg 以上の右の列（sticky）に目次・シェア・ページの先頭へを置く。見出しの `scroll-margin-top` を幅ごとに付ける
