@@ -1,7 +1,7 @@
 // @ts-check
 import { existsSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "astro/config";
+import { defineConfig, passthroughImageService } from "astro/config";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
@@ -71,6 +71,12 @@ export default defineConfig({
         !page.includes("/blog/preview") && !page.includes("/dev/"),
     }),
   ],
+  // astro:assets の画像変換は使っていないため、sharp を通さない passthrough にする。
+  // Vercel の SSR ビルドに含まれる /_image から、sharp の脆弱性（AVIF 変換での RCE など）を
+  // 突かれないようにするため（Astro 7 へ上げたあとも、画像変換を使うまではこのままでよい）
+  image: {
+    service: passthroughImageService(),
+  },
   output: "static",
   site: "https://tus-tnd.com/",
   base: "",
