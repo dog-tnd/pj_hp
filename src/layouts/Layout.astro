@@ -12,7 +12,7 @@ interface Props {
 
 const {
   title,
-  description = "「TND」は東京理科大学野田キャンパスで活動するプログラミングサークルです。Web開発やデータサイエンスに挑戦し、メンバーと共に成長を目指しています。",
+  description = "TNDは東京理科大学野田キャンパスで活動するプログラミングサークルです。2024年設立、約40名のメンバーがWeb開発・デザイン・データサイエンスを勉強会やハッカソンで実践的に学んでいます。",
   image = "/mainCharm.svg",
   canonicalURL = Astro.url.href,
   keywords = ["東京理科大学", "プログラミングサークル", "TND", "Web開発", "データサイエンス", "野田キャンパス"],
@@ -102,14 +102,14 @@ const structuredData = {
     <meta property="og:description" content={description} />
     <meta property="og:image" content={fullImageURL} />
     <meta property="og:site_name" content="TND - 東京理科大学プログラミングサークル" />
+    <meta property="og:locale" content="ja_JP" />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={fullImageURL} />
-    <meta property="twitter:site" content="@TokyorikaND" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={fullImageURL} />
+    <meta name="twitter:site" content="@TokyorikaND" />
 
     <!-- JSON-LD structured data -->
     <script
