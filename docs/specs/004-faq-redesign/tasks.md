@@ -8,7 +8,7 @@
   - [ ] API キーの GET 権限を2つの API に付ける（GitHub の Secrets・Vercel・ローカルのキーすべて）
   - [ ] 2つの API に Webhook（`repository_dispatch: microcms-publish`）を、公開・更新・公開終了・削除で設定し、再ビルドが始まることを確かめる
 - [x] 1. spec（requirements / design / tasks）を追加
-- [ ] 2. `tailwind.config.cjs` に `tnd`・`marshmallow` の色を追加し、`Layout.astro` の背景をぼかし複数個にする
+- [x] 2. `tailwind.config.cjs` に `tnd`・`marshmallow` の色を追加し、`Layout.astro` の背景をぼかし複数個にする
 - [ ] 3. `src/utils/faq.ts`（型・変換・異常データの検出）と `FaqView`・子コンポーネント・`faq.ts`（開閉・すべて開く・ハッシュ・`beforematch`）を作り、dev ページ `src/dev-pages/faq.astro` に固定データで表示する（本番の `/faq` はまだ変えない）
   - dev ページのサンプル：今の12問に加え、長い質問、複数段落と段落内の改行がある回答、カテゴリ6つ、質問0件のカテゴリ
 - [ ] 4. カテゴリの一覧の追従（sticky）と現在地の判定、カテゴリへの移動とフォーカス、`scroll-margin-top`、`scroll-behavior` を追加する（dev ページで確認）

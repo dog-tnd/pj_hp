@@ -3,6 +3,23 @@ module.exports = {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
     extend: {
+      colors: {
+        // メインビジュアル（public/mainCharm.svg）の色。背景のぼかしなどに使う
+        tnd: {
+          blue: "#4874CE",
+          violet: "#9599E2",
+          teal: "#46C4D3",
+          mint: "#45FAD6",
+        },
+        // マシュマロ（匿名の質問箱）への導線。DEFAULT・hover はマシュマロのボタンの色に合わせている
+        marshmallow: {
+          DEFAULT: "#E69A9C",
+          hover: "#EDBEC0",
+          border: "#F3D3D4",
+          tint: "#FBEEEE",
+          icon: "#B5525A",
+        },
+      },
       typography: {
         DEFAULT: {
           css: {
