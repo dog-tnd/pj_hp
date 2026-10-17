@@ -5,7 +5,7 @@
 - [ ] 0. （人間）microCMS の設定。タスク 6 より前に必須
   - [x] `faq` を作る（design の「microCMS」の表どおり。API 数の上限のため1つだけ）
   - [x] 今の12問を登録する（design の「移行する12問」）
-  - [ ] API キーの GET 権限を `faq` に付ける（GitHub の Secrets・Vercel・ローカルのキーすべて）
+  - [x] API キーの GET 権限を `faq` に付ける（GitHub の Secrets・Vercel・ローカルのキーすべて）
   - [ ] `faq` に Webhook（`repository_dispatch: microcms-publish`）を、公開・更新・公開終了・削除で設定し、再ビルドが始まることを確かめる
 - [x] 1. spec（requirements / design / tasks）を追加
 - [x] 2. `tailwind.config.cjs` に `tnd`・`marshmallow` の色を追加し、`Layout.astro` の背景をぼかし複数個にする
