@@ -1,5 +1,6 @@
-// よくある質問のデータ変換。microCMS の形（faq-categories / faq）から、表示用の形にそろえる。
-// env に依存しないので、dev ページの固定データもこの関数を通して表示する（spec 004）。
+// よくある質問のデータ変換。microCMS の faq（API は1つ）から、表示用の形にそろえる。
+// microCMS の無料枠の API 数の都合で、カテゴリは faq のセレクトフィールドで持つ（spec 004 D3）。
+// env に依存しないので、dev ページの固定データもこの関数を通して表示する。
 
 export type FaqItem = {
   id: string;
@@ -9,38 +10,28 @@ export type FaqItem = {
 };
 
 export type FaqSection = {
-  slug: string;
+  // ページ内リンク用（`cat-{anchor}`）。カテゴリ名の空白をハイフンにしたもの
+  anchor: string;
   name: string;
   items: FaqItem[];
 };
 
 // microCMS から受け取る形（microcms.ts の型はこれを満たす）
-export type FaqCategoryInput = {
-  id: string;
-  name: string;
-  slug: string;
-  sortOrder: number;
-  createdAt: string;
-};
-
 export type FaqEntryInput = {
   id: string;
   question: string;
   answer: string;
+  // セレクトフィールドは選んだ項目の配列で返る（複数選択なしでも配列）
+  category: string[];
   sortOrder: number;
   createdAt: string;
-  // 参照先のカテゴリが下書きに戻されると null になりうる
-  category: { id: string } | null;
 };
 
-const SLUG = /^[a-z0-9-]+$/;
-
-const bySortOrder = (
-  a: { sortOrder: number; createdAt: string },
-  b: { sortOrder: number; createdAt: string },
-) =>
+const bySortOrder = (a: FaqEntryInput, b: FaqEntryInput) =>
   a.sortOrder - b.sortOrder ||
   Date.parse(a.createdAt) - Date.parse(b.createdAt);
+
+const toAnchor = (name: string) => name.trim().replace(/\s+/g, "-");
 
 /**
  * 回答のテキストを段落と行に分ける。改行コードをそろえ、空行（空白だけの行も含む）で段落を分ける。
@@ -62,63 +53,39 @@ export function toParagraphs(answer: string): string[][] {
 }
 
 /**
- * カテゴリと質問を、表示順のセクションにまとめる。
- * データが壊れているとき（質問0件・カテゴリの参照切れ・slug の不正や重複）は例外を投げてビルドを止める。
+ * 質問をカテゴリごとのセクションにまとめる。
+ * 質問は sortOrder（同じなら作成日時）の順に並べ、カテゴリはその中で最初に出てきた順
+ * （＝カテゴリ内の最小の sortOrder の順）にする。
+ * データが壊れているとき（質問0件・カテゴリ未設定）は例外を投げてビルドを止める。
  * 直前のデプロイが残るので、壊れたページを公開するよりよい。
  */
-export function toFaqSections(
-  categories: FaqCategoryInput[],
-  entries: FaqEntryInput[],
-): FaqSection[] {
+export function toFaqSections(entries: FaqEntryInput[]): FaqSection[] {
   if (entries.length === 0) {
     throw new Error(
       "[faq] 公開中の質問が0件です。microCMS の faq を確認してください。",
     );
   }
 
-  const seen = new Set<string>();
-  for (const category of categories) {
-    if (!SLUG.test(category.slug)) {
+  const sections = new Map<string, FaqSection>();
+  for (const entry of [...entries].sort(bySortOrder)) {
+    const name = entry.category?.[0]?.trim();
+    if (!name || entry.category.length !== 1) {
       throw new Error(
-        `[faq] カテゴリ「${category.name}」の slug「${category.slug}」が不正です（英小文字・数字・ハイフンのみ）。`,
+        `[faq] 質問「${entry.question}」のカテゴリが1つに決まっていません（未設定か、複数選ばれています）。`,
       );
     }
-    if (seen.has(category.slug)) {
-      throw new Error(
-        `[faq] カテゴリの slug「${category.slug}」が重複しています。`,
-      );
+    let section = sections.get(name);
+    if (!section) {
+      section = { anchor: toAnchor(name), name, items: [] };
+      sections.set(name, section);
     }
-    seen.add(category.slug);
+    section.items.push({
+      id: entry.id,
+      question: entry.question,
+      paragraphs: toParagraphs(entry.answer),
+    });
   }
-
-  const itemsByCategory = new Map<string, FaqEntryInput[]>();
-  for (const category of categories) itemsByCategory.set(category.id, []);
-  for (const entry of entries) {
-    const list = entry.category
-      ? itemsByCategory.get(entry.category.id)
-      : undefined;
-    if (!list) {
-      throw new Error(
-        `[faq] 質問「${entry.question}」のカテゴリが見つかりません（未設定か、カテゴリが公開されていません）。`,
-      );
-    }
-    list.push(entry);
-  }
-
-  return [...categories]
-    .sort(bySortOrder)
-    .map((category) => ({
-      slug: category.slug,
-      name: category.name,
-      items: [...(itemsByCategory.get(category.id) ?? [])]
-        .sort(bySortOrder)
-        .map((entry) => ({
-          id: entry.id,
-          question: entry.question,
-          paragraphs: toParagraphs(entry.answer),
-        })),
-    }))
-    .filter((section) => section.items.length > 0);
+  return [...sections.values()];
 }
 
 /**

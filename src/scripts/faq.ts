@@ -73,20 +73,22 @@ const headings = [
 const bar = document.querySelector<HTMLElement>("[data-faq-bar]");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-let currentSlug: string | null = null;
+let currentAnchor: string | null = null;
 // カテゴリを選んだあと、移動が終わるまでは判定を止める（なめらかな移動の途中で現在地がちらつくため）
 let lockedUntil = 0;
 
-const setCurrent = (slug: string) => {
-  if (slug === currentSlug) return;
-  currentSlug = slug;
+const setCurrent = (anchor: string) => {
+  if (anchor === currentAnchor) return;
+  currentAnchor = anchor;
   for (const link of catLinks) {
-    if (link.dataset.faqCat === slug)
+    if (link.dataset.faqCat === anchor)
       link.setAttribute("aria-current", "location");
     else link.removeAttribute("aria-current");
   }
   // lg 未満：現在地のピルが見えるよう、カテゴリの行を横にだけスクロールする（ページは縦に動かさない）
-  const pill = bar?.querySelector<HTMLElement>(`[data-faq-cat="${slug}"]`);
+  const pill = bar?.querySelector<HTMLElement>(
+    `[data-faq-cat="${CSS.escape(anchor)}"]`,
+  );
   if (bar && pill && bar.offsetParent !== null) {
     bar.scrollTo({
       left: pill.offsetLeft - (bar.clientWidth - pill.offsetWidth) / 2,
@@ -102,10 +104,10 @@ const judgeLine = () =>
 const updateCurrent = () => {
   if (performance.now() < lockedUntil) return;
   const line = judgeLine();
-  let slug = headings[0].id.slice("cat-".length);
+  let anchor = headings[0].id.slice("cat-".length);
   for (const heading of headings) {
     if (heading.getBoundingClientRect().top - line > 0) break;
-    slug = heading.id.slice("cat-".length);
+    anchor = heading.id.slice("cat-".length);
   }
   // ページの一番下では、最後のほうのカテゴリは判定線まで上がりきらないので、画面に見えている最後のカテゴリにする
   const atBottom =
@@ -116,9 +118,9 @@ const updateCurrent = () => {
       (heading) => heading.getBoundingClientRect().top < window.innerHeight,
     );
     const last = visible[visible.length - 1];
-    if (last) slug = last.id.slice("cat-".length);
+    if (last) anchor = last.id.slice("cat-".length);
   }
-  setCurrent(slug);
+  setCurrent(anchor);
 };
 
 let ticking = false;
@@ -143,18 +145,18 @@ if (headings.length > 0) {
   // カテゴリを選んだら、見出しへ移動してフォーカスを移し、URL のハッシュを更新する
   for (const link of catLinks) {
     link.addEventListener("click", (event) => {
-      const slug = link.dataset.faqCat;
-      const heading = slug ? document.getElementById(`cat-${slug}`) : null;
-      if (!slug || !heading) return;
+      const anchor = link.dataset.faqCat;
+      const heading = anchor ? document.getElementById(`cat-${anchor}`) : null;
+      if (!anchor || !heading) return;
       event.preventDefault();
-      setCurrent(slug);
+      setCurrent(anchor);
       lockedUntil = performance.now() + 1000;
       heading.scrollIntoView({
         behavior: reducedMotion.matches ? "auto" : "smooth",
         block: "start",
       });
       heading.focus({ preventScroll: true });
-      history.replaceState(null, "", `#cat-${slug}`);
+      history.replaceState(null, "", `#cat-${anchor}`);
     });
   }
 }

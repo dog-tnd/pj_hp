@@ -48,11 +48,11 @@ const { sections } = Astro.props;
 
     {sections.map((section) => (
       <section
-        aria-labelledby={`cat-${section.slug}`}
+        aria-labelledby={`cat-${section.anchor}`}
         class="pt-10 first-of-type:pt-0 lg:pt-14"
       >
         <h2
-          id={`cat-${section.slug}`}
+          id={`cat-${section.anchor}`}
           tabindex="-1"
           class="mb-2 flex scroll-mt-[121px] items-baseline gap-2 text-[19px] font-bold leading-[1.5] focus:outline-none lg:mb-3 lg:scroll-mt-[88px] lg:gap-2.5 lg:text-[22px]"
         >

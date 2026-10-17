@@ -21,8 +21,8 @@ const sidebar = variant === "sidebar";
       {sections.map((section, i) => (
         <li>
           <a
-            href={`#cat-${section.slug}`}
-            data-faq-cat={section.slug}
+            href={`#cat-${section.anchor}`}
+            data-faq-cat={section.anchor}
             aria-current={i === 0 ? "location" : undefined}
             class="group flex min-h-9 items-center gap-2 py-1 text-sm leading-[1.6] text-gray-600 hover:text-gray-900 aria-[current=location]:font-bold aria-[current=location]:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
@@ -46,8 +46,8 @@ const sidebar = variant === "sidebar";
       {sections.map((section, i) => (
         <li class="shrink-0">
           <a
-            href={`#cat-${section.slug}`}
-            data-faq-cat={section.slug}
+            href={`#cat-${section.anchor}`}
+            data-faq-cat={section.anchor}
             aria-current={i === 0 ? "location" : undefined}
             class="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 aria-[current=location]:border-gray-900 aria-[current=location]:bg-gray-900 aria-[current=location]:font-bold aria-[current=location]:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
