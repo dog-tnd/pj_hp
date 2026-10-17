@@ -136,7 +136,7 @@ Layout.astro（背景：body の gray-50 ＋ ぼかし）
   | フィールドID | 種類 | 必須 | 用途 |
   |---|---|---|---|
   | `question` | テキスト | ✔ | 質問文 |
-  | `answer` | テキストエリア | ✔ | 回答。空行で段落を分ける（Open question 1） |
+  | `answer` | テキストエリア | ✔ | 回答。空行で段落を分ける |
   | `category` | コンテンツ参照 → `faq-categories` | ✔ | カテゴリ |
   | `sortOrder` | 数値 | ✔ | カテゴリ内の並び順 |
 - API キーの GET 権限を、2つの API に付ける（GitHub の Secrets・Vercel・ローカルの `.env` で使っているキーすべて）
@@ -172,7 +172,7 @@ Layout.astro（背景：body の gray-50 ＋ ぼかし）
 - `src/pages/faq/index.astro`：作り直す。データ取得・`FAQPage`・`description`（main の spec 003 と同じ文言。main とのマージ時の衝突を簡単にするため）。今のカテゴリ絞り込み・開閉のスクリプトとスタイルは消す。`TwoLine` の装飾は使わない（お問い合わせページと同じ）
 - `src/lib/microcms.ts`：FAQ の型と取得関数を追加する
 - `README.md`：次を追記・修正する
-  - FAQ の更新手順（microCMS の `faq` に登録する／説明文の根拠になっている事実を消すときは、コード側の説明文も直す）
+  - FAQ の更新手順（microCMS の `faq` に登録する）。説明文との対応ルールはサークル内で未確定のため書かない
   - microCMS の説明・キーが無いとビルドできない旨・Webhook の節に、FAQ の2つの API を含める
 - `src/scripts/article-toc.ts`：変更しない。現在地の判定は同じ考え方で `faq.ts` に書く（共通化は、3か所目が出たときに検討する）
 - #74：「FAQ のデータ化と `FAQPage`」の項目を、この PR のマージ後にチェックする

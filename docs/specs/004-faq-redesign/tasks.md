@@ -2,7 +2,7 @@
 
 <!-- 1タスク ≒ 1コミット。各タスクの後に pnpm build が通る順番にしてある -->
 
-- [ ] 0. （人間）microCMS の設定。タスク 4 より前に必須
+- [ ] 0. （人間）microCMS の設定。タスク 6 より前に必須
   - [ ] `faq-categories` と `faq` を作る（design の「microCMS」の表どおり。`slug` に正規表現と重複不可を設定）
   - [ ] 今の12問を登録する（design の「移行する12問」）
   - [ ] API キーの GET 権限を2つの API に付ける（GitHub の Secrets・Vercel・ローカルのキーすべて）
@@ -11,9 +11,9 @@
 - [ ] 2. `tailwind.config.cjs` に `tnd`・`marshmallow` の色を追加し、`Layout.astro` の背景をぼかし複数個にする
 - [ ] 3. `src/utils/faq.ts`（型・変換・異常データの検出）と `FaqView`・子コンポーネント・`faq.ts`（開閉・すべて開く・ハッシュ・`beforematch`）を作り、dev ページ `src/dev-pages/faq.astro` に固定データで表示する（本番の `/faq` はまだ変えない）
   - dev ページのサンプル：今の12問に加え、長い質問、複数段落と段落内の改行がある回答、カテゴリ6つ、質問0件のカテゴリ
-- [ ] 4. `microcms.ts` に FAQ の取得を追加し、`/faq` を `FaqView` に差し替える（`description` も追加。旧ページのスクリプトとスタイルを消す）
-- [ ] 5. カテゴリの一覧の追従（sticky）と現在地の判定、カテゴリへの移動とフォーカス、`scroll-margin-top`、`scroll-behavior` を追加する
-- [ ] 6. `FAQPage` の構造化データを出力する
+- [ ] 4. カテゴリの一覧の追従（sticky）と現在地の判定、カテゴリへの移動とフォーカス、`scroll-margin-top`、`scroll-behavior` を追加する（dev ページで確認）
+- [ ] 5. `utils/faq.ts` に `FAQPage` の JSON-LD を作る関数を追加し、dev ページで出力する
+- [ ] 6. `microcms.ts` に FAQ の取得を追加し、`/faq` を `FaqView` に差し替える（`description`・`FAQPage` も出力。旧ページのスクリプトとスタイルを消す）
 - [ ] 7. README に FAQ の更新手順を追記し、microCMS・Webhook の節を直す
 - [ ] 検証: `pnpm build` がエラー0
 - [ ] 検証: `/faq` と dev ページを 375 / 768 / 1024 / 1440px でスクリーンショット。キャンバスと見比べる
