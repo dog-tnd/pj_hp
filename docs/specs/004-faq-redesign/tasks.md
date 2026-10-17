@@ -2,11 +2,11 @@
 
 <!-- 1タスク ≒ 1コミット。各タスクの後に pnpm build が通る順番にしてある -->
 
-- [ ] 0. （人間）microCMS の設定。タスク 6 より前に必須
+- [x] 0. （人間）microCMS の設定。タスク 6 より前に必須
   - [x] `faq` を作る（design の「microCMS」の表どおり。API 数の上限のため1つだけ）
   - [x] 今の12問を登録する（design の「移行する12問」）
   - [x] API キーの GET 権限を `faq` に付ける（GitHub の Secrets・Vercel・ローカルのキーすべて）
-  - [ ] `faq` に Webhook（`repository_dispatch: microcms-publish`）を、公開・更新・公開終了・削除で設定し、再ビルドが始まることを確かめる
+  - [x] `faq` に Webhook は設定しない（D8。6時間ごとの定期リビルドで反映する）
 - [x] 1. spec（requirements / design / tasks）を追加
 - [x] 2. `tailwind.config.cjs` に `tnd`・`marshmallow` の色を追加し、`Layout.astro` の背景をぼかし複数個にする
 - [x] 3. `src/utils/faq.ts`（型・変換・異常データの検出）と `FaqView`・子コンポーネント・`faq.ts`（開閉・すべて開く・ハッシュ・`beforematch`）を作り、dev ページ `src/dev-pages/faq.astro` に固定データで表示する（本番の `/faq` はまだ変えない）
@@ -14,7 +14,7 @@
 - [x] 4. カテゴリの一覧の追従（sticky）と現在地の判定、カテゴリへの移動とフォーカス、`scroll-margin-top`、`scroll-behavior` を追加する（dev ページで確認）
 - [x] 5. `utils/faq.ts` に `FAQPage` の JSON-LD を作る関数を追加し、dev ページで出力する
 - [x] 6. `microcms.ts` に FAQ の取得を追加し、`/faq` を `FaqView` に差し替える（`description`・`FAQPage` も出力。旧ページのスクリプトとスタイルを消す）
-- [x] 7. README に FAQ の更新手順を追記し、microCMS・Webhook の節を直す
+- [x] 7. README に FAQ の更新手順を追記し、microCMS・デプロイの節を直す
 - [x] 検証: `pnpm build` がエラー0
 - [ ] 検証: `/faq` と dev ページを 375 / 768 / 1024 / 1440px でスクリーンショット。キャンバスと見比べる
 - [x] 検証: 旧ページと新ページで、12問の質問・回答の文言が一致すること

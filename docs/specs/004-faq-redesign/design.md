@@ -135,7 +135,7 @@ Layout.astro（背景：body の gray-50 ＋ ぼかし）
 - コンテンツ ID は意味のある英字にする（`tnd`・`beginner` など）。質問へのリンク（`/faq#q-beginner`）が読める形になるため
 - カテゴリを増やすときは、セレクトフィールドに選択肢を足す（コードの変更は要らない）
 - API キーの GET 権限を `faq` に付ける（GitHub の Secrets・Vercel・ローカルの `.env` で使っているキーすべて）
-- `faq` にも既存と同じ Webhook（GitHub Actions の `repository_dispatch: microcms-publish`）を、公開・更新・公開終了・削除で設定する
+- `faq` には Webhook を設定しない（D8）。公開した内容は、6時間ごとの定期リビルドで反映する（最大6時間かかる。急ぐときは GitHub Actions を手動で実行する）
 - **`faq` の作成と今の12問の登録を、`/faq` の差し替え（タスク 6）のマージより前に済ませる**（API が無いとビルドが失敗する）
 
 ### 移行する12問（文言は今の `src/pages/faq/index.astro` からそのまま移す。2026-10-18 登録済み）
@@ -169,6 +169,6 @@ Layout.astro（背景：body の gray-50 ＋ ぼかし）
 - `src/lib/microcms.ts`：FAQ の型と取得関数を追加する
 - `README.md`：次を追記・修正する
   - FAQ の更新手順（microCMS の `faq` に登録する）。説明文との対応ルールはサークル内で未確定のため書かない
-  - microCMS の説明・キーが無いとビルドできない旨・Webhook の節に、FAQ の2つの API を含める
+  - microCMS の説明・キーが無いとビルドできない旨・デプロイの節に、FAQ の API と反映のタイミング（定期リビルド）を含める
 - `src/scripts/article-toc.ts`：変更しない。現在地の判定は同じ考え方で `faq.ts` に書く（共通化は、3か所目が出たときに検討する）
 - #74：「FAQ のデータ化と `FAQPage`」の項目を、この PR のマージ後にチェックする
