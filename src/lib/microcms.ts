@@ -99,3 +99,19 @@ export async function getAllCategories(): Promise<Category[]> {
   });
   return data.contents;
 }
+
+// faq エンドポイント（よくある質問）。API 数の上限のため1つだけで、カテゴリはセレクトフィールドで持つ。
+// セレクトフィールドは選んだ項目の配列で返る（複数選択なしでも配列）
+export type FaqEntry = MicroCMSBase & {
+  question: string;
+  answer: string;
+  category: string[];
+  sortOrder: number;
+};
+
+// 公開済みの質問を全件取得（並べ替えとカテゴリ分けは utils/faq.ts で行う）
+export async function getAllFaqEntries(): Promise<FaqEntry[]> {
+  const contents = await client.getAllContents<FaqEntry>({ endpoint: "faq" });
+  // 下書き（未公開）は publishedAt が付かないため除外する
+  return contents.filter((entry) => Boolean(entry.publishedAt));
+}
