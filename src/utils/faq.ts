@@ -120,3 +120,24 @@ export function toFaqSections(
     }))
     .filter((section) => section.items.length > 0);
 }
+
+/**
+ * 表示と同じセクションから FAQPage の構造化データ（JSON-LD）を作る。
+ * 回答は段落を空行、段落内の行を改行でつないだプレーンテキストにする。
+ */
+export function toFaqPageJsonLd(sections: FaqSection[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: sections.flatMap((section) =>
+      section.items.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.paragraphs.map((lines) => lines.join("\n")).join("\n\n"),
+        },
+      })),
+    ),
+  };
+}
