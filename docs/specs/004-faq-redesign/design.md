@@ -1,10 +1,9 @@
 # よくある質問ページの刷新 design
 
 ## 情報構造の追加・変更（OOUX）
-- 「FAQ のカテゴリ」と「質問」を、microCMS のオブジェクトとして新しく持つ
-  - カテゴリ：名前・アンカー用の slug・並び順。質問を複数持つ
-  - 質問：質問文・回答・カテゴリ（1つ）・並び順
-- サイト内で使う形：`FaqSection = { slug, name, items: FaqItem[] }`、`FaqItem = { id, question, paragraphs: string[][] }`（段落 → 行）
+- 「質問」を microCMS のオブジェクトとして新しく持つ。質問文・回答・カテゴリ（セレクトの1つ）・並び順
+  - 「カテゴリ」は独立したオブジェクトにせず、質問の属性として持つ（API 数の制約。requirements の D3）
+- サイト内で使う形：`FaqSection = { anchor, name, items: FaqItem[] }`、`FaqItem = { id, question, paragraphs: string[][] }`（段落 → 行）
 
 ## UI
 
@@ -56,8 +55,8 @@ Layout.astro（背景：body の gray-50 ＋ ぼかし）
   - `role="region"` は付けない。パネルが12個あり、ランドマークが増えすぎるため（WAI-ARIA の実装例集では、6個を超えるときは避けるよう勧めている）
   - JavaScript が動かないときは、すべて閉じたまま開けない。`<noscript>` のスタイルで回答を表示する
 - id は microCMS のコンテンツ ID から作る（文言が変わってもリンクが切れない）
-  - 質問：`q-{id}`、回答：`a-{id}`、カテゴリの見出し：`cat-{slug}`
-- カテゴリの見出し：`<h2 id="cat-{slug}" tabindex="-1">入会について<span>3<span class="sr-only">件</span></span></h2>`
+  - 質問：`q-{id}`、回答：`a-{id}`、カテゴリの見出し：`cat-{anchor}`（anchor はカテゴリ名の空白をハイフンにしたもの。例：`cat-入会について`）
+- カテゴリの見出し：`<h2 id="cat-{anchor}" tabindex="-1">入会について<span>3<span class="sr-only">件</span></span></h2>`
 - 回答の段落：`answer` を `\r\n` → `\n` にそろえ、空白だけの行も空行とみなして、空行で段落に分ける。段落内の改行は `<br>` にする。`set:html` は使わない
 
 ### 状態
@@ -126,43 +125,40 @@ Layout.astro（背景：body の gray-50 ＋ ぼかし）
 ## データ・API
 
 ### microCMS（管理画面での作業。コード変更なし）
-- `faq-categories`（リスト形式）
+- `faq`（リスト形式。API はこれ1つ）
   | フィールドID | 種類 | 必須 | 用途 |
   |---|---|---|---|
-  | `name` | テキスト | ✔ | カテゴリ名（例：入会について） |
-  | `slug` | テキスト | ✔ | アンカー用。正規表現 `^[a-z0-9-]+$`、重複を許可しない（例：`joining`） |
-  | `sortOrder` | 数値 | ✔ | 並び順（小さいほど上） |
-- `faq`（リスト形式）
-  | フィールドID | 種類 | 必須 | 用途 |
-  |---|---|---|---|
-  | `question` | テキスト | ✔ | 質問文 |
+  | `question` | テキストフィールド | ✔ | 質問文 |
   | `answer` | テキストエリア | ✔ | 回答。空行で段落を分ける |
-  | `category` | コンテンツ参照 → `faq-categories` | ✔ | カテゴリ |
-  | `sortOrder` | 数値 | ✔ | カテゴリ内の並び順 |
-- API キーの GET 権限を、2つの API に付ける（GitHub の Secrets・Vercel・ローカルの `.env` で使っているキーすべて）
-- 2つの API にも既存と同じ Webhook（GitHub Actions の `repository_dispatch: microcms-publish`）を、公開・更新・公開終了・削除で設定する
-- **2つの API と今の12問の登録を、タスク 4 のマージより前に済ませる**（API が無いとビルドが失敗する）
+  | `category` | セレクトフィールド（複数選択なし） | ✔ | カテゴリ。選択肢：一般的な質問／コース内容／入会について／活動内容 |
+  | `sortOrder` | 数字 | ✔ | 並び順。カテゴリをまたいだ通し番号（一般的な質問 10番台、コース内容 20番台…） |
+- コンテンツ ID は意味のある英字にする（`tnd`・`beginner` など）。質問へのリンク（`/faq#q-beginner`）が読める形になるため
+- カテゴリを増やすときは、セレクトフィールドに選択肢を足す（コードの変更は要らない）
+- API キーの GET 権限を `faq` に付ける（GitHub の Secrets・Vercel・ローカルの `.env` で使っているキーすべて）
+- `faq` にも既存と同じ Webhook（GitHub Actions の `repository_dispatch: microcms-publish`）を、公開・更新・公開終了・削除で設定する
+- **`faq` の作成と今の12問の登録を、`/faq` の差し替え（タスク 6）のマージより前に済ませる**（API が無いとビルドが失敗する）
 
-### 移行する12問（文言は今の `src/pages/faq/index.astro` からそのまま移す）
-| カテゴリ（slug・sortOrder） | 質問（sortOrder 順） |
+### 移行する12問（文言は今の `src/pages/faq/index.astro` からそのまま移す。2026-10-18 登録済み）
+| カテゴリ | 質問（コンテンツ ID・sortOrder） |
 |---|---|
-| 一般的な質問（`general`・1） | TNDとは何ですか？／プログラミング初心者でも参加できますか？／どの学科の人が参加していますか？ |
-| コース内容（`courses`・2） | Web開発コースでは何を学べますか？／デザインコースではどのようなツールを使いますか？／データサイエンスコースは難しいですか？ |
-| 入会について（`joining`・3） | 入会はいつでもできますか？／入会に必要な持ち物はありますか？／複数のコースに参加可能ですか？ |
-| 活動内容（`activities`・4） | ハッカソンとは何ですか？／勉強会はどのくらいの頻度で開催されますか？／チーム開発プロジェクトに参加するには？ |
+| 一般的な質問 | TNDとは何ですか？（`tnd`・11）／プログラミング初心者でも参加できますか？（`beginner`・12）／どの学科の人が参加していますか？（`department`・13） |
+| コース内容 | Web開発コースでは何を学べますか？（`web`・21）／デザインコースではどのようなツールを使いますか？（`design`・22）／データサイエンスコースは難しいですか？（`ds`・23） |
+| 入会について | 入会はいつでもできますか？（`when`・31）／入会に必要な持ち物はありますか？（`bring`・32）／複数のコースに参加可能ですか？（`multi`・33） |
+| 活動内容 | ハッカソンとは何ですか？（`hackathon`・41）／勉強会はどのくらいの頻度で開催されますか？（`study`・42）／チーム開発プロジェクトに参加するには？（`project`・43） |
 
 - 「入会はいつでもできますか？」の回答は、今の `<br />` の位置で段落を分ける（空行を入れる）
 - ソースの折り返しで入っている改行は消し、表示どおりの文にする（例：「Web アプリ」「Adobe Photoshop」は表示のとおり半角スペース1つ）
 
 ### 取得と変換
-- `src/lib/microcms.ts`：型 `FaqCategory`・`FaqEntry`（microCMS の形）と、`getAllFaqCategories()`・`getAllFaqEntries()`（`getAllContents` で全件、下書きを除く）を追加する
-- `src/utils/faq.ts`：`toFaqSections(categories, entries): FaqSection[]`
-  - カテゴリを `sortOrder` 順（同じなら `createdAt` 順）、質問をカテゴリごとに `sortOrder` 順（同じなら `createdAt` 順）にまとめる。質問の無いカテゴリは除く
-  - 次のときは例外を投げてビルドを失敗させる：公開中の質問が0件／質問の `category` が null・公開中のカテゴリに無い／`slug` が `^[a-z0-9-]+$` に合わない・重複
+- `src/lib/microcms.ts`：型 `FaqEntry`（microCMS の形）と `getAllFaqEntries()`（`getAllContents` で全件、下書きを除く）を追加する
+- `src/utils/faq.ts`：`toFaqSections(entries): FaqSection[]`
+  - 質問を `sortOrder` 順（同じなら `createdAt` 順）に並べ、カテゴリはその中で最初に出てきた順にまとめる（＝カテゴリ内の最小の `sortOrder` の順）
+  - セレクトフィールドの値は配列で返るので、1つ目をカテゴリ名にする
+  - 次のときは例外を投げてビルドを失敗させる：公開中の質問が0件／`category` が空・複数
   - `answer` を段落と行の配列に変換する（上記「回答の段落」）
 
 ### 構造化データ（`FAQPage`）
-- `faq/index.astro` で、変換後の `sections` から作り、`<script type="application/ld+json" slot="head" is:inline set:html={…}>` で出す（記事ページの `BlogPosting` と同じ出し方。`<` を `<` にエスケープする）
+- `faq/index.astro` で、変換後の `sections` から作り、`<script type="application/ld+json" slot="head" is:inline set:html={…}>` で出す（記事ページの `BlogPosting` と同じ出し方。`<` を `\u003c` にエスケープする）
 - `mainEntity` は表示順の `Question`。`acceptedAnswer.text` は回答の段落・行を改行でつないだプレーンテキスト
 - 補足（spec 003）：FAQ のリッチリザルトは現在、政府・医療系サイトに限られる。目的は、質問と回答の組を機械に正確に渡すこと
 
