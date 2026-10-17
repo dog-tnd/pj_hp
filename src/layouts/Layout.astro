@@ -108,7 +108,10 @@ const fullImageURL = image.startsWith("http") ? image : `${siteURL}${image}`;
   </head>
   <body class="bg-gray-50">
     <SiteHeader />
-    <div class="relative min-h-screen overflow-hidden">
+    <!-- overflow-hidden だと中の position: sticky（記事の目次）が効かないため、
+         スクロールコンテナを作らない overflow-clip で切る。clip を解釈しない古いブラウザでは
+         overflow-hidden が残り、見た目は今までどおりになる（Tailwind の出力順で clip が後に来る） -->
+    <div class="relative min-h-screen overflow-hidden overflow-clip">
       <!-- Gradient shape -->
       <div class="absolute right-0 top-0 -z-10">
         <div class="h-[600px] w-[600px] rotate-12 transform rounded-[40%] bg-gradient-to-br from-blue-400 to-teal-300 opacity-20 blur-3xl"></div>
