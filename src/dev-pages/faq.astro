@@ -1,0 +1,184 @@
+---
+import Layout from "../layouts/Layout.astro";
+import FaqView from "../components/faq/FaqView.astro";
+import {
+  toFaqSections,
+  type FaqCategoryInput,
+  type FaqEntryInput,
+} from "../utils/faq";
+
+// microCMS を呼ばずに FAQ ページを確認するためのサンプル（dev 限定。.env 不要）。
+// 本番と同じ toFaqSections を通すので、並べ替え・段落分け・空カテゴリの除外もここで確かめられる。
+const at = (n: number) => new Date(Date.UTC(2026, 9, 1, 0, n)).toISOString();
+
+const categories: FaqCategoryInput[] = [
+  {
+    id: "c-joining",
+    name: "入会について",
+    slug: "joining",
+    sortOrder: 3,
+    createdAt: at(3),
+  },
+  {
+    id: "c-general",
+    name: "一般的な質問",
+    slug: "general",
+    sortOrder: 1,
+    createdAt: at(1),
+  },
+  {
+    id: "c-courses",
+    name: "コース内容",
+    slug: "courses",
+    sortOrder: 2,
+    createdAt: at(2),
+  },
+  {
+    id: "c-activities",
+    name: "活動内容",
+    slug: "activities",
+    sortOrder: 4,
+    createdAt: at(4),
+  },
+  {
+    id: "c-sample",
+    name: "サンプル：長い質問と段落",
+    slug: "sample",
+    sortOrder: 5,
+    createdAt: at(5),
+  },
+  {
+    id: "c-empty",
+    name: "サンプル：質問0件（表示されない）",
+    slug: "empty",
+    sortOrder: 6,
+    createdAt: at(6),
+  },
+];
+
+const entry = (
+  id: string,
+  category: string,
+  sortOrder: number,
+  question: string,
+  answer: string,
+): FaqEntryInput => ({
+  id,
+  category: { id: category },
+  sortOrder,
+  question,
+  answer,
+  createdAt: at(10 + sortOrder),
+});
+
+const entries: FaqEntryInput[] = [
+  entry(
+    "tnd",
+    "c-general",
+    1,
+    "TNDとは何ですか？",
+    "TNDは、ウェブ開発、デザイン、データサイエンスに焦点を当てた東京理科大学野田キャンパスのプログラミングサークルです。2024年に設立され、実践的なプロジェクトや共同イベントを通して共に学び、成長することに力を入れています。",
+  ),
+  entry(
+    "beginner",
+    "c-general",
+    2,
+    "プログラミング初心者でも参加できますか？",
+    "はい、初心者の方も大歓迎です！先輩メンバーがサポートする体制が整っており、定期的な勉強会などを通じて、基礎からしっかりと学べます。",
+  ),
+  entry(
+    "department",
+    "c-general",
+    3,
+    "どの学科の人が参加していますか？",
+    "TND には、情報計算科学科、先端化学科、数理科学科をはじめとした、幅広い学科のメンバーが所属しています。プログラミングに興味がある方であれば、どの学科の方でも参加可能です。",
+  ),
+  entry(
+    "web",
+    "c-courses",
+    1,
+    "Web開発コースでは何を学べますか？",
+    "Web開発コースでは、フロントエンドとバックエンドの両面を学習できます。具体的には、HTML/CSS、JavaScript/TypeScript、React/Next.js、Python、Golang、Node.js（TypeScript）、データベース設計などを扱います。",
+  ),
+  entry(
+    "design",
+    "c-courses",
+    2,
+    "デザインコースではどのようなツールを使いますか？",
+    "デザインコースでは、Figma、Adobe Illustrator、Adobe Photoshop、Adobe XD、Blender などのツールを使用し、UI/UX デザインの原則や効果的なデザイン手法を学びます。",
+  ),
+  entry(
+    "ds",
+    "c-courses",
+    3,
+    "データサイエンスコースは難しいですか？",
+    "データサイエンスコースは、初心者にも分かりやすいカリキュラムで構成されています。基本的な Python プログラミングから始め、段階的にデータ分析や AI の基礎を学んでいきます。数学の知識があるとより理解が深まりますが、必須ではありません。",
+  ),
+  entry(
+    "when",
+    "c-joining",
+    1,
+    "入会はいつでもできますか？",
+    "新メンバーの募集は毎年4月と5月に実施しています。募集期間中に説明会を開催し、入会希望者を受け付けていますので、詳細はその際にご確認ください。\n\nスタート時期を揃えることで、新入生同士の学習や交流がスムーズに行えるようにしています。",
+  ),
+  entry(
+    "bring",
+    "c-joining",
+    2,
+    "入会に必要な持ち物はありますか？",
+    "自分のノートパソコンがあれば、それで十分です。OSは問いませんが、Windows 11 または macOS が推奨です。",
+  ),
+  entry(
+    "multi",
+    "c-joining",
+    3,
+    "複数のコースに参加可能ですか？",
+    "複数の班に参加することは可能です！各コースで勉強会やプロジェクト活動を行っており、自分の興味に合わせて複数のコースに参加することができます。",
+  ),
+  entry(
+    "hackathon",
+    "c-activities",
+    1,
+    "ハッカソンとは何ですか？",
+    "ハッカソンは、短期間で集中的にプロダクトを開発するイベントです。チームでアイデア出しから実装までを行い、内部ハッカソンや外部ハッカソンに参加しています。初心者も参加しやすいようサポート体制が整っています。",
+  ),
+  entry(
+    "study",
+    "c-activities",
+    2,
+    "勉強会はどのくらいの頻度で開催されますか？",
+    "各コースの勉強会は基本的に週1回しています。録画も行っているため、参加できなかった場合も後から確認できます。聞くだけではなく、実際に手を動かして学ぶことができます。当番制で運営しており、メンバーが自主的に勉強会を開催することも可能です。",
+  ),
+  entry(
+    "project",
+    "c-activities",
+    3,
+    "チーム開発プロジェクトに参加するには？",
+    "TNDではチーム開発プロジェクトを実施しています。Web アプリ、モバイルアプリ、データ分析など、幅広いテーマのプロジェクトに参加可能です。プロジェクト開始時に募集を行うほか、自主的に提案することもできます。",
+  ),
+  // 表示確認用（本番には無い）
+  entry(
+    "long",
+    "c-sample",
+    1,
+    "とても長い質問文が2行・3行に折り返したときに、Q の印と開閉の矢印が質問の1行目にそろって表示されるかを確認するためのサンプルの質問ですか？",
+    "1つ目の段落です。\r\n段落の中の改行は、この行のように改行として表示されます。\r\n   \r\n2つ目の段落です（空白だけの行も空行として扱います）。\n\n\n3つ目の段落です（空行が続いても段落は1つだけ分かれます）。",
+  ),
+  entry(
+    "same-order",
+    "c-sample",
+    1,
+    "並び順が同じときは作成日時の古い順になりますか？",
+    "はい。このサンプルは上の質問と sortOrder が同じで、作成日時が後なので2番目に表示されます。",
+  ),
+];
+
+const sections = toFaqSections(categories, entries);
+---
+
+<Layout title="よくある質問のサンプル（dev限定）" noindex={true}>
+  <div class="border-b border-yellow-300 bg-yellow-100 px-4 py-2 text-sm text-yellow-800">
+    開発時のみ表示される確認用ページです（本番ビルドには含まれません）。データは固定のサンプルです。
+  </div>
+  <FaqView sections={sections} />
+</Layout>
