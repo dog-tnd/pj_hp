@@ -14,7 +14,7 @@
 - [x] 4. カテゴリの一覧の追従（sticky）と現在地の判定、カテゴリへの移動とフォーカス、`scroll-margin-top`、`scroll-behavior` を追加する（dev ページで確認）
 - [x] 5. `utils/faq.ts` に `FAQPage` の JSON-LD を作る関数を追加し、dev ページで出力する
 - [ ] 6. `microcms.ts` に FAQ の取得を追加し、`/faq` を `FaqView` に差し替える（`description`・`FAQPage` も出力。旧ページのスクリプトとスタイルを消す）
-- [ ] 7. README に FAQ の更新手順を追記し、microCMS・Webhook の節を直す
+- [x] 7. README に FAQ の更新手順を追記し、microCMS・Webhook の節を直す
 - [ ] 検証: `pnpm build` がエラー0
 - [ ] 検証: `/faq` と dev ページを 375 / 768 / 1024 / 1440px でスクリーンショット。キャンバスと見比べる
 - [ ] 検証: 旧ページと新ページで、12問の質問・回答の文言が一致すること

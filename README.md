@@ -3,7 +3,7 @@
 東京理科大学プログラミングサークル TND の公式サイトです。
 
 - **フレームワーク**: Astro 5（静的サイト生成）
-- **ブログ記事**: microCMS（ヘッドレス CMS）から取得
+- **ブログ記事・よくある質問**: microCMS（ヘッドレス CMS）から取得
 - **本番ホスティング**: GitHub Pages
 - **下書きプレビュー**: Vercel（`/blog/preview` のみ SSR）
 
@@ -41,7 +41,7 @@ pnpm install
 4. 環境変数を設定
 
 `.env.example` をコピーして `.env` を作成し、値を設定します。
-ブログ記事は microCMS から取得するため、**microCMS のキーが無いとビルドできません**。
+ブログ記事とよくある質問は microCMS から取得するため、**microCMS のキーが無いとビルドできません**。
 
 ```bash
 cp .env.example .env
@@ -61,6 +61,7 @@ pnpm dev
 
 - **本番ビルド（GitHub Pages）にも Vercel にも含まれません**（dev のときだけルートが注入されます）
 - 例: `/dev/code-sample` … 記事本文の描画（コードブロックのハイライト、インラインコード）を固定データで確認できます
+- 例: `/dev/faq` … よくある質問ページを固定データで確認できます
 - microCMS を呼ばないページであれば **`.env` 無しでも動作**します
 
 新しい確認用ページを追加したいときは、`src/dev-pages/` に `.astro` を置くだけです。
@@ -77,6 +78,20 @@ microCMS の下書きを本番と同じ見た目で確認するページです�
 ローカル（dev）と Vercel でのみ有効で、本番（GitHub Pages）では 404 になります。
 URL は microCMS 管理画面の「画面プレビュー」から開けます。
 
+## よくある質問の更新
+
+`/faq` の質問と回答は、microCMS の2つの API で管理しています。コードを変えずに更新できます。
+
+- `faq-categories` … カテゴリ。`name`（表示名）・`slug`（ページ内リンク用。英小文字・数字・ハイフン）・`sortOrder`（小さいほど上）
+- `faq` … 質問。`question`・`answer`・`category`（カテゴリを参照）・`sortOrder`（カテゴリ内の並び順）
+
+更新するときの注意:
+
+- 回答（`answer`）は空行で段落が分かれます。段落の中の改行は、そのまま改行として表示されます
+- 質問が1件も無いカテゴリは表示されません
+- 公開中の質問が0件、カテゴリが未設定・非公開の質問がある、または `slug` が不正・重複しているときは、**ビルドが失敗して公開されません**（直前の公開内容が残ります）。GitHub Actions のログに理由が出ます
+- 公開すると Webhook で自動的に再ビルドされます
+
 ## ビルド・型チェック
 
 ```bash
@@ -91,7 +106,7 @@ pnpm astro check
 
 ## デプロイ
 
-- `main` への push、または **microCMS の Webhook**（記事の公開・更新・削除）で GitHub Actions が走り、GitHub Pages へ自動デプロイされます
+- `main` への push、または **microCMS の Webhook**（ブログ記事・よくある質問の公開・更新・公開終了・削除）で GitHub Actions が走り、GitHub Pages へ自動デプロイされます
 - Webhook を取りこぼした場合の保険として、**6 時間ごとの定期リビルド**も設定されています
 
 ## プレビュー環境（Vercel）について
