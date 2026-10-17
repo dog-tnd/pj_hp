@@ -60,3 +60,101 @@ const openFromHash = () => {
 
 openFromHash();
 window.addEventListener("hashchange", openFromHash);
+
+// ---- カテゴリの一覧：今見ているカテゴリの判定と、カテゴリへの移動 ----
+// 判定は記事の目次（article-toc.ts）と同じ考え方：判定線より上にある最後のカテゴリ見出しを現在地にする
+
+const catLinks = [
+  ...document.querySelectorAll<HTMLAnchorElement>("[data-faq-cat]"),
+];
+const headings = [
+  ...document.querySelectorAll<HTMLElement>("section > h2[id^='cat-']"),
+];
+const bar = document.querySelector<HTMLElement>("[data-faq-bar]");
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+let currentSlug: string | null = null;
+// カテゴリを選んだあと、移動が終わるまでは判定を止める（なめらかな移動の途中で現在地がちらつくため）
+let lockedUntil = 0;
+
+const setCurrent = (slug: string) => {
+  if (slug === currentSlug) return;
+  currentSlug = slug;
+  for (const link of catLinks) {
+    if (link.dataset.faqCat === slug)
+      link.setAttribute("aria-current", "location");
+    else link.removeAttribute("aria-current");
+  }
+  // lg 未満：現在地のピルが見えるよう、カテゴリの行を横にだけスクロールする（ページは縦に動かさない）
+  const pill = bar?.querySelector<HTMLElement>(`[data-faq-cat="${slug}"]`);
+  if (bar && pill && bar.offsetParent !== null) {
+    bar.scrollTo({
+      left: pill.offsetLeft - (bar.clientWidth - pill.offsetWidth) / 2,
+      behavior: reducedMotion.matches ? "auto" : "smooth",
+    });
+  }
+};
+
+// 判定線：見出しの着地位置（scroll-margin-top）＋ 8px
+const judgeLine = () =>
+  parseFloat(getComputedStyle(headings[0]).scrollMarginTop || "0") + 8;
+
+const updateCurrent = () => {
+  if (performance.now() < lockedUntil) return;
+  const line = judgeLine();
+  let slug = headings[0].id.slice("cat-".length);
+  for (const heading of headings) {
+    if (heading.getBoundingClientRect().top - line > 0) break;
+    slug = heading.id.slice("cat-".length);
+  }
+  // ページの一番下では、最後のほうのカテゴリは判定線まで上がりきらないので、画面に見えている最後のカテゴリにする
+  const atBottom =
+    window.innerHeight + window.scrollY >=
+    document.documentElement.scrollHeight - 2;
+  if (atBottom) {
+    const visible = headings.filter(
+      (heading) => heading.getBoundingClientRect().top < window.innerHeight,
+    );
+    const last = visible[visible.length - 1];
+    if (last) slug = last.id.slice("cat-".length);
+  }
+  setCurrent(slug);
+};
+
+let ticking = false;
+const onScroll = () => {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => {
+    ticking = false;
+    updateCurrent();
+  });
+};
+
+if (headings.length > 0) {
+  updateCurrent();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  window.addEventListener("scrollend", () => {
+    lockedUntil = 0;
+    updateCurrent();
+  });
+
+  // カテゴリを選んだら、見出しへ移動してフォーカスを移し、URL のハッシュを更新する
+  for (const link of catLinks) {
+    link.addEventListener("click", (event) => {
+      const slug = link.dataset.faqCat;
+      const heading = slug ? document.getElementById(`cat-${slug}`) : null;
+      if (!slug || !heading) return;
+      event.preventDefault();
+      setCurrent(slug);
+      lockedUntil = performance.now() + 1000;
+      heading.scrollIntoView({
+        behavior: reducedMotion.matches ? "auto" : "smooth",
+        block: "start",
+      });
+      heading.focus({ preventScroll: true });
+      history.replaceState(null, "", `#cat-${slug}`);
+    });
+  }
+}

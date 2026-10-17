@@ -12,8 +12,8 @@ interface Props {
 const { sections } = Astro.props;
 ---
 
-<!-- カテゴリの行（lg 未満） -->
-<div class="lg:hidden">
+<!-- カテゴリの行（lg 未満）。モバイルのヘッダー 56px の直下に追従する -->
+<div class="sticky top-14 z-40 lg:hidden">
   <FaqCategoryNav sections={sections} variant="bar" />
 </div>
 
@@ -54,7 +54,7 @@ const { sections } = Astro.props;
         <h2
           id={`cat-${section.slug}`}
           tabindex="-1"
-          class="mb-2 flex items-baseline gap-2 text-[19px] font-bold leading-[1.5] focus:outline-none lg:mb-3 lg:gap-2.5 lg:text-[22px]"
+          class="mb-2 flex scroll-mt-[121px] items-baseline gap-2 text-[19px] font-bold leading-[1.5] focus:outline-none lg:mb-3 lg:scroll-mt-[88px] lg:gap-2.5 lg:text-[22px]"
         >
           {section.name}
           <span class="font-['Inter'] text-[13px] font-normal text-gray-500 lg:text-sm">
@@ -73,7 +73,8 @@ const { sections } = Astro.props;
     <FaqMoreQuestions />
   </div>
 
-  <aside class="hidden w-[280px] shrink-0 pt-[52px] lg:block">
+  <!-- 右の列（lg 以上）。上の余白 52px を含めて top 44px で追従し、一覧自体はスクロール後のヘッダー 64px ＋ 32px の位置に来る -->
+  <aside class="sticky top-11 hidden w-[280px] shrink-0 pt-[52px] lg:block">
     <FaqCategoryNav sections={sections} variant="sidebar" />
   </aside>
 </div>
@@ -94,3 +95,12 @@ const { sections } = Astro.props;
 <script>
   import "../../scripts/faq";
 </script>
+
+<style>
+  /* カテゴリへの移動をなめらかにする。動きを減らす設定のときは即時に移動する */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html) {
+      scroll-behavior: smooth;
+    }
+  }
+</style>
