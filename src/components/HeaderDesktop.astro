@@ -62,7 +62,8 @@ const isCurrent = (href: string) =>
   .site-header {
     position: fixed;
     top: 0;
-    right: 0;
+    /* モーダルでスクロールバーが消えたときは、その幅を右に空けて位置を保つ（scroll-lock.ts） */
+    right: var(--scrollbar-width, 0px);
     left: 0;
     z-index: 50;
     display: block;
