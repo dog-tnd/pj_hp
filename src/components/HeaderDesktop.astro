@@ -90,6 +90,31 @@ const isCurrent = (href: string) =>
     backdrop-filter: blur(12px);
   }
 
+  /* 対応ブラウザでは、スクロールの量にそのまま連動させる（0〜26px で 80px → 64px・背景を付ける）。
+     JavaScript でスクロールを受けてから切り替えると、どうしても遅れて見えるため。未対応のブラウザは上の .scrolled で切り替える */
+  @supports (animation-timeline: scroll()) {
+    .site-header,
+    .site-header.scrolled {
+      height: 80px;
+      background-color: rgba(249, 250, 251, 0);
+      box-shadow: 0 1px 0 rgba(17, 24, 39, 0);
+      transition: none;
+      animation: header-scrolled linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 26px;
+    }
+  }
+
+  @keyframes header-scrolled {
+    to {
+      height: 64px;
+      background-color: rgba(249, 250, 251, 0.97);
+      box-shadow: 0 1px 0 rgba(17, 24, 39, 0.08);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+  }
+
   .header-inner {
     width: min(100%, 1440px);
     height: 100%;
