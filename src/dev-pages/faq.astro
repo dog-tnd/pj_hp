@@ -12,6 +12,15 @@ import {
 // sortOrder はカテゴリをまたいだ通し番号（カテゴリの並びは、カテゴリ内の最小の sortOrder の順）
 const at = (n: number) => new Date(Date.UTC(2026, 9, 1, 0, n)).toISOString();
 
+// カテゴリの英字ラベル（microCMS では質問ごとに選ぶ。同じカテゴリには同じもの）
+const EN: Record<string, string> = {
+  一般的な質問: "GENERAL",
+  コース内容: "COURSES",
+  入会について: "JOINING",
+  活動内容: "ACTIVITIES",
+  "サンプル：長い質問と段落": "SAMPLE",
+};
+
 const entry = (
   id: string,
   category: string,
@@ -22,6 +31,7 @@ const entry = (
 ): FaqEntryInput => ({
   id,
   category: [category],
+  categoryEn: [EN[category]],
   sortOrder,
   question,
   answer,

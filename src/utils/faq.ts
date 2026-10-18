@@ -13,6 +13,8 @@ export type FaqSection = {
   // ページ内リンク用（`cat-{anchor}`）。カテゴリ名の空白をハイフンにしたもの
   anchor: string;
   name: string;
+  // 英字ラベル（GENERAL など）。見出しの上に飾りとして出す
+  en: string;
   items: FaqItem[];
 };
 
@@ -23,6 +25,7 @@ export type FaqEntryInput = {
   answer: string;
   // セレクトフィールドは選んだ項目の配列で返る（複数選択なしでも配列）
   category: string[];
+  categoryEn: string[];
   sortOrder: number;
   createdAt: string;
 };
@@ -56,7 +59,8 @@ export function toParagraphs(answer: string): string[][] {
  * 質問をカテゴリごとのセクションにまとめる。
  * 質問は sortOrder（同じなら作成日時）の順に並べ、カテゴリはその中で最初に出てきた順
  * （＝カテゴリ内の最小の sortOrder の順）にする。
- * データが壊れているとき（質問0件・カテゴリ未設定）は例外を投げてビルドを止める。
+ * データが壊れているとき（質問0件・カテゴリや英字ラベルが1つに決まらない・同じカテゴリで英字ラベルが食い違う）は
+ * 例外を投げてビルドを止める。
  * 直前のデプロイが残るので、壊れたページを公開するよりよい。
  */
 export function toFaqSections(entries: FaqEntryInput[]): FaqSection[] {
@@ -74,10 +78,20 @@ export function toFaqSections(entries: FaqEntryInput[]): FaqSection[] {
         `[faq] 質問「${entry.question}」のカテゴリが1つに決まっていません（未設定か、複数選ばれています）。`,
       );
     }
+    const en = entry.categoryEn?.[0]?.trim();
+    if (!en || entry.categoryEn.length !== 1) {
+      throw new Error(
+        `[faq] 質問「${entry.question}」のカテゴリの英字ラベルが1つに決まっていません（未設定か、複数選ばれています）。`,
+      );
+    }
     let section = sections.get(name);
     if (!section) {
-      section = { anchor: toAnchor(name), name, items: [] };
+      section = { anchor: toAnchor(name), name, en, items: [] };
       sections.set(name, section);
+    } else if (section.en !== en) {
+      throw new Error(
+        `[faq] カテゴリ「${name}」の英字ラベルが質問によって違います（${section.en} と ${en}）。質問「${entry.question}」を確認してください。`,
+      );
     }
     section.items.push({
       id: entry.id,

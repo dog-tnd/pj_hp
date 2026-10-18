@@ -106,6 +106,8 @@ export type FaqEntry = MicroCMSBase & {
   question: string;
   answer: string;
   category: string[];
+  // カテゴリの英字ラベル（GENERAL など）。同じカテゴリの質問には同じものを選ぶ
+  categoryEn: string[];
   sortOrder: number;
 };
 
