@@ -117,13 +117,11 @@ const toAbsoluteUrl = (url: string) => new URL(url, Astro.site).href;
         image: toAbsoluteUrl(getAuthorImageUrl(post)),
         jobTitle: post.role,
       },
+      // 詳細（ロゴなど）は Layout の Organization が持つ。参照を解決しないツールのため型と名前は残す
       publisher: {
         "@type": "Organization",
+        "@id": "https://tus-tnd.com/#organization",
         name: "TND",
-        logo: {
-          "@type": "ImageObject",
-          url: "https://tus-tnd.com/logo.png",
-        },
       },
       datePublished: new Date(post.publishedAt!).toISOString(),
       dateModified: new Date(post.updatedAt).toISOString(),

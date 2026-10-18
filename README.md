@@ -68,6 +68,21 @@ pnpm dev
 新しい確認用ページを追加したいときは、`src/dev-pages/` に `.astro` を置くだけです。
 ファイル名がそのまま URL になります（`src/dev-pages/foo.astro` → `/dev/foo`）。一覧にも自動で並びます。
 
+#### OG 画像（`public/og.png`）を作り直す
+
+SNS で共有したときの画像（1200×630）は、`/dev/og-image`（`src/dev-pages/og-image.astro`）を撮って作ります。
+
+1. `pnpm dev` を起動する（確認用ページのルートは起動したときに作られるので、ページを足したあとは起動し直す）
+2. リポジトリのルートで、Chrome のヘッドレスで撮る
+
+   ```bash
+   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --hide-scrollbars --window-size=1200,630 --virtual-time-budget=5000 --screenshot=public/og.png http://localhost:4321/dev/og-image
+   ```
+
+3. 寸法が 1200×630 か確かめる：`sips -g pixelWidth -g pixelHeight public/og.png`
+
+人数など変わりうる事実は、画像に入れません（spec 006）。
+
 ### 下書きプレビュー
 
 microCMS の下書きを本番と同じ見た目で確認するページです。
