@@ -59,7 +59,7 @@ export function toParagraphs(answer: string): string[][] {
  * 質問をカテゴリごとのセクションにまとめる。
  * 質問は sortOrder（同じなら作成日時）の順に並べ、カテゴリはその中で最初に出てきた順
  * （＝カテゴリ内の最小の sortOrder の順）にする。
- * データが壊れているとき（質問0件・カテゴリや英字ラベルが1つに決まらない・同じカテゴリで英字ラベルが食い違う）は
+ * データが壊れているとき（質問0件・カテゴリや英字ラベルが1つに決まらない・カテゴリと英字ラベルが1対1でない）は
  * 例外を投げてビルドを止める。
  * 直前のデプロイが残るので、壊れたページを公開するよりよい。
  */
@@ -98,6 +98,17 @@ export function toFaqSections(entries: FaqEntryInput[]): FaqSection[] {
       question: entry.question,
       paragraphs: toParagraphs(entry.answer),
     });
+  }
+  // カテゴリと英字ラベルは1対1にする。別のカテゴリに同じ英字ラベルが選ばれていたら、どちらかの選び間違い
+  const byEn = new Map<string, string>();
+  for (const section of sections.values()) {
+    const other = byEn.get(section.en);
+    if (other) {
+      throw new Error(
+        `[faq] 英字ラベル「${section.en}」が、カテゴリ「${other}」と「${section.name}」の両方で使われています。`,
+      );
+    }
+    byEn.set(section.en, section.name);
   }
   return [...sections.values()];
 }
