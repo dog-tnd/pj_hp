@@ -163,7 +163,7 @@ Layout.astro（背景：body の gray-50 ＋ ぼかし）
 - `src/utils/faq.ts`：`toFaqSections(entries): FaqSection[]`
   - 質問を `sortOrder` 順（同じなら `createdAt` 順）に並べ、カテゴリはその中で最初に出てきた順にまとめる（＝カテゴリ内の最小の `sortOrder` の順）
   - セレクトフィールドの値は配列で返るので、1つ目をカテゴリ名にする
-  - 次のときは例外を投げてビルドを失敗させる：公開中の質問が0件／`category` が空・複数／`categoryEn` が空・複数／同じカテゴリで `categoryEn` が食い違う
+  - 次のときは例外を投げてビルドを失敗させる：公開中の質問が0件／`category` が空・複数／`categoryEn` が空・複数／同じカテゴリで `categoryEn` が食い違う／1つの `categoryEn` が複数のカテゴリで使われる（カテゴリと英字ラベルを1対1にする）
   - `FaqSection` に英字ラベル `en` を足す
   - `answer` を段落と行の配列に変換する（上記「回答の段落」）
 
