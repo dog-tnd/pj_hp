@@ -657,10 +657,20 @@ const hasToc = toc.items.length >= 2;
     }
   }
 
-  /* 目次シートは下からせり上げる。動きを減らす設定のときは動かさない */
+  /* 目次シートは下からせり上げ、閉じるときは下へ沈める（article-toc.ts が is-closing を付ける）。
+     動きを減らす設定のときは動かさない */
   @media (prefers-reduced-motion: no-preference) {
     .toc-sheet[open] {
       animation: toc-sheet-in 200ms ease-out;
+    }
+    .toc-sheet[open]::backdrop {
+      animation: toc-backdrop-in 200ms ease-out;
+    }
+    .toc-sheet.is-closing {
+      animation: toc-sheet-out 200ms ease-in forwards;
+    }
+    .toc-sheet.is-closing::backdrop {
+      animation: toc-backdrop-out 200ms ease-in forwards;
     }
   }
   @keyframes toc-sheet-in {
@@ -669,6 +679,21 @@ const hasToc = toc.items.length >= 2;
     }
     to {
       transform: translateY(0);
+    }
+  }
+  @keyframes toc-sheet-out {
+    to {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes toc-backdrop-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes toc-backdrop-out {
+    to {
+      opacity: 0;
     }
   }
 </style>

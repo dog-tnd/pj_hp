@@ -62,12 +62,12 @@ const mailDomain = "gmail.com";
           <p class="max-w-[640px] text-[15px] leading-[1.9] text-gray-600 lg:text-lg">
             新入生の方はDiscordへご案内しています。下のボタンを押すと、参加方法の案内が開きます。
           </p>
-          <!-- クリック処理は JoinDialog.astro が data-open-join を拾ってまとめて付ける -->
+          <!-- クリック処理は JoinDialog.astro が data-open-join を拾ってまとめて付ける。ホバーはヘッダーの入会申し込みと同じ -->
           <button
             type="button"
             data-open-join
             data-join-inline
-            class="mt-[22px] flex h-[52px] w-full items-center justify-center rounded-full bg-[#F5BF48] px-7 text-base font-bold text-white shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-colors hover:bg-[#E9AF2E] md:inline-flex md:w-auto lg:mt-[26px]"
+            class="mt-[22px] flex h-[52px] w-full items-center justify-center rounded-full bg-[#F5BF48] px-7 text-base font-bold text-white shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-[background,box-shadow,transform] duration-[180ms] hover:-translate-y-px hover:bg-[linear-gradient(94deg,#f5bf48_0%,#f7bc5b_42%,#efa169_100%)] hover:shadow-[0_10px_20px_rgba(239,161,105,.28)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 md:inline-flex md:w-auto lg:mt-[26px]"
           >
             入会申し込み
           </button>

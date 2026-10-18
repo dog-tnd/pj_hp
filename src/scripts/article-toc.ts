@@ -168,13 +168,39 @@ const sheetClose = sheet?.querySelector<HTMLButtonElement>(
 if (sheet && sheetOpen && sheetClose) {
   // 項目を選んで閉じたときと、幅が変わって閉じたときは、目次ボタンへフォーカスを戻さない
   let returnFocus = true;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let closing = false;
 
   // close イベントは後から非同期で届くので、自分で閉じるときはその場で固定も解除する
-  const closeSheet = (focusOpenButton: boolean) => {
+  const finishClose = () => {
+    closing = false;
+    sheet.classList.remove("is-closing");
+    if (sheet.open) sheet.close();
+    syncScrollLock();
+  };
+
+  // animate のときは、下へ沈む動き（is-closing）が終わってから閉じる。
+  // 項目を選んだとき・幅が変わったときは、すぐ閉じる（固定を解いてから見出しへ移動するため）
+  const closeSheet = (focusOpenButton: boolean, animate = false) => {
     if (!sheet.open) return;
     returnFocus = focusOpenButton;
-    sheet.close();
-    syncScrollLock();
+    if (!animate || reducedMotion.matches) {
+      finishClose();
+      return;
+    }
+    if (closing) return;
+    closing = true;
+    sheet.classList.add("is-closing");
+    // ::backdrop の animationend も届くので、dialog 本体の分だけ見る。届かない環境のために時間でも閉じる
+    const onEnd = (event: AnimationEvent) => {
+      if (event.target !== sheet || event.pseudoElement) return;
+      sheet.removeEventListener("animationend", onEnd);
+      if (closing) finishClose();
+    };
+    sheet.addEventListener("animationend", onEnd);
+    window.setTimeout(() => {
+      if (closing) finishClose();
+    }, 350);
   };
 
   sheetOpen.addEventListener("click", () => {
@@ -183,11 +209,17 @@ if (sheet && sheetOpen && sheetClose) {
     syncScrollLock();
   });
 
-  sheetClose.addEventListener("click", () => closeSheet(true));
+  sheetClose.addEventListener("click", () => closeSheet(true, true));
 
   // シートの外（dialog 自身＝背景）を押したら閉じる
   sheet.addEventListener("click", (event) => {
-    if (event.target === sheet) closeSheet(true);
+    if (event.target === sheet) closeSheet(true, true);
+  });
+
+  // Escape：既定ではすぐ閉じるので止めて、動きを付けて閉じる
+  sheet.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeSheet(true, true);
   });
 
   // 項目を選んだら、閉じて固定を解除してから見出しへ移動する
