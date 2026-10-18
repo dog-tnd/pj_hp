@@ -35,18 +35,29 @@ const latestPosts = sortedPosts.slice(0, 4);
     <TwoLine />
   </header>
 
-  <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-    <!-- Hero Section -->
-
+  <!-- Layout が <main> を持つので div。幅と余白は docs/design/README.md に合わせる -->
+  <div class="mx-auto max-w-[1440px] px-6 lg:px-20">
     <div class="relative">
-      <section class="mb-16">
-        <h2
-          class="mb-8 text-gray-900 md:pt-[3rem]"
-          style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 38px; font-style: normal; font-weight: 400; line-height: normal;"
-        >
-          What's TND
-        </h2>
-        <div class="prose prose-lg max-w-xg text-gray-600 md:max-w-md lg:max-w-xl">
+      <!-- What's TND（デザインシステム「項目の見出し」。ページの見出しが無いので上の線なし・上の余白はページの見出しと同じ） -->
+      <section
+        aria-labelledby="whats-tnd"
+        class="grid grid-cols-1 gap-3.5 pb-8 pt-[72px] lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 lg:pb-[52px] lg:pt-[104px]"
+      >
+        <div>
+          <p
+            aria-hidden="true"
+            class="font-['Rubik_Doodle_Shadow'] text-2xl leading-tight text-blue-500 lg:text-[28px]"
+          >
+            WHAT'S TND
+          </p>
+          <h2
+            id="whats-tnd"
+            class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl"
+          >
+            TNDとは
+          </h2>
+        </div>
+        <div class="max-w-[640px] space-y-4 text-[15px] leading-[1.9] text-gray-600 lg:text-lg">
           <p>
             TNDはweb開発をメインに活動する東京理科大学のプログラミングサークルです。2024年に設立され、現在は40名のメンバーが所属しています。
           </p>
@@ -55,73 +66,79 @@ const latestPosts = sortedPosts.slice(0, 4);
           </p>
         </div>
       </section>
+      <!-- メインビジュアル（spec 005 D2 でそのまま）。外枠の py-12 が無くなった分、top を 5rem → 8rem にして上下の位置を保つ -->
       <img
         src="/mainCharm.svg"
         alt="mainCharm"
-        class="w-full md:w-auto md:absolute top-[5rem] right-[2rem] max-w-xs md:max-w-md lg:max-w-lg pb-[5rem] opacity-30 -z-10"
+        class="w-full md:w-auto md:absolute top-[8rem] right-[2rem] max-w-xs md:max-w-md lg:max-w-lg pb-[5rem] opacity-30 -z-10"
       />
     </div>
 
-    <div class="w-full max-w-full md:max-w-full custom-md:max-w-7xl mx-auto">
-      <section class="mb-16 w-full">
-        <h2
-          class="mb-8 text-gray-900"
-          style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 30px; font-style: normal; font-weight: 400; line-height: normal;"
+    <!-- NEWS（デザインシステム「項目の見出し」の上置き。カードの一覧は幅が要るので見出しを上に置く） -->
+    <section
+      aria-labelledby="news"
+      class="grid grid-cols-1 gap-3.5 border-t border-gray-200 pt-8 lg:gap-8 lg:pt-[52px]"
+    >
+      <div>
+        <p
+          aria-hidden="true"
+          class="font-['Rubik_Doodle_Shadow'] text-2xl leading-tight text-blue-500 lg:text-[28px]"
         >
           NEWS
+        </p>
+        <h2 id="news" class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl">
+          新着記事
         </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 custom-md:grid-cols-3 gap-6 w-full">
-          {latestPosts.map((post, index) => {
-            const postUrl = `/blog/${post.id}`;
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 custom-md:grid-cols-3 gap-6 w-full">
+        {latestPosts.map((post, index) => {
+          const postUrl = `/blog/${post.id}`;
 
-            return (
-              <div
-                class="animate-fade-in"
-                style={`animation-delay: ${0.4 + (index % 6) * 0.1}s`}
-              >
-                <NewsCard
-                  image={getImageUrl(post)}
-                  title={post.title}
-                  description={post.description}
-                  author={post.author}
-                  role={post.role}
-                  authorImage={getAuthorImageUrl(post)}
-                  date={formatDotDate(post.publishedAt)}
-                  url={postUrl}
-                  client:load
-                />
-              </div>
-            );
-          })}
-        </div>
-        <!-- もっと見るボタン（5件以上で表示） -->
-        {sortedPosts.length > 4 && (
-          <div class="mt-8 text-center">
-            <a
-              href="/blog"
-              class="inline-flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
+          return (
+            <div
+              class="animate-fade-in"
+              style={`animation-delay: ${0.4 + (index % 6) * 0.1}s`}
             >
-              もっと見る
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 ml-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </a>
-          </div>
-        )}
-      </section>
-    </div>
-  </main>
+              <NewsCard
+                image={getImageUrl(post)}
+                title={post.title}
+                description={post.description}
+                author={post.author}
+                role={post.role}
+                authorImage={getAuthorImageUrl(post)}
+                date={formatDotDate(post.publishedAt)}
+                url={postUrl}
+                client:load
+              />
+            </div>
+          );
+        })}
+      </div>
+      <!-- もっと見るボタン（5件以上で表示）。デザインシステムの枠線のボタン -->
+      {sortedPosts.length > 4 && (
+        <div class="text-center">
+          <a
+            href="/blog"
+            class="inline-flex h-12 items-center gap-2 rounded-[10px] border border-blue-500 bg-white px-[18px] text-sm font-bold text-blue-700 transition-colors hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-11"
+          >
+            もっと見る
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M9 18l6-6-6-6"></path>
+            </svg>
+          </a>
+        </div>
+      )}
+    </section>
+  </div>
 
   <!-- SNS LOGOs - 固定位置（PC画面のみ） -->
   <div
