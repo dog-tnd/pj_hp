@@ -100,11 +100,14 @@ const postUrl = (post: BlogPost) => `/blog/${post.id}`;
           web開発をメインに、フロントエンド、バックエンド、データサイエンスなど、様々な分野の技術に取り組んでいます。
         </p>
         <div class="mt-7 flex flex-col gap-3 md:flex-row md:flex-wrap md:gap-4 lg:mt-9">
-          <!-- クリック処理は JoinDialog.astro が data-open-join を拾ってまとめて付ける -->
+          <!-- クリック処理は JoinDialog.astro が data-open-join を拾ってまとめて付ける。
+               data-join-inline：これが画面に見えている間、スマホの右下の入会ボタンを隠す（HeaderMobile.astro。お問い合わせと同じ）。
+               ホバーはヘッダーの入会申し込みと同じ -->
           <button
             type="button"
             data-open-join
-            class="inline-flex h-[52px] items-center justify-center rounded-full bg-[#F5BF48] px-8 text-base font-bold text-white shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-colors hover:bg-[#E9AF2E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-14"
+            data-join-inline
+            class="inline-flex h-[52px] items-center justify-center rounded-full bg-[#F5BF48] px-8 text-base font-bold text-white shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-[background,box-shadow,transform] duration-[180ms] hover:-translate-y-px hover:bg-[linear-gradient(94deg,#f5bf48_0%,#f7bc5b_42%,#efa169_100%)] hover:shadow-[0_10px_20px_rgba(239,161,105,.28)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-14"
           >
             入会申し込み
           </button>
@@ -419,7 +422,8 @@ const postUrl = (post: BlogPost) => `/blog/${post.id}`;
         <button
           type="button"
           data-open-join
-          class="inline-flex h-[52px] items-center justify-center rounded-full bg-[#F5BF48] px-8 text-base font-bold text-white shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-colors hover:bg-[#E9AF2E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-14 lg:min-w-[260px]"
+          data-join-inline
+          class="inline-flex h-[52px] items-center justify-center rounded-full bg-[#F5BF48] px-8 text-base font-bold text-white shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-[background,box-shadow,transform] duration-[180ms] hover:-translate-y-px hover:bg-[linear-gradient(94deg,#f5bf48_0%,#f7bc5b_42%,#efa169_100%)] hover:shadow-[0_10px_20px_rgba(239,161,105,.28)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-14 lg:min-w-[260px]"
         >
           入会申し込み
         </button>
