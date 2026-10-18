@@ -21,7 +21,7 @@
 - 新規：
   - `src/utils/faq.ts` … 型（`FaqSection`・`FaqItem`）と、microCMS の形からの変換（並べ替え・段落への分割・異常データの検出）。env に依存しない
   - `src/components/faq/FaqView.astro` … ページ本体。`sections` を受け取って描画する（dev ページでも使う）
-  - `src/components/faq/FaqCategoryNav.astro` … カテゴリの一覧。`variant="sidebar"`（lg 以上の右の列）／`"bar"`（lg 未満のヘッダー直下）
+  - `src/components/faq/FaqCategoryNav.astro` … カテゴリの一覧（横並び・ヘッダー直下に追従）。lg 以上では右端に「すべて開く」も置く
   - `src/components/faq/FaqItem.astro` … 質問1つ（ボタン＋回答）
   - `src/components/faq/FaqMoreQuestions.astro` … 「ここにない質問は」（マシュマロ・お問い合わせ）
   - `src/scripts/faq.ts` … 開閉、すべて開く、ハッシュからの展開、ページ内検索での展開、今見ているカテゴリの判定
@@ -34,14 +34,12 @@ Layout.astro（背景：body の gray-50 ＋ ぼかし）
 └ <main>
    └ faq/index.astro … microCMS から取得 → utils/faq.ts で変換 → FaqView に渡す。FAQPage の JSON-LD を head に出す
       ├ FaqView.astro
-      │  ├ FaqCategoryNav variant="bar"（lg 未満。ヘッダー直下に sticky、白の不透明な背景）
-      │  ├ ページの見出し（デザインシステム）：大学名の英字・英字の大見出し「FAQ」（aria-hidden）・h1「よくある質問」・説明文
-      │  └ 2カラム（最大 1120px、lg 以上で横並び、items-start）
-      │      ├ 本文（最大 720px）
-      │      │   ├「すべて開く」ボタン（右寄せ）
-      │      │   ├ <section> × カテゴリ数（項目の見出し）：英字ラベル（aria-hidden）＋ h2（名前＋件数）／白い面に FaqItem × 質問数
-      │      │   └ FaqMoreQuestions（項目の見出し：英字ラベル「ASK US」＋ h2「ここにない質問は」／2枚のカード）
-      │      └ <aside>（lg 以上のみ。sticky）：FaqCategoryNav variant="sidebar"
+      │  ├ ページの見出し（デザインシステム。最大 1440px）：大学名の英字・英字の大見出し「FAQ」（aria-hidden）・h1「よくある質問」・説明文
+      │  ├ FaqCategoryNav（sticky。全幅の帯の中に最大 1440px の行。lg 以上は右端に「すべて開く」）
+      │  └ 本文（最大 1440px）
+      │      ├「すべて開く」ボタン（lg 未満のみ。右寄せ）
+      │      ├ <section> × カテゴリ数（項目の見出し）：左に英字ラベル（aria-hidden）＋ h2（名前＋件数）／右に白い面と FaqItem × 質問数
+      │      └ FaqMoreQuestions（項目の見出し：英字ラベル「ASK US」＋ h2「ここにない質問は」／2枚のカード）
       └ <footer>（今のページと同じ）
 ```
 
@@ -73,17 +71,21 @@ Layout.astro（背景：body の gray-50 ＋ ぼかし）
 ### アクセシビリティ（ARIA）
 - 見出し：h1（ページに1つ）→ カテゴリ h2 →「ここにない質問は」h2 → 質問 h3／カードのタイトル h3
 - 質問：`<h3>` の中の `<button type="button" aria-expanded aria-controls>`。「Q」の文字と矢印は `aria-hidden="true"`
-- カテゴリの一覧：`<nav aria-label="カテゴリ">` の `<ol>`。現在地は `aria-current="location"`。項目の高さは、lg 未満のピルで 44px 以上（行の上下の余白込みで押しやすく）、右の列は 36px 以上
+- カテゴリの一覧：`<nav aria-label="カテゴリ">` の `<ol>`。現在地は `aria-current="location"`。ピルの高さは lg 未満 36px・lg 以上 40px（行の上下の余白込みで 44px 以上の押しやすさ）
+- 「すべて開く」は、lg 以上と未満で別のボタンを置き、片方を `hidden` にする（`data-faq-toggle-all` が2つ。スクリプトは両方の文言を更新する）
 - マシュマロのボタン：`target="_blank" rel="noopener noreferrer"`、`aria-label="マシュマロで質問する（新しいタブで開きます）"`
 - アイコンはすべて `aria-hidden="true"`
 
 ### レスポンシブ
 - 境界は既存の `lg`（1024px）と `md`（768px）
-  - `lg` 以上：右の列（280px、sticky `top: 96px`）。本文 720px、間 80px。2カラムの親は `items-start`
-  - `lg` 未満：カテゴリの行をヘッダーの直下に固定（sticky `top: 56px`、`z-40`、白の不透明な背景）。行の高さは 48px（ピル 36px ＋ 上下 6px）＋ 下の枠線 1px ＝ 49px。横スクロールのピル
-- 見出しと質問の着地位置（`scroll-margin-top`）
-  - `lg` 未満：ヘッダー 56px ＋ カテゴリの行 49px ＋ 16px ＝ 121px
-  - `lg` 以上：スクロール後のヘッダー 64px ＋ 24px ＝ 88px（ページの先頭から飛ぶと、ヘッダーが 80px から縮む途中のため最大 16px ずれる。隠れはしない）
+  - カテゴリの行（`z-40`）
+    - `lg` 未満：sticky `top: 56px`。白の不透明な背景・上下の枠線。高さは ピル 36px ＋ 上下 6px ＋ 枠線 2px ＝ 50px
+    - `lg` 以上：sticky `top: 64px`（スクロール後のヘッダー）。`gray-50` の半透明＋ぼかしの背景、枠線なし。高さは ピル 40px ＋ 上下 12px ＝ 64px
+  - 項目：`lg` 以上は見出し 280px ＋ 間 56px ＋ 中身。`lg` 未満は縦に積む（デザインシステム「項目の見出し」）
+- 着地位置（`scroll-margin-top`）。カテゴリの行の下端を「行の下」とする（`lg` 未満 106px、`lg` 以上 128px）
+  - カテゴリの見出し（h2）：項目の上の線が行の下にそろう位置。行の下 ＋ 項目の上の余白 ＋ 英字ラベルと間 → `lg` 未満 106 ＋ 32 ＋ 38 ＝ 176px、`lg` 以上 128 ＋ 52 ＋ 45 ＝ 225px
+  - 質問：行の下 ＋ 16px → `lg` 未満 122px、`lg` 以上 144px
+  - ページの先頭から PC で飛ぶと、ヘッダーが 80px から縮む途中のため最大 16px ずれる（隠れはしない）
 - 「ここにない質問は」のカード：`md` 以上で2列、`md` 未満は縦に積み、マシュマロを先にする
 
 ### 背景（全ページ・`Layout.astro`）
@@ -115,7 +117,7 @@ Layout.astro（背景：body の gray-50 ＋ ぼかし）
 | 要素 | 忠実度 | 意図（なぜ） |
 |---|---|---|
 | カテゴリ別に全部並べる（絞り込まない） | 厳守 | ページ内検索で全部の質問が見つかるようにするため（D1） |
-| カテゴリの一覧の位置（lg 以上は右の列、未満はヘッダー直下） | 厳守（Open question 1 で見直し中） | 記事の目次と同じ位置にそろえ、サイト内で迷わないようにするため |
+| カテゴリの一覧の位置（どの幅でもページの見出しの下・ヘッダー直下に追従） | 厳守 | 人間の決定（D12）。左の列を項目の見出しが使うため、右の列（目次）はやめた |
 | ページの見出し・項目の見出し・カードの形 | 厳守 | サイト共通のデザインシステムに従うため（D9） |
 | 背景のぼかし（全ページ・左右交互） | 厳守 | 人間と合意済み（D2・D7） |
 | マシュマロのボタンの色と白文字 | 厳守 | 人間の決定（D5） |
