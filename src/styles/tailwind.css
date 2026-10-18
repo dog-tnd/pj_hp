@@ -1,0 +1,4 @@
+/* Tailwind の土台・コンポーネント・ユーティリティ。Layout.astro で全ページに読み込む */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
