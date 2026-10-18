@@ -1,0 +1,62 @@
+---
+// 質問1つ。回答は hidden="until-found" で閉じ、ページ内検索の対象に残す。
+// 回答の外側の div には display 系のクラスや余白を付けない（until-found は中身だけを隠すため。spec 004）
+import type { FaqItem } from "../../utils/faq";
+
+interface Props {
+  item: FaqItem;
+}
+
+const { item } = Astro.props;
+const questionId = `q-${item.id}`;
+const answerId = `a-${item.id}`;
+---
+
+<div class="border-b border-gray-200 last:border-b-0">
+  <h3>
+    <button
+      type="button"
+      id={questionId}
+      aria-expanded="false"
+      aria-controls={answerId}
+      data-faq-toggle
+      class="group flex min-h-[56px] w-full scroll-mt-[122px] items-start gap-3 py-4 text-left text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:min-h-[64px] lg:scroll-mt-[144px] lg:gap-4 lg:py-5"
+    >
+      <span
+        aria-hidden="true"
+        class="w-3.5 shrink-0 font-['Inter'] text-[15px] font-semibold leading-[1.6] text-blue-600 lg:w-4 lg:text-base"
+      >
+        Q
+      </span>
+      <span class="min-w-0 flex-1 text-base font-bold leading-[1.6] lg:text-[17px]">
+        {item.question}
+      </span>
+      <svg
+        class="mt-[3px] h-5 w-5 shrink-0 text-gray-500 transition-transform duration-150 group-aria-expanded:rotate-180 motion-reduce:transition-none"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path d="M6 9l6 6 6-6"></path>
+      </svg>
+    </button>
+  </h3>
+  <div id={answerId} hidden="until-found" data-faq-answer>
+    <div class="flex flex-col gap-2.5 pb-5 pl-[26px] lg:gap-3 lg:pb-6 lg:pl-8 lg:pr-9">
+      {item.paragraphs.map((lines) => (
+        <p class="max-w-[680px] text-[15px] leading-[1.9] text-gray-700 lg:text-base">
+          {lines.map((line, i) => (
+            <>
+              {i > 0 && <br />}
+              {line}
+            </>
+          ))}
+        </p>
+      ))}
+    </div>
+  </div>
+</div>
