@@ -1,52 +1,75 @@
 ---
-// 「ここにない質問は」：マシュマロ（匿名の質問箱）とお問い合わせフォームの2つの入口。
+// 「ここにない質問は」：マシュマロ（匿名の質問箱）とお問い合わせの2つの入口。
+// 項目の見出しとカードは docs/design/README.md に合わせる（お問い合わせページの EMAIL・X のカードと同じ作り）。
 // マシュマロのロゴ・キャラクターは利用条件が示されていないため使わず、自前のアイコンにする（spec 004 D6）。
 // ボタンの白文字はコントラスト比が基準未満だが、人間の決定で採用している（spec 004 D5）
 const MARSHMALLOW_URL =
   "https://marshmallow-qa.com/d5cmwnm4bg7zar3?t=pKYfm7&utm_medium=url_text&utm_source=promotion";
+const X_URL = "https://x.com/TokyorikaND";
 ---
 
-<section aria-labelledby="more-questions" class="mt-14 lg:mt-[72px]">
-  <h2
-    id="more-questions"
-    class="mb-3 text-[19px] font-bold leading-[1.5] lg:mb-4 lg:text-[22px]"
-  >
-    ここにない質問は
-  </h2>
-  <div class="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
+<section
+  aria-labelledby="more-questions"
+  class="grid grid-cols-1 gap-3.5 border-t border-gray-200 pt-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 lg:pt-[52px]"
+>
+  <div>
+    <p
+      aria-hidden="true"
+      class="font-['Rubik_Doodle_Shadow'] text-2xl leading-tight text-blue-500 lg:text-[28px]"
+    >
+      ASK US
+    </p>
+    <h2
+      id="more-questions"
+      class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl"
+    >
+      ここにない質問は
+    </h2>
+  </div>
+
+  <!-- lg〜1279px は右の列が狭く、ボタンの文字が折り返すので縦に積む -->
+  <div class="flex flex-col gap-4 md:flex-row md:gap-5 lg:flex-col custom-md:flex-row">
     <!-- 768px 未満はマシュマロを先に（気軽に聞ける入口を上に） -->
-    <div class="order-first flex flex-col gap-2.5 rounded-[14px] border border-marshmallow-border bg-white p-5 md:order-last lg:p-7">
-      <div class="flex items-center gap-3 md:flex-col md:items-start md:gap-2.5">
-        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-marshmallow-tint text-marshmallow-icon lg:h-14 lg:w-14">
-          <svg
-            class="h-[22px] w-[22px] lg:h-[26px] lg:w-[26px]"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path d="M12 3c4.97 0 9 3.36 9 7.5S16.97 18 12 18c-.9 0-1.77-.11-2.6-.31L4 20l1.4-3.8C3.9 14.85 3 12.75 3 10.5 3 6.36 7.03 3 12 3z"></path>
-            <path d="M10 8.5a2 2 0 1 1 2.8 1.83c-.5.22-.8.7-.8 1.24v.43"></path>
-            <path d="M12 14.5h.01"></path>
-          </svg>
-        </span>
-        <h3 class="text-base font-bold leading-[1.5] lg:text-[17px]">
-          マシュマロで匿名の質問
-        </h3>
-      </div>
-      <p class="flex-1 text-sm leading-[1.8] text-gray-600 lg:text-[15px]">
-        TND の
-        X（@TokyorikaND）で、マシュマロから匿名の質問を募集しています。名前を出さずに気軽に聞けます。
+    <div class="order-first flex flex-1 flex-col rounded-[14px] border border-marshmallow-border bg-white px-5 py-[22px] md:order-last lg:px-7 lg:py-[26px]">
+      <p class="flex items-center gap-2 text-xs font-medium tracking-[0.16em] text-gray-500 lg:text-sm lg:tracking-[0.18em]">
+        <svg
+          class="h-4 w-4 shrink-0 text-marshmallow-icon"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path d="M12 3c4.97 0 9 3.36 9 7.5S16.97 18 12 18c-.9 0-1.77-.11-2.6-.31L4 20l1.4-3.8C3.9 14.85 3 12.75 3 10.5 3 6.36 7.03 3 12 3z"></path>
+          <path d="M10 8.5a2 2 0 1 1 2.8 1.83c-.5.22-.8.7-.8 1.24v.43"></path>
+          <path d="M12 14.5h.01"></path>
+        </svg>
+        MARSHMALLOW
+      </p>
+      <h3 class="mt-2.5 text-[17px] font-bold leading-[1.5] lg:mt-3 lg:text-xl">
+        マシュマロで匿名の質問
+      </h3>
+      <p class="mt-2 flex-1 text-sm leading-[1.8] text-gray-600 lg:mt-2.5 lg:text-[15px]">
+        TND の X（
+        <a
+          href={X_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="@TokyorikaND（X・新しいタブで開きます）"
+          class="text-blue-600 underline underline-offset-2 hover:text-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        >
+          @TokyorikaND
+        </a>
+        ）で、マシュマロから匿名の質問を募集しています。名前を出さずに気軽に聞けます。
       </p>
       <a
         href={MARSHMALLOW_URL}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="マシュマロで質問する（新しいタブで開きます）"
-        class="inline-flex h-12 items-center justify-center gap-2 rounded-[10px] bg-marshmallow px-[22px] text-[15px] font-bold text-white transition-colors hover:bg-marshmallow-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 md:self-start"
+        class="mt-4 inline-flex h-12 items-center gap-2 self-start whitespace-nowrap rounded-[10px] bg-marshmallow px-[18px] text-sm font-bold text-white transition-colors hover:bg-marshmallow-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:mt-[18px] lg:h-11"
       >
         マシュマロで質問する
         <svg
@@ -66,36 +89,35 @@ const MARSHMALLOW_URL =
       </a>
     </div>
 
-    <div class="flex flex-col gap-2.5 rounded-[14px] border border-gray-200 bg-white p-5 lg:p-7">
-      <div class="flex items-center gap-3 md:flex-col md:items-start md:gap-2.5">
-        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600 lg:h-14 lg:w-14">
-          <svg
-            class="h-[22px] w-[22px] lg:h-[26px] lg:w-[26px]"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path d="M4 4h16v12H5.17L4 17.17V4z"></path>
-            <path d="M8 9h8"></path>
-            <path d="M8 12h5"></path>
-          </svg>
-        </span>
-        <h3 class="text-base font-bold leading-[1.5] lg:text-[17px]">
-          お問い合わせフォーム
-        </h3>
-      </div>
-      <p class="flex-1 text-sm leading-[1.8] text-gray-600 lg:text-[15px]">
-        お問い合わせフォームから、お気軽にご質問ください。
+    <div class="flex flex-1 flex-col rounded-[14px] border border-gray-200 bg-white px-5 py-[22px] lg:px-7 lg:py-[26px]">
+      <p class="flex items-center gap-2 text-xs font-medium tracking-[0.16em] text-gray-500 lg:text-sm lg:tracking-[0.18em]">
+        <svg
+          class="h-4 w-4 shrink-0 text-blue-600"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path d="M4 4h16v12H5.17L4 17.17V4z"></path>
+          <path d="M8 9h8"></path>
+          <path d="M8 12h5"></path>
+        </svg>
+        CONTACT
+      </p>
+      <h3 class="mt-2.5 text-[17px] font-bold leading-[1.5] lg:mt-3 lg:text-xl">
+        お問い合わせ
+      </h3>
+      <p class="mt-2 flex-1 text-sm leading-[1.8] text-gray-600 lg:mt-2.5 lg:text-[15px]">
+        メールか X の DM で、お気軽にご質問ください。
       </p>
       <a
         href="/contact"
-        class="inline-flex h-12 items-center justify-center gap-2 rounded-[10px] bg-blue-600 px-[22px] text-[15px] font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 md:self-start"
+        class="mt-4 inline-flex h-12 items-center gap-2 self-start whitespace-nowrap rounded-[10px] border border-blue-500 bg-white px-[18px] text-sm font-bold text-blue-700 transition-colors hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:mt-[18px] lg:h-11"
       >
-        お問い合わせ
+        お問い合わせへ
         <svg
           class="h-4 w-4"
           fill="none"
