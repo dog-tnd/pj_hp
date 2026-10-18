@@ -70,6 +70,15 @@ export default defineConfig({
     }),
   ],
   output: "static",
+  // Astro 7 の既定（"jsx"）はインライン要素の間の空白を消すため、6 までの扱いに固定する
+  compressHTML: true,
+  vite: {
+    build: {
+      // Vite 8 の既定（Lightning CSS）は animation と animation-timeline を一括指定にまとめ、
+      // ブラウザが無効として捨てるため（ヘッダーのスクロール連動が効かなくなる）、Vite 7 までの esbuild で圧縮する
+      cssMinify: "esbuild",
+    },
+  },
   site: "https://tus-tnd.com/",
   base: "",
   adapter: ssrPreview ? vercel() : undefined,
