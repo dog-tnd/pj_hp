@@ -104,7 +104,9 @@ Layout.astro（背景：body の gray-50 ＋ ぼかし）
   - ヘッダーは半透明（スクロール前の PC は透明）なので、ヘッダーの後ろにもぼかしが見える
 
 ### 動き
-- 開閉：アニメーションなし。矢印の回転だけ 150ms。`prefers-reduced-motion` のときは回転も即時
+- 開閉：質問を1つ押したときだけ、回答の高さと透明度を 200ms（ease-out）で変える。動きの途中で押されたら、今の高さから逆向きに動く。閉じるときは動き終わってから `hidden="until-found"` を付ける
+  - 「すべて開く／閉じる」・ハッシュ・ページ内検索では動かさない。`prefers-reduced-motion: reduce` のときも動かさない
+  - 矢印の回転は 150ms。`prefers-reduced-motion` のときは即時
 - カテゴリへの移動：`scroll-behavior: smooth`（`prefers-reduced-motion: reduce` のときは `auto`）。記事ページの設定は記事ページでしか読み込まれないため、FAQ ページにも同じ指定を置く
 
 ### 忠実度と意図
