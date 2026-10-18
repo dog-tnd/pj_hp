@@ -14,12 +14,34 @@ const panelOf = (button: HTMLButtonElement) =>
 const isOpen = (button: HTMLButtonElement) =>
   button.getAttribute("aria-expanded") === "true";
 
-const setOpen = (button: HTMLButtonElement, open: boolean) => {
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+// 開くときだけ、高さ 0 から回答の高さまで広げる（閉じるときはすぐ閉じる）
+const animateOpen = (panel: HTMLElement) => {
+  if (reducedMotion.matches) return;
+  panel.style.overflow = "hidden";
+  const animation = panel.animate(
+    [
+      { height: "0px", opacity: 0 },
+      { height: `${panel.scrollHeight}px`, opacity: 1 },
+    ],
+    { duration: 200, easing: "ease-out" },
+  );
+  const clear = () => panel.style.removeProperty("overflow");
+  animation.addEventListener("finish", clear);
+  animation.addEventListener("cancel", clear);
+};
+
+// animate は質問を1つ押したときだけ true。すべて開く・ハッシュ・ページ内検索ではすぐ開く
+const setOpen = (button: HTMLButtonElement, open: boolean, animate = false) => {
   const panel = panelOf(button);
   if (!panel) return;
   button.setAttribute("aria-expanded", String(open));
-  if (open) panel.removeAttribute("hidden");
-  else panel.setAttribute("hidden", "until-found");
+  for (const animation of panel.getAnimations()) animation.cancel();
+  if (open) {
+    panel.removeAttribute("hidden");
+    if (animate) animateOpen(panel);
+  } else panel.setAttribute("hidden", "until-found");
 };
 
 // 1つでも閉じていれば「すべて開く」
@@ -30,7 +52,7 @@ const syncToggleAll = () => {
 
 for (const button of toggles) {
   button.addEventListener("click", () => {
-    setOpen(button, !isOpen(button));
+    setOpen(button, !isOpen(button), true);
     syncToggleAll();
   });
   // ページ内検索で閉じた回答が見つかると、ブラウザが hidden を外してからこのイベントを出す
@@ -71,7 +93,6 @@ const headings = [
   ...document.querySelectorAll<HTMLElement>("section > h2[id^='cat-']"),
 ];
 const bar = document.querySelector<HTMLElement>("[data-faq-bar]");
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 let currentAnchor: string | null = null;
 // カテゴリを選んだあと、移動が終わるまでは判定を止める（なめらかな移動の途中で現在地がちらつくため）
