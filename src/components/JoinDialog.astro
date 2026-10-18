@@ -1,44 +1,149 @@
 ---
 // 入会モーダル。全ページで1つだけ置く（SiteHeader.astro から呼ぶ）。
 // 開くボタン側は data-open-join を付けるだけでよく、クリック処理はここでまとめて付ける。
+// 768px 以上は中央のカード、768px 未満は画面の下から出るシート（spec 005 D15）
+const DISCORD_URL = "https://discord.gg/k3qMBEn3CC";
+
+const steps = [
+  { title: "Discord に参加", body: "（下のボタンから）" },
+  { title: "自己紹介チャンネル", body: "で、ひとことあいさつ" },
+  { title: "雑談チャンネル", body: "で、先輩や新入生と話してみる" },
+];
 ---
 
 <dialog
   id="join-dialog"
   data-scroll-lock
-  class="w-[min(440px,calc(100%-48px))] p-0 border-0 rounded-2xl bg-white text-gray-800 backdrop:bg-slate-900/50"
+  aria-labelledby="join-dialog-title"
+  class="mb-0 mt-auto max-h-[calc(100dvh-24px)] w-full max-w-none overflow-y-auto rounded-t-3xl border-0 bg-white p-0 text-gray-900 shadow-[0_-12px_40px_rgba(15,23,42,.2)] backdrop:bg-slate-900/45 backdrop:backdrop-blur-sm md:m-auto md:w-[min(520px,calc(100%-48px))] md:rounded-[28px] md:shadow-[0_24px_64px_rgba(15,23,42,.28)]"
 >
-  <div class="flex items-center justify-between px-6 py-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
-    <h2 class="text-xl font-bold">Discordに参加しよう！</h2>
+  <div class="relative isolate overflow-hidden px-6 pb-7 pt-3 md:px-11 md:pb-9 md:pt-10">
+    <!-- 面の中のぼかし（トップの入会の案内と同じ） -->
+    <div
+      aria-hidden="true"
+      class="absolute -right-24 -top-28 -z-10 h-[260px] w-[260px] rotate-12 rounded-[40%] bg-gradient-to-br from-blue-400 to-teal-300 opacity-30 blur-[40px] md:-right-[110px] md:-top-[130px] md:h-[320px] md:w-[320px] md:blur-[44px]"
+    ></div>
+    <div
+      aria-hidden="true"
+      class="absolute -bottom-[150px] -left-[90px] -z-10 hidden h-[280px] w-[280px] -rotate-12 rounded-[40%] bg-[#F5BF48] opacity-20 blur-[48px] md:block"
+    ></div>
+
+    <!-- シートのつまみ（飾り） -->
+    <div
+      aria-hidden="true"
+      class="mx-auto h-1 w-10 rounded-full bg-gray-300 md:hidden"
+    ></div>
+
     <button
       type="button"
       aria-label="閉じる"
       data-close-join
-      class="w-8 h-8 flex items-center justify-center text-white text-2xl"
+      class="absolute right-3 top-3 flex h-11 w-11 items-center justify-center rounded-full bg-white/70 text-gray-700 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 md:right-4 md:top-4"
     >
-      ×
+      <svg
+        class="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path d="M6 6l12 12M18 6L6 18"></path>
+      </svg>
     </button>
-  </div>
-  <div class="p-6 text-center">
-    <img src="/sns-discord.svg" alt="" class="w-16 h-16 mx-auto mb-5" />
-    <p>
-      <strong>4,5月はDiscordを中心に新歓イベントを開催します！</strong>
+
+    <div
+      class="mt-5 flex items-end gap-2.5 md:mt-0 md:gap-3.5"
+      aria-hidden="true"
+    >
+      <p class="font-['Rubik_Doodle_Shadow'] text-[40px] leading-none text-blue-500 md:text-5xl">
+        JOIN US!
+      </p>
+      <img
+        src="/mainCharm.svg"
+        alt=""
+        width="289"
+        height="358"
+        class="h-auto w-9 -rotate-[8deg] md:w-11"
+      />
+    </div>
+    <!-- まとまりの途中で改行しない（spec 005 D13） -->
+    <h2
+      id="join-dialog-title"
+      class="mt-3 text-[21px] font-bold leading-normal md:mt-4 md:text-2xl"
+    >
+      {
+        // まとまりの間に空白を入れないよう、式で並べる（タグを改行で並べると空白が入る）
+        ["まずは Discord に", "参加しよう"].map((part) => (
+          <span class="whitespace-nowrap">{part}</span>
+        ))
+      }
+    </h2>
+    <p class="mt-2 text-sm leading-[1.85] text-gray-600 md:mt-2.5 md:text-[15px] md:leading-[1.9]">
+      TND の入口は Discord です。参加すると新歓ロールが付き、TND
+      の仮加入メンバーになります。メンバーは一年中募集しています。
     </p>
-    <p>
-      このDiscordサーバーに参加すると、プログラミングサークルTNDの
-      <strong>仮加入メンバー</strong>となります。
-    </p>
-    <p>
-      新入生同士でたくさん交流して、プログラミングの楽しさを一緒に体験しましょう！
-    </p>
+
+    <!-- 参加したあとの流れ -->
+    <ol class="mt-[18px] flex flex-col gap-2 md:mt-6 md:gap-3">
+      {steps.map((step, index) => (
+        <li class="flex items-center gap-3 rounded-[14px] bg-blue-50/85 px-3.5 py-3 md:gap-3.5 md:rounded-2xl md:px-4 md:py-3.5">
+          <span
+            aria-hidden="true"
+            class="flex h-7 w-7 flex-none items-center justify-center rounded-full border border-blue-200 bg-white font-['Inter'] text-[13px] font-semibold text-blue-600 md:h-8 md:w-8 md:text-sm"
+          >
+            {index + 1}
+          </span>
+          <!-- 太字と続きの間に空白が入らないよう、1つの文字列で出す（中身はこのファイルの固定の文言だけ）。
+               auto-phrase：対応ブラウザでは文節で改行し、「あいさ／つ」のような切れ方を防ぐ -->
+          <span
+            class="text-sm leading-[1.6] text-gray-600 [word-break:auto-phrase] md:text-[15px]"
+            set:html={`<b class="font-bold text-gray-900">${step.title}</b>${step.body}`}
+          />
+        </li>
+      ))}
+    </ol>
+
     <a
-      href="https://discord.gg/k3qMBEn3CC"
+      href={DISCORD_URL}
       target="_blank"
       rel="noopener noreferrer"
-      class="block mt-6 py-3 px-[18px] rounded-[10px] bg-indigo-600 text-white font-bold"
+      aria-label="Discord サーバーに参加する（新しいタブで開きます）"
+      class="mt-5 flex h-[52px] items-center justify-center gap-2.5 rounded-full bg-indigo-600 text-base font-bold text-white shadow-[0_8px_20px_rgba(79,70,229,.3)] transition-colors hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 md:mt-7 md:h-14"
     >
-      Discordサーバーに参加する
+      <svg
+        class="h-5 w-5 md:h-[22px] md:w-[22px]"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path d="M7 7c3-1.5 7-1.5 10 0l2 9c-2 1.6-4 2.3-5 2.5l-1-2h-2l-1 2c-1-.2-3-.9-5-2.5l2-9z"></path>
+        <path d="M9.5 12.5h.01M14.5 12.5h.01"></path>
+      </svg>
+      Discord サーバーに参加する
+      <svg
+        class="h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path d="M14 3h7v7"></path>
+        <path d="M10 14L21 3"></path>
+        <path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"></path>
+      </svg>
     </a>
+    <p class="mt-2.5 text-center text-xs text-gray-500 md:mt-3 md:text-[13px]">
+      参加には Discord のアカウントが必要です
+    </p>
   </div>
 </dialog>
 <script>
