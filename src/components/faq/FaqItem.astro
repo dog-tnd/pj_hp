@@ -20,7 +20,7 @@ const answerId = `a-${item.id}`;
       aria-expanded="false"
       aria-controls={answerId}
       data-faq-toggle
-      class="group flex min-h-[56px] w-full scroll-mt-[121px] items-start gap-3 py-4 text-left text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:min-h-[64px] lg:scroll-mt-[88px] lg:gap-4 lg:py-5"
+      class="group flex min-h-[56px] w-full scroll-mt-[122px] items-start gap-3 py-4 text-left text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:min-h-[64px] lg:scroll-mt-[144px] lg:gap-4 lg:py-5"
     >
       <span
         aria-hidden="true"
@@ -48,7 +48,7 @@ const answerId = `a-${item.id}`;
   <div id={answerId} hidden="until-found" data-faq-answer>
     <div class="flex flex-col gap-2.5 pb-5 pl-[26px] lg:gap-3 lg:pb-6 lg:pl-8 lg:pr-9">
       {item.paragraphs.map((lines) => (
-        <p class="text-[15px] leading-[1.9] text-gray-700 lg:text-base">
+        <p class="max-w-[680px] text-[15px] leading-[1.9] text-gray-700 lg:text-base">
           {lines.map((line, i) => (
             <>
               {i > 0 && <br />}

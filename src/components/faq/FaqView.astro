@@ -12,49 +12,65 @@ interface Props {
 const { sections } = Astro.props;
 ---
 
-<!-- カテゴリの行（lg 未満）。モバイルのヘッダー 56px の直下に追従する -->
-<div class="sticky top-14 z-40 lg:hidden">
-  <FaqCategoryNav sections={sections} variant="bar" />
+<!-- ページの見出し（docs/design/README.md「ページの見出し」） -->
+<div class="mx-auto max-w-[1440px] px-6 lg:px-20">
+  <div class="grid grid-cols-1 gap-5 pt-[72px] lg:pt-[104px] custom-md:grid-cols-[minmax(0,1fr)_480px] custom-md:items-end custom-md:gap-16">
+    <div>
+      <p class="text-[11px] font-medium leading-relaxed tracking-[0.2em] text-gray-500 lg:text-sm lg:tracking-[0.22em]">
+        TOKYO UNIVERSITY OF SCIENCE /
+        <span class="whitespace-nowrap">NODA CAMPUS</span>
+      </p>
+      <p
+        aria-hidden="true"
+        class="mt-3.5 font-['Rubik_Doodle_Shadow'] text-[42px] leading-none text-blue-500 md:text-[64px] lg:mt-5 lg:text-[72px] custom-md:text-[92px]"
+      >
+        FAQ
+      </p>
+      <h1 class="mt-4 text-[22px] font-bold tracking-[0.04em] text-gray-900 lg:mt-6 lg:text-[30px]">
+        よくある質問
+      </h1>
+    </div>
+    <p class="max-w-[560px] text-[15px] leading-[1.9] text-gray-600 lg:text-lg lg:leading-loose custom-md:max-w-none">
+      よくある質問をまとめました。ご不明な点がございましたら、お気軽にお問い合わせください。
+    </p>
+  </div>
 </div>
 
-<!-- 見出し -->
-<section class="mx-auto max-w-[760px] px-5 pt-8 md:max-w-[784px] md:px-8 lg:max-w-[1184px] lg:pt-14">
-  <p
-    aria-hidden="true"
-    class="font-['Rubik_Doodle_Shadow'] text-[32px] leading-none text-gray-900 lg:text-[40px]"
-  >
-    FAQ
-  </p>
-  <h1 class="mt-3 text-[26px] font-bold leading-[1.4] lg:mt-4 lg:text-[32px]">
-    よくある質問
-  </h1>
-  <p class="mt-2.5 max-w-[640px] text-[15px] leading-[1.8] text-gray-600 lg:mt-3 lg:text-base">
-    よくある質問をまとめました。ご不明な点がございましたら、お気軽にお問い合わせください。
-  </p>
-</section>
+<!-- カテゴリの一覧。スクロールしたらヘッダーの直下（lg 未満 56px・lg 以上は縮んだ後の 64px）に追従する -->
+<div class="sticky top-14 z-40 mt-10 lg:top-16 lg:mt-16">
+  <FaqCategoryNav sections={sections} />
+</div>
 
-<!-- 質問の一覧 + 右の列（カテゴリ） -->
-<div class="mx-auto flex max-w-[760px] items-start gap-20 px-5 pt-6 md:max-w-[784px] md:px-8 lg:max-w-[1184px] lg:pt-12">
-  <div class="w-full min-w-0 max-w-[720px] flex-1">
-    <div class="mb-2 flex justify-end">
-      <button
-        type="button"
-        data-faq-toggle-all
-        class="min-h-[44px] px-1 text-sm font-medium text-blue-600 hover:text-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-      >
-        すべて開く
-      </button>
-    </div>
+<div class="mx-auto max-w-[1440px] px-6 lg:px-20 lg:pt-2">
+  <!-- lg 以上の「すべて開く」はカテゴリの行の右端にある -->
+  <div class="flex justify-end pt-2 lg:hidden">
+    <button
+      type="button"
+      data-faq-toggle-all
+      class="min-h-[44px] px-1 text-sm font-medium text-blue-600 hover:text-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+    >
+      すべて開く
+    </button>
+  </div>
 
-    {sections.map((section) => (
-      <section
-        aria-labelledby={`cat-${section.anchor}`}
-        class="pt-10 first-of-type:pt-0 lg:pt-14"
-      >
+  <!-- カテゴリごとの項目（docs/design/README.md「項目の見出し」）。
+       見出しの着地位置は、項目の上の線がカテゴリの行の下端にそろう値（spec 004 design「レスポンシブ」） -->
+  {sections.map((section) => (
+    <section
+      aria-labelledby={`cat-${section.anchor}`}
+      class="grid grid-cols-1 gap-3.5 border-t border-gray-200 py-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 lg:py-[52px]"
+    >
+      <div>
+        <p
+          aria-hidden="true"
+          class="font-['Rubik_Doodle_Shadow'] text-2xl leading-tight text-blue-500 lg:text-[28px]"
+        >
+          {section.en}
+        </p>
         <h2
           id={`cat-${section.anchor}`}
           tabindex="-1"
-          class="mb-2 flex scroll-mt-[121px] items-baseline gap-2 text-[19px] font-bold leading-[1.5] focus:outline-none lg:mb-3 lg:scroll-mt-[88px] lg:gap-2.5 lg:text-[22px]"
+          class="mt-2 flex scroll-mt-[176px] items-baseline gap-2 text-[19px] font-bold focus:outline-none lg:mt-2.5 lg:scroll-mt-[225px] lg:gap-2.5 lg:text-2xl"
         >
           {section.name}
           <span class="font-['Inter'] text-[13px] font-normal text-gray-500 lg:text-sm">
@@ -62,21 +78,16 @@ const { sections } = Astro.props;
             <span class="sr-only">件</span>
           </span>
         </h2>
-        <div class="rounded-[14px] border border-gray-200 bg-white px-[18px] py-0.5 lg:px-7 lg:py-1">
-          {section.items.map((item) => (
-            <FaqItem item={item} />
-          ))}
-        </div>
-      </section>
-    ))}
+      </div>
+      <div class="min-w-0 self-start rounded-[14px] border border-gray-200 bg-white px-[18px] py-0.5 lg:px-7 lg:py-1">
+        {section.items.map((item) => (
+          <FaqItem item={item} />
+        ))}
+      </div>
+    </section>
+  ))}
 
-    <FaqMoreQuestions />
-  </div>
-
-  <!-- 右の列（lg 以上）。上の余白 52px を含めて top 44px で追従し、一覧自体はスクロール後のヘッダー 64px ＋ 32px の位置に来る -->
-  <aside class="sticky top-11 hidden w-[280px] shrink-0 pt-[52px] lg:block">
-    <FaqCategoryNav sections={sections} variant="sidebar" />
-  </aside>
+  <FaqMoreQuestions />
 </div>
 
 <!-- JavaScript が動かないときは、閉じた回答を開けないので最初から表示する -->

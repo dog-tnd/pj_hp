@@ -1,55 +1,33 @@
 ---
-// カテゴリの一覧。sidebar は lg 以上の右の列、bar は lg 未満のヘッダー直下の横スクロール。
+// カテゴリの一覧。ページの見出しの下に横並びで置き、FaqView がヘッダーの直下に追従させる（spec 004 D12）。
+// 並びきらないときは横スクロール。lg 以上は右端に「すべて開く」を置く（lg 未満は FaqView 側）。
 // 今見ているカテゴリ（aria-current="location"）は faq.ts が付け替える。最初は先頭のカテゴリ
 import type { FaqSection } from "../../utils/faq";
 
 interface Props {
   sections: FaqSection[];
-  variant: "sidebar" | "bar";
 }
 
-const { sections, variant } = Astro.props;
-const sidebar = variant === "sidebar";
+const { sections } = Astro.props;
 ---
 
-{sidebar ? (
-  <nav aria-label="カテゴリ">
-    <p class="mb-3.5 font-['Inter'] text-xs tracking-[0.1em] text-gray-500">
-      CATEGORY
-    </p>
-    <ol>
-      {sections.map((section, i) => (
-        <li>
-          <a
-            href={`#cat-${section.anchor}`}
-            data-faq-cat={section.anchor}
-            aria-current={i === 0 ? "location" : undefined}
-            class="group flex min-h-9 items-center gap-2 py-1 text-sm leading-[1.6] text-gray-600 hover:text-gray-900 aria-[current=location]:font-bold aria-[current=location]:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-          >
-            <span
-              aria-hidden="true"
-              class="h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600 opacity-0 group-aria-[current=location]:opacity-100"
-            />
-            <span class="flex-1">{section.name}</span>
-            <span class="font-['Inter'] text-xs font-normal text-gray-500">
-              {section.items.length}
-              <span class="sr-only">件</span>
-            </span>
-          </a>
-        </li>
-      ))}
-    </ol>
-  </nav>
-) : (
-  <nav aria-label="カテゴリ" class="border-b border-gray-200 bg-white">
-    <ol class="flex gap-2 overflow-x-auto px-5 py-1.5 md:px-8" data-faq-bar>
+<!-- 高さ：lg 未満 50px（ピル 36 ＋ 上下 6 ＋ 枠線 2）、lg 以上 64px（ピル 40 ＋ 上下 12）。変えるときは着地位置も直す -->
+<nav
+  aria-label="カテゴリ"
+  class="border-y border-gray-200 bg-white lg:border-0 lg:bg-gray-50/70 lg:backdrop-blur-md"
+>
+  <div class="mx-auto flex max-w-[1440px] items-center gap-6 lg:px-20 lg:py-2">
+    <ol
+      class="flex min-w-0 flex-1 gap-2 overflow-x-auto px-6 py-1.5 lg:px-0 lg:py-1"
+      data-faq-bar
+    >
       {sections.map((section, i) => (
         <li class="shrink-0">
           <a
             href={`#cat-${section.anchor}`}
             data-faq-cat={section.anchor}
             aria-current={i === 0 ? "location" : undefined}
-            class="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 aria-[current=location]:border-gray-900 aria-[current=location]:bg-gray-900 aria-[current=location]:font-bold aria-[current=location]:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            class="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:border-gray-400 aria-[current=location]:border-gray-900 aria-[current=location]:bg-gray-900 aria-[current=location]:font-bold aria-[current=location]:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-10 lg:px-4"
           >
             {section.name}
             <span class="font-['Inter'] text-xs opacity-70">
@@ -60,5 +38,12 @@ const sidebar = variant === "sidebar";
         </li>
       ))}
     </ol>
-  </nav>
-)}
+    <button
+      type="button"
+      data-faq-toggle-all
+      class="hidden min-h-[44px] shrink-0 px-1 text-[15px] font-medium text-blue-600 hover:text-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:block"
+    >
+      すべて開く
+    </button>
+  </div>
+</nav>

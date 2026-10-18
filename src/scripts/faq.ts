@@ -4,9 +4,10 @@
 const toggles = [
   ...document.querySelectorAll<HTMLButtonElement>("[data-faq-toggle]"),
 ];
-const toggleAll = document.querySelector<HTMLButtonElement>(
-  "[data-faq-toggle-all]",
-);
+// 「すべて開く」は lg 以上（カテゴリの行の右端）と lg 未満（行の下）の2つ。見えるのはどちらか1つ
+const toggleAlls = [
+  ...document.querySelectorAll<HTMLButtonElement>("[data-faq-toggle-all]"),
+];
 
 const panelOf = (button: HTMLButtonElement) =>
   document.getElementById(button.getAttribute("aria-controls") ?? "");
@@ -69,8 +70,8 @@ const setOpen = (button: HTMLButtonElement, open: boolean, animate = false) => {
 
 // 1つでも閉じていれば「すべて開く」
 const syncToggleAll = () => {
-  if (!toggleAll) return;
-  toggleAll.textContent = toggles.every(isOpen) ? "すべて閉じる" : "すべて開く";
+  const label = toggles.every(isOpen) ? "すべて閉じる" : "すべて開く";
+  for (const button of toggleAlls) button.textContent = label;
 };
 
 for (const button of toggles) {
@@ -85,11 +86,13 @@ for (const button of toggles) {
   });
 }
 
-toggleAll?.addEventListener("click", () => {
-  const open = !toggles.every(isOpen);
-  for (const button of toggles) setOpen(button, open);
-  syncToggleAll();
-});
+for (const toggleAll of toggleAlls) {
+  toggleAll.addEventListener("click", () => {
+    const open = !toggles.every(isOpen);
+    for (const button of toggles) setOpen(button, open);
+    syncToggleAll();
+  });
+}
 
 // ハッシュが質問を指していれば（#q-…）、その回答を開いて質問へ移動し、フォーカスを移す
 const openFromHash = () => {
@@ -113,7 +116,7 @@ const catLinks = [
   ...document.querySelectorAll<HTMLAnchorElement>("[data-faq-cat]"),
 ];
 const headings = [
-  ...document.querySelectorAll<HTMLElement>("section > h2[id^='cat-']"),
+  ...document.querySelectorAll<HTMLElement>("section h2[id^='cat-']"),
 ];
 const bar = document.querySelector<HTMLElement>("[data-faq-bar]");
 
@@ -129,7 +132,7 @@ const setCurrent = (anchor: string) => {
       link.setAttribute("aria-current", "location");
     else link.removeAttribute("aria-current");
   }
-  // lg 未満：現在地のピルが見えるよう、カテゴリの行を横にだけスクロールする（ページは縦に動かさない）
+  // 現在地のピルが見えるよう、カテゴリの行を横にだけスクロールする（ページは縦に動かさない）
   const pill = bar?.querySelector<HTMLElement>(
     `[data-faq-cat="${CSS.escape(anchor)}"]`,
   );
