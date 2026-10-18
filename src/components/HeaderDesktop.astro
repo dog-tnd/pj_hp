@@ -18,6 +18,7 @@ const isCurrent = (href: string) =>
      ページの流れの中（sticky）で 80px → 64px に縮めると、その分ページ全体が上に詰まり、スクロール中にかくっと跳ねるため -->
 <div class="header-spacer" aria-hidden="true"></div>
 <header class="site-header" data-header>
+  <div class="header-bg" aria-hidden="true"></div>
   <div class="header-inner">
     <a class="brand" href="/" aria-label="TND ホーム">
       <img src="/logo.png" alt="" width="40" height="40" />
@@ -58,7 +59,9 @@ const isCurrent = (href: string) =>
     height: 80px;
   }
 
-  /* 高さ・背景・影・ぼかしを同じ時間で一緒に変える（背景だけ先に切り替わってずれて見えないように） */
+  /* スクロールで 80px → 64px に縮める。高さ（height）を動かすと1コマごとに配置の計算と背景のぼかしの描き直しが起き、
+     実機でコマ落ちして背景とボタンがずれて見えるため、箱の高さは 80px のまま、見た目だけを transform で動かす。
+     背景は上を基準に 0.8 倍（64px）に縮め、中身は 8px 上げて 64px の中央にそろえる。どちらも同じ時間・緩急で動かす */
   .site-header {
     position: fixed;
     top: 0;
@@ -68,30 +71,59 @@ const isCurrent = (href: string) =>
     z-index: 50;
     display: block;
     height: 80px;
+    /* 縮んだ後の下 16px は透明な箱が残るので、押せるのはリンクとボタンだけにする（下の追従する部品を押せるように） */
+    pointer-events: none;
+  }
+
+  .header-bg {
+    position: absolute;
+    inset: 0;
+    transform-origin: top;
     background-color: rgba(249, 250, 251, 0);
     box-shadow: 0 1px 0 rgba(17, 24, 39, 0);
+    -webkit-backdrop-filter: blur(0);
     backdrop-filter: blur(0);
     transition:
-      height 180ms ease,
+      transform 180ms ease,
       background-color 180ms ease,
       box-shadow 180ms ease,
+      -webkit-backdrop-filter 180ms ease,
       backdrop-filter 180ms ease;
   }
 
-  .site-header.scrolled {
-    height: 64px;
+  .site-header.scrolled .header-bg {
+    transform: scaleY(0.8);
     background-color: rgba(249, 250, 251, 0.97);
     box-shadow: 0 1px 0 rgba(17, 24, 39, 0.08);
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
   }
 
   .header-inner {
+    position: relative;
     width: min(100%, 1440px);
     height: 100%;
     margin: 0 auto;
     padding: 0 40px;
     display: flex;
     align-items: center;
+    transition: transform 180ms ease;
+  }
+
+  .site-header.scrolled .header-inner {
+    transform: translateY(-8px);
+  }
+
+  .header-inner a,
+  .header-inner button {
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header-bg,
+    .header-inner {
+      transition: none;
+    }
   }
 
   .brand {
