@@ -91,6 +91,24 @@ Layout
 #### 消すもの
 - `TwoLine`（右上の十字線）・左下の固定の SNS の欄・`NewsCard` の import（ホームでは使わなくなる。ブログ一覧では使い続ける）
 
+### 入会モーダル（`src/components/JoinDialog.astro`。全ページ共通）
+- キャンバス「入会モーダル 案1」（PC）・「入会モーダル — スマホ（下から出るシート）」
+- `<dialog id="join-dialog" aria-labelledby>` のまま作り直す。開く・閉じる・スクロールの固定（`data-open-join`・`data-close-join`・`syncScrollLock`）の仕組みは変えない
+- 形
+  - 768px 以上：中央のカード。`w-[min(520px,calc(100%-48px))]`、角丸 28px、`px-11 pb-9 pt-10`
+  - 768px 未満：下から出るシート。幅いっぱい・下に付ける（`mb-0 mt-auto`）、上だけ角丸 24px、上につまみ（飾り）
+  - どちらも `max-h-[calc(100dvh-24px)]` を超えたらモーダルの中だけスクロール
+  - 背景：`backdrop:bg-slate-900/45` ＋ ぼかし。面の中に青緑と黄色のぼかし（aria-hidden）
+- 中身（上から）
+  - 英字 `JOIN US!`（Rubik Doodle Shadow・青、aria-hidden）＋小さなシンボル（aria-hidden）
+  - h2「まずは Discord に参加しよう」（「まずは Discord に」「参加しよう」を nowrap の span）
+  - 説明：TND の入口は Discord です。参加すると新歓ロールが付き、TND の仮加入メンバーになります。メンバーは一年中募集しています。
+  - 参加したあとの流れ（`<ol>`、番号は aria-hidden の丸）：Discord に参加（下のボタンから）／自己紹介チャンネルで、ひとことあいさつ／雑談チャンネルで、先輩や新入生と話してみる
+  - 「Discord サーバーに参加する」：`<a href="https://discord.gg/k3qMBEn3CC" target="_blank" rel="noopener noreferrer" aria-label="Discord サーバーに参加する（新しいタブで開きます）">`。`bg-indigo-600`（白文字 6:1 以上）・高さ 56px（スマホ 52px）の pill
+  - 補足：参加には Discord のアカウントが必要です
+  - 閉じるボタン：右上・44px・`aria-label="閉じる"`
+- 文言のうち「新歓ロール」「仮加入メンバー」「自己紹介チャンネル」「雑談チャンネル」は、人間から聞いた内容と今のモーダルの文言から取った
+
 ### ブログ一覧（`src/pages/blog/index.astro`）
 
 ```
@@ -151,8 +169,7 @@ Layout
 ## 既存コードとの関係
 - `src/pages/index.astro`：作り直す。データ取得（`getAllPosts()` の先頭4件）は今のまま
 - `src/pages/blog/index.astro`：見出しまわりと囲みを変え、タグの絞り込みを移す（済）。#71（Zenn 混在）とマージ時に競合しうる（D4）
-- `src/components/JoinDialog.astro`：変えない。ボタンに `data-open-join` を付けると開く
-  - モーダルの文言「4,5月はDiscordを中心に新歓イベントを開催します！」は通年募集（D9）と合わない可能性がある。今回は変えない（Non-goals）
+- `src/components/JoinDialog.astro`：見た目と文言を作り直す（D15）。開く仕組み（`data-open-join`）は変えないので、ヘッダー・お問い合わせ・トップのボタンはそのまま使える
 - `docs/design/README.md`：「見出しの改行」を足し、D6 の決まりを消し、適用状況を直す
 - `TwoLine`：ホームとブログ一覧で使わなくなる。about・記事などで使っているので部品は残す
 - `NewsCard`：ホームでは使わなくなる。ブログ一覧では使い続ける
