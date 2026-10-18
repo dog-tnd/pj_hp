@@ -217,8 +217,18 @@ const postUrl = (post: BlogPost) => `/blog/${post.id}`;
           普段は Discord
           でやりとりしながら、ハッカソンやチーム開発に挑戦しています。複数のチームに参加することもできます。
         </p>
+        <!-- 1024px 以上で、左の列の下の空きにイラストを置く（飾りなので読み上げない） -->
+        <img
+          src="/home/hero1.webp"
+          alt=""
+          width="640"
+          height="581"
+          loading="lazy"
+          decoding="async"
+          class="mt-10 hidden h-auto w-full lg:block"
+        />
       </div>
-      <div class="grid grid-cols-1 gap-3.5 md:grid-cols-2 md:gap-5">
+      <div class="grid grid-cols-1 gap-3.5 self-start md:grid-cols-2 md:gap-5">
         {teams.map((team) => (
           <article class="flex flex-col gap-2.5 rounded-2xl border border-gray-200 bg-white px-[22px] py-6 lg:gap-3.5 lg:p-8">
             <h3 class="text-[19px] font-bold lg:text-[22px]">{team.name}</h3>
