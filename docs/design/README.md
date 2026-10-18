@@ -132,4 +132,5 @@
 
 ### フッター
 
-- 各ページが持つ（共通部品ではない）。`mt-24 border-t border-gray-200 py-8`、`text-sm text-gray-500` で `© 2026 TND All Rights Reserved.`
+- 共通部品 `SiteFooter`（`src/components/SiteFooter.astro`）を `Layout` が `<main>` の後ろに出す。ページには書かない
+- `mt-24 border-t border-gray-200 py-8`、`text-sm text-gray-500` で `© 2026 TND All Rights Reserved.`
