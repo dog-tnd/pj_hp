@@ -107,6 +107,7 @@ Layout
   - 「Discord サーバーに参加する」：`<a href="https://discord.gg/k3qMBEn3CC" target="_blank" rel="noopener noreferrer" aria-label="Discord サーバーに参加する（新しいタブで開きます）">`。`bg-indigo-600`（白文字 6:1 以上）・高さ 56px（スマホ 52px）の pill
   - 補足：参加には Discord のアカウントが必要です
   - 閉じるボタン：右上・44px・`aria-label="閉じる"`
+- 動き：開く 300ms（`cubic-bezier(0.2,0.8,0.2,1)`）、閉じる 220ms（ease-in）。スマホは `translateY(100%)` から、PC は `translateY(16px) scale(0.96)`・透明から。閉じるときは `is-closing` を付けて動きが終わってから `close()`（Esc は `cancel` を止めて同じ処理。`animationend` が届かない環境のため 400ms でも閉じる）
 - 文言のうち「新歓ロール」「仮加入メンバー」「自己紹介チャンネル」「雑談チャンネル」は、人間から聞いた内容と今のモーダルの文言から取った
 
 ### ブログ一覧（`src/pages/blog/index.astro`）

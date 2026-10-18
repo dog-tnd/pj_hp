@@ -153,6 +153,7 @@ const steps = [
   const closeButton = join.querySelector(
     "[data-close-join]",
   ) as HTMLButtonElement;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   document.querySelectorAll("[data-open-join]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -161,14 +162,112 @@ const steps = [
     });
   });
 
-  closeButton.addEventListener("click", () => {
-    join.close();
+  // 閉じるときも動きを付ける：閉じる動き（is-closing）が終わってから close() する。
+  // 動きを減らす設定のときは、すぐに閉じる
+  let closing = false;
+  const closeWithMotion = () => {
+    if (!join.open || closing) return;
+    if (reducedMotion.matches) {
+      join.close();
+      return;
+    }
+    closing = true;
+    join.classList.add("is-closing");
+    const finish = () => {
+      if (!closing) return;
+      closing = false;
+      join.classList.remove("is-closing");
+      join.close();
+    };
+    // ::backdrop の animationend も届くので、dialog 本体の分だけ見る。届かない環境のために時間でも閉じる
+    const onEnd = (e: AnimationEvent) => {
+      if (e.target !== join || e.pseudoElement) return;
+      join.removeEventListener("animationend", onEnd);
+      finish();
+    };
+    join.addEventListener("animationend", onEnd);
+    window.setTimeout(finish, 400);
+  };
+
+  closeButton.addEventListener("click", closeWithMotion);
+
+  // Esc キー：既定ではすぐ閉じるので止めて、動きを付けて閉じる
+  join.addEventListener("cancel", (e) => {
+    e.preventDefault();
+    closeWithMotion();
   });
 
   join.addEventListener("close", syncScrollLock);
 
   // 余白（dialog 自身）のクリックで閉じる
   join.addEventListener("click", (e) => {
-    if (e.target === join) join.close();
+    if (e.target === join) closeWithMotion();
   });
 </script>
+
+<style>
+  /* 開く・閉じる動き。768px 未満は下から出て下へ消える（シート）、768px 以上は少し下から浮かび上がる（カード） */
+  #join-dialog[open] {
+    animation: join-sheet-in 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  #join-dialog[open]::backdrop {
+    animation: join-fade-in 300ms ease-out;
+  }
+  #join-dialog.is-closing {
+    animation: join-sheet-out 220ms ease-in forwards;
+  }
+  #join-dialog.is-closing::backdrop {
+    animation: join-fade-out 220ms ease-in forwards;
+  }
+
+  @media (min-width: 768px) {
+    #join-dialog[open] {
+      animation-name: join-card-in;
+    }
+    #join-dialog.is-closing {
+      animation-name: join-card-out;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #join-dialog[open],
+    #join-dialog[open]::backdrop,
+    #join-dialog.is-closing,
+    #join-dialog.is-closing::backdrop {
+      animation: none;
+    }
+  }
+
+  @keyframes join-sheet-in {
+    from {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes join-sheet-out {
+    to {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes join-card-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.96);
+    }
+  }
+  @keyframes join-card-out {
+    to {
+      opacity: 0;
+      transform: translateY(12px) scale(0.97);
+    }
+  }
+  @keyframes join-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes join-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+</style>
