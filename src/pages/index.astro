@@ -1,15 +1,58 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import TwoLine from "../components/TwoLine.astro";
-import NewsCard from "../components/NewsCard";
-import { getAllPosts, getImageUrl, getAuthorImageUrl } from "../lib/microcms";
+import { getAllPosts, getImageUrl, type BlogPost } from "../lib/microcms";
 import { formatDotDate } from "../utils/date";
 
 // ブログ記事の取得（microCMS から公開済み記事を全件取得、publishedAt 降順）
 const sortedPosts = await getAllPosts();
 
-// 最新の記事を取得（最大4件）
-const latestPosts = sortedPosts.slice(0, 4);
+// 新着記事：最新の1件を大きく、続く3件を一覧で出す（spec 005）
+const [featuredPost, ...restPosts] = sortedPosts.slice(0, 4);
+
+// 流れる帯の言葉（取り組んでいる技術。デザインの技術は入れない。spec 005 D9）。継ぎ目なく流すため2回続けて置く
+const marqueeWords = [
+  "HTML/CSS",
+  "TypeScript",
+  "React",
+  "Next.js",
+  "Python",
+  "Golang",
+  "Node.js",
+  "Kaggle",
+  "AI Agent",
+  "Hackathon",
+  "Team Dev",
+];
+
+const teams = [
+  {
+    name: "Web開発チーム",
+    body: "フロントエンドとバックエンドの両面から、Webアプリをつくっています。",
+    tags: ["HTML/CSS", "TypeScript", "React/Next.js", "Python", "Golang"],
+  },
+  {
+    name: "データサイエンスチーム",
+    body: "Kaggle のコンペに参加したり、AI エージェントの設計に取り組んだりしています。",
+    tags: ["Python", "Kaggle", "AIエージェント"],
+  },
+];
+
+const activities = [
+  {
+    name: "Discord",
+    body: "ふだんのコミュニケーションは Discord で。メンバー同士でよく話しています。",
+  },
+  {
+    name: "ハッカソン",
+    body: "短い期間で集中してプロダクトをつくります。学外のイベントにも参加。",
+  },
+  {
+    name: "チーム開発",
+    body: "Webアプリやデータ分析など、幅広いテーマのプロジェクトに参加できます。",
+  },
+];
+
+const postUrl = (post: BlogPost) => `/blog/${post.id}`;
 ---
 
 <Layout
@@ -31,97 +74,205 @@ const latestPosts = sortedPosts.slice(0, 4);
   image="/mainCharm.svg"
   type="website"
 >
-  <header>
-    <TwoLine />
-  </header>
-
-  <!-- Layout が <main> を持つので div。幅と余白は docs/design/README.md に合わせる -->
-  <div class="mx-auto max-w-[1440px] px-6 lg:px-20">
-    <div class="relative">
-      <!-- What's TND（デザインシステム「項目の見出し」。ページの見出しが無いので上の線なし・上の余白はページの見出しと同じ） -->
-      <section
-        aria-labelledby="whats-tnd"
-        class="grid grid-cols-1 gap-3.5 pb-8 pt-[72px] lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 lg:pb-[52px] lg:pt-[104px]"
-      >
-        <div>
-          <p
+  <!-- Layout が <main> を持つので div。流れる帯は傾けて少し広げるので、はみ出しをここで切る -->
+  <div class="overflow-x-clip">
+    <!-- ヒーロー（キャンバス「ホーム刷新」案A） -->
+    <section class="relative isolate mx-auto grid max-w-[1440px] grid-cols-1 gap-12 px-6 pt-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-center lg:px-20 lg:pt-[72px]">
+      <div>
+        <p class="text-[11px] font-medium leading-relaxed tracking-[0.2em] text-gray-500 lg:text-sm lg:tracking-[0.22em]">
+          TOKYO UNIVERSITY OF SCIENCE /
+          <span class="whitespace-nowrap">NODA CAMPUS</span>
+        </p>
+        <p
+          aria-hidden="true"
+          class="-ml-1 mt-2.5 font-['Rubik_Doodle_Shadow'] text-[112px] leading-[0.9] text-blue-500 md:text-[160px] lg:-ml-2 lg:mt-4 custom-md:text-[208px]"
+        >
+          TND
+        </p>
+        <!-- まとまりの途中で改行しない（「の」だけが次の行に落ちないように。spec 005 D13） -->
+        <h1 class="mt-5 text-2xl font-bold leading-normal tracking-[0.02em] lg:mt-7 lg:text-[32px] custom-md:text-[40px]">
+          <span class="whitespace-nowrap">東京理科大学</span>
+          <span class="whitespace-nowrap">野田キャンパスの</span>
+          <br />
+          <span class="whitespace-nowrap">プログラミングサークル</span>
+        </h1>
+        <p class="mt-4 max-w-[560px] text-[15px] leading-[1.9] text-gray-600 lg:mt-6 lg:text-lg lg:leading-loose">
+          web開発をメインに、フロントエンド、バックエンド、データサイエンスなど、様々な分野の技術に取り組んでいます。
+        </p>
+        <div class="mt-7 flex flex-col gap-3 md:flex-row md:flex-wrap md:gap-4 lg:mt-9">
+          <!-- クリック処理は JoinDialog.astro が data-open-join を拾ってまとめて付ける -->
+          <button
+            type="button"
+            data-open-join
+            class="inline-flex h-[52px] items-center justify-center rounded-full bg-[#F5BF48] px-8 text-base font-bold text-white shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-colors hover:bg-[#E9AF2E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-14"
+          >
+            入会申し込み
+          </button>
+          <a
+            href="#what-we-do"
+            class="inline-flex h-[52px] items-center justify-center gap-2 rounded-full border border-blue-500 bg-white px-7 text-base font-bold text-blue-700 transition-colors hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-14"
+          >
+            活動を知る
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M12 5v14"></path>
+              <path d="M19 12l-7 7-7-7"></path>
+            </svg>
+          </a>
+        </div>
+        <!-- X のフォロー。Discord は新入生向けの入口なので、ここには置かず入会申し込みから案内する（spec 005 D10） -->
+        <div class="mt-4 flex items-center justify-center gap-3.5 md:justify-start lg:mt-7 lg:gap-5">
+          <span
             aria-hidden="true"
-            class="font-['Rubik_Doodle_Shadow'] text-2xl leading-tight text-blue-500 lg:text-[28px]"
+            class="font-['Inter'] text-[11px] font-semibold tracking-[0.24em] text-gray-500 lg:text-xs"
           >
-            WHAT'S TND
-          </p>
-          <h2
-            id="whats-tnd"
-            class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl"
+            FOLLOW US
+          </span>
+          <span aria-hidden="true" class="h-px w-6 bg-gray-300 lg:w-8"></span>
+          <a
+            href="https://x.com/TokyorikaND"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="@TokyorikaND（X・新しいタブで開きます）"
+            class="inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-gray-700 underline-offset-4 hover:text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
-            TNDとは
-          </h2>
+            <svg
+              class="h-[15px] w-[15px]"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M4 4l16 16M20 4L4 20"></path>
+            </svg>
+            @TokyorikaND
+          </a>
         </div>
-        <div class="max-w-[640px] space-y-4 text-[15px] leading-[1.9] text-gray-600 lg:text-lg">
-          <p>
-            TNDはweb開発をメインに活動する東京理科大学のプログラミングサークルです。2024年に設立され、現在は40名のメンバーが所属しています。
-          </p>
-          <p>
-            フロントエンド、バックエンド、デザイン、データサイエンスなど様々な分野の技術を学び、実践しています。
-          </p>
-        </div>
-      </section>
-      <!-- メインビジュアル（spec 005 D2 でそのまま）。外枠の py-12 が無くなった分、top を 5rem → 8rem にして上下の位置を保つ -->
-      <img
-        src="/mainCharm.svg"
-        alt="mainCharm"
-        class="w-full md:w-auto md:absolute top-[8rem] right-[2rem] max-w-xs md:max-w-md lg:max-w-lg pb-[5rem] opacity-30 -z-10"
-      />
+      </div>
+      <!-- シンボル（千葉県の形）。まわりに飾りは付けない（spec 005 D11）。lg 未満は薄くしてヒーローの右後ろに置く -->
+      <div
+        aria-hidden="true"
+        class="absolute -right-12 top-6 -z-10 w-[230px] -rotate-[8deg] opacity-25 lg:static lg:z-auto lg:flex lg:h-[560px] lg:w-auto lg:rotate-0 lg:items-center lg:justify-center lg:opacity-100"
+      >
+        <img
+          src="/mainCharm.svg"
+          alt=""
+          width="289"
+          height="358"
+          class="h-auto w-full lg:w-[330px] lg:-rotate-6"
+        />
+      </div>
+    </section>
+
+    <!-- 流れる帯（取り組んでいる技術）。読み上げない。動きを減らす設定では止める -->
+    <div
+      aria-hidden="true"
+      class="-mx-[5%] mt-6 -rotate-2 overflow-hidden bg-gray-900 text-white lg:-mx-[2%] lg:mt-[72px]"
+    >
+      <div class="marquee-track flex w-max py-4 lg:py-[22px]">
+        {[...marqueeWords, ...marqueeWords].map((word) => (
+          <span class="inline-flex items-center gap-[18px] whitespace-nowrap pr-[18px] font-['Rubik_Doodle_Shadow'] text-[28px] leading-none lg:gap-7 lg:pr-7 lg:text-[40px]">
+            {word}
+            <span class="font-['Inter'] text-base text-[#F5BF48] lg:text-[22px]">
+              ✦
+            </span>
+          </span>
+        ))}
+      </div>
     </div>
 
-    <!-- NEWS（デザインシステム「項目の見出し」の上置き。カードの一覧は幅が要るので見出しを上に置く） -->
+    <!-- 活動（デザインシステム「項目の見出し」） -->
     <section
-      aria-labelledby="news"
-      class="grid grid-cols-1 gap-3.5 border-t border-gray-200 pt-8 lg:gap-8 lg:pt-[52px]"
+      id="what-we-do"
+      aria-labelledby="what-we-do-heading"
+      class="mx-auto grid max-w-[1440px] scroll-mt-20 grid-cols-1 gap-5 px-6 pt-20 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 lg:px-20 lg:pt-32"
     >
       <div>
         <p
           aria-hidden="true"
           class="font-['Rubik_Doodle_Shadow'] text-2xl leading-tight text-blue-500 lg:text-[28px]"
         >
-          NEWS
+          WHAT WE DO
         </p>
-        <h2 id="news" class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl">
-          新着記事
+        <h2
+          id="what-we-do-heading"
+          class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl"
+        >
+          活動
         </h2>
+        <p class="mt-3 text-[15px] leading-[1.9] text-gray-600 lg:mt-4">
+          ふだんは Discord
+          でやりとりしながら、ハッカソンやチーム開発に挑戦しています。複数のチームに参加することもできます。
+        </p>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 custom-md:grid-cols-3 gap-6 w-full">
-        {latestPosts.map((post, index) => {
-          const postUrl = `/blog/${post.id}`;
+      <div class="grid grid-cols-1 gap-3.5 md:grid-cols-2 md:gap-5">
+        {teams.map((team) => (
+          <article class="flex flex-col gap-2.5 rounded-2xl border border-gray-200 bg-white px-[22px] py-6 lg:gap-3.5 lg:p-8">
+            <h3 class="text-[19px] font-bold lg:text-[22px]">{team.name}</h3>
+            <p class="text-sm leading-[1.85] text-gray-600 lg:text-[15px]">
+              {team.body}
+            </p>
+            <ul class="mt-1 flex flex-wrap gap-1.5">
+              {team.tags.map((tag) => (
+                <li class="rounded-full bg-gray-100 px-2.5 py-1 font-['Inter'] text-xs font-medium text-gray-700">
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+        <ul class="grid grid-cols-1 gap-2.5 md:col-span-2 md:grid-cols-3 md:gap-5">
+          {activities.map((activity) => (
+            <li class="flex flex-col gap-1 rounded-2xl bg-blue-50 px-5 py-[18px] lg:gap-1.5 lg:px-6 lg:py-[22px]">
+              <span class="text-base font-bold lg:text-[17px]">
+                {activity.name}
+              </span>
+              <span class="text-[13px] leading-[1.8] text-gray-600 lg:text-sm">
+                {activity.body}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
 
-          return (
-            <div
-              class="animate-fade-in"
-              style={`animation-delay: ${0.4 + (index % 6) * 0.1}s`}
+    <!-- 新着記事（上置き）：最新の1件を大きく、続く3件を一覧で。タイトル（32字以内）は1行16字×2行（spec 005 D12）。
+         375px 以上で16字が1行に入るよう、カードの余白・一覧の画像の幅を決めている（320px では3行になる） -->
+    <section
+      aria-labelledby="news-heading"
+      class="mx-auto mt-[72px] max-w-[1440px] px-6 lg:mt-[104px] lg:px-20"
+    >
+      <div class="border-t border-gray-200 pt-8 lg:pt-[52px]">
+        <div class="flex items-end justify-between gap-6">
+          <div>
+            <p
+              aria-hidden="true"
+              class="font-['Rubik_Doodle_Shadow'] text-2xl leading-tight text-blue-500 lg:text-[28px]"
             >
-              <NewsCard
-                image={getImageUrl(post)}
-                title={post.title}
-                description={post.description}
-                author={post.author}
-                role={post.role}
-                authorImage={getAuthorImageUrl(post)}
-                date={formatDotDate(post.publishedAt)}
-                url={postUrl}
-                client:load
-              />
-            </div>
-          );
-        })}
-      </div>
-      <!-- もっと見るボタン（5件以上で表示）。デザインシステムの枠線のボタン -->
-      {sortedPosts.length > 4 && (
-        <div class="text-center">
+              NEWS
+            </p>
+            <h2
+              id="news-heading"
+              class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl"
+            >
+              新着記事
+            </h2>
+          </div>
           <a
             href="/blog"
-            class="inline-flex h-12 items-center gap-2 rounded-[10px] border border-blue-500 bg-white px-[18px] text-sm font-bold text-blue-700 transition-colors hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-11"
+            class="hidden h-11 items-center gap-2 rounded-[10px] border border-blue-500 bg-white px-[18px] text-sm font-bold text-blue-700 transition-colors hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 md:inline-flex"
           >
-            もっと見る
+            テックブログを見る
             <svg
               class="h-4 w-4"
               fill="none"
@@ -136,48 +287,177 @@ const latestPosts = sortedPosts.slice(0, 4);
             </svg>
           </a>
         </div>
-      )}
+
+        {featuredPost && (
+          <div class="mt-5 grid grid-cols-1 gap-2 md:grid-cols-2 md:items-stretch md:gap-6 lg:mt-8 lg:gap-10">
+            <a
+              href={postUrl(featuredPost)}
+              class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            >
+              <img
+                src={getImageUrl(featuredPost)}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                class="aspect-[2/1] w-full bg-gray-100 object-cover"
+              />
+              <div class="px-4 pb-[22px] pt-[18px] lg:px-7 lg:pb-[26px] lg:pt-[22px]">
+                <p class="font-['Inter'] text-xs text-gray-500 lg:text-[13px]">
+                  {formatDotDate(featuredPost.publishedAt)}
+                </p>
+                <h3 class="mt-1.5 max-w-[16em] text-lg font-bold leading-normal group-hover:text-blue-700 lg:mt-2 lg:text-[21px]">
+                  {featuredPost.title}
+                </h3>
+                <p class="mt-1.5 text-sm leading-[1.8] text-gray-600 lg:mt-2">
+                  {featuredPost.description}
+                </p>
+                <p class="mt-2.5 text-[13px] text-gray-700 lg:mt-3">
+                  {featuredPost.author}
+                  <span class="text-gray-500">・{featuredPost.role}</span>
+                </p>
+              </div>
+            </a>
+
+            {restPosts.length > 0 && (
+              <ol class="md:grid md:grid-rows-3">
+                {restPosts.map((post, index) => (
+                  <li
+                    class:list={[
+                      "flex",
+                      index < restPosts.length - 1 &&
+                        "border-b border-gray-200",
+                    ]}
+                  >
+                    <a
+                      href={postUrl(post)}
+                      class="group grid flex-1 grid-cols-[88px_minmax(0,1fr)] items-center gap-3 py-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:grid-cols-[112px_minmax(0,1fr)] lg:gap-5 custom-md:grid-cols-[176px_minmax(0,1fr)]"
+                    >
+                      <img
+                        src={getImageUrl(post)}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        class="aspect-[16/10] w-full rounded-[10px] bg-gray-100 object-cover"
+                      />
+                      <div>
+                        <p class="font-['Inter'] text-xs text-gray-500 lg:text-[13px]">
+                          {formatDotDate(post.publishedAt)}
+                        </p>
+                        <h3 class="mt-1 max-w-[16em] text-sm font-bold leading-[1.55] group-hover:text-blue-700 lg:mt-1.5 lg:text-[17px]">
+                          {post.title}
+                        </h3>
+                        <p class="mt-1 text-xs text-gray-500 lg:mt-1.5 lg:text-[13px]">
+                          {post.author}・{post.role}
+                        </p>
+                      </div>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </div>
+        )}
+
+        <a
+          href="/blog"
+          class="mt-3 flex h-12 items-center justify-center gap-2 rounded-[10px] border border-blue-500 bg-white text-sm font-bold text-blue-700 transition-colors hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 md:hidden"
+        >
+          テックブログを見る
+          <svg
+            class="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M9 18l6-6-6-6"></path>
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- 入会の案内（明るい面）。メンバーは通年で募集（spec 005 D9）。左右に並べるのは 1280px 以上（1024px では左の文字が狭くなりすぎるため） -->
+    <section
+      aria-labelledby="join-heading"
+      class="mx-auto mt-[72px] max-w-[1440px] px-6 lg:mt-[120px] lg:px-20"
+    >
+      <div class="relative isolate grid grid-cols-1 items-center gap-6 overflow-hidden rounded-3xl border border-blue-100 bg-white px-6 pb-8 pt-9 lg:gap-10 lg:rounded-[28px] lg:px-14 lg:py-16 custom-md:grid-cols-[minmax(0,1fr)_auto] custom-md:gap-12 custom-md:px-20 custom-md:py-[72px]">
+        <div
+          aria-hidden="true"
+          class="absolute -right-24 -top-24 -z-10 h-[260px] w-[260px] rotate-12 rounded-[40%] bg-gradient-to-br from-blue-400 to-teal-300 opacity-[0.28] blur-[40px] lg:-right-20 lg:-top-[120px] lg:h-[420px] lg:w-[420px] lg:blur-[48px]"
+        ></div>
+        <div
+          aria-hidden="true"
+          class="absolute -bottom-[120px] -left-16 -z-10 h-[240px] w-[240px] -rotate-12 rounded-[40%] bg-[#F5BF48] opacity-[0.22] blur-[44px] lg:-bottom-[200px] lg:left-[30%] lg:h-[360px] lg:w-[360px] lg:blur-[56px]"
+        ></div>
+        <div>
+          <p
+            aria-hidden="true"
+            class="font-['Rubik_Doodle_Shadow'] text-5xl leading-none text-blue-500 lg:text-[72px]"
+          >
+            JOIN US!
+          </p>
+          <h2
+            id="join-heading"
+            class="mt-3.5 text-[21px] font-bold leading-normal lg:mt-[18px] lg:text-[30px]"
+          >
+            <span class="whitespace-nowrap">メンバーは</span>
+            <span class="whitespace-nowrap">一年中募集しています</span>
+          </h2>
+          <p class="mt-2.5 max-w-[620px] text-sm leading-[1.85] text-gray-600 lg:mt-3.5 lg:text-base lg:leading-[1.9]">
+            プログラミング初心者も大歓迎。先輩メンバーがサポートします。入会申し込みから、新入生向けの
+            Discord に参加できます。
+          </p>
+        </div>
+        <div class="flex items-center gap-4 lg:gap-7">
+          <img
+            src="/mainCharm.svg"
+            alt=""
+            aria-hidden="true"
+            width="289"
+            height="358"
+            class="h-auto w-16 flex-none -rotate-[8deg] lg:w-[132px]"
+          />
+          <button
+            type="button"
+            data-open-join
+            class="inline-flex h-[52px] flex-1 items-center justify-center rounded-full bg-[#F5BF48] px-8 text-base font-bold text-white shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-colors hover:bg-[#E9AF2E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-14 lg:flex-none lg:min-w-[260px]"
+          >
+            入会申し込み
+          </button>
+        </div>
+      </div>
     </section>
   </div>
 
-  <!-- SNS LOGOs - 固定位置（PC画面のみ） -->
-  <div
-    class="hidden md:flex fixed bottom-4 left-4 z-[9999] flex-col items-center gap-3 bg-white/20 backdrop-blur-sm rounded-lg p-4 shadow-xl border border-gray-200/50"
-    style="position: fixed !important;"
-  >
-    <p class="text-xs text-gray-700 font-semibold mb-1">Follow</p>
-    <a
-      href="https://x.com/TokyorikaND"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="block"
-    >
-      <img
-        src="/sns-x.png"
-        alt="XIcon"
-        class="w-8 h-8 hover:opacity-70 transition-all duration-300 hover:scale-125 block"
-        style="display: block !important;"
-      />
-    </a>
-    <a
-      href="https://discord.gg/k3qMBEn3CC"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="block"
-    >
-      <img
-        src="/sns-discord.svg"
-        alt="DiscordIcon"
-        class="w-8 h-8 hover:opacity-70 transition-all duration-300 hover:scale-125 block"
-        style="display: block !important;"
-      />
-    </a>
-  </div>
-
-  <!-- Footer -->
   <footer class="mt-24 border-t border-gray-200 py-8">
     <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
       <p class="text-sm text-gray-500">© 2026 TND All Rights Reserved.</p>
     </div>
   </footer>
 </Layout>
+
+<style>
+  /* 流れる帯：同じ並びを2回置いているので、半分動かすと継ぎ目なくつながる */
+  .marquee-track {
+    animation: tnd-marquee 32s linear infinite;
+  }
+
+  @keyframes tnd-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+</style>
