@@ -39,7 +39,7 @@ Layout
    ├ 流れる帯（aria-hidden。bg-gray-900、-rotate-2、横に流れる）
    ├ 活動 <section id="what-we-do" aria-labelledby>（項目の見出し：左に英字 WHAT WE DO・h2「活動」・説明文、右にチームのカード2枚＋活動3つ）
    ├ 新着記事 <section aria-labelledby>（上置き：英字 NEWS・h2「新着記事」と「テックブログを見る」→ 大きい1件＋一覧3件）
-   └ 入会の案内 <section aria-labelledby>（白い面にぼかし2つ：英字 JOIN US!・h2・説明文・シンボル＋入会申し込み）
+   └ 入会の案内 <section aria-labelledby>（白い面にぼかし2つ：英字 JOIN US!・h2・説明文・入会申し込み）
 └ <footer>（今のまま）
 ```
 
@@ -85,7 +85,7 @@ Layout
 #### 入会の案内
 - 面：白・`border-blue-100`・角丸 28px（スマホ 24px）。中に青緑と黄色のぼかし（aria-hidden、`-z-10`）
 - 左：英字 `JOIN US!`（Rubik Doodle Shadow・青・スマホ 48px・lg 72px）・h2（「メンバーは」「一年中募集しています」を nowrap の span）・説明文
-- 右（スマホは下）：シンボル（lg 132px・スマホ 64px、-8°、aria-hidden）＋「入会申し込み」（`data-open-join`）
+- 右（1024px 未満は下）：「入会申し込み」（`data-open-join`）。シンボルは置かない（D14）。1024px 以上は `lg:grid-cols-[minmax(0,1fr)_auto]` で文字の右に並べる
 - 説明文：プログラミング初心者も大歓迎。先輩メンバーがサポートします。入会申し込みから、新入生向けの Discord に参加できます。
 
 #### 消すもの

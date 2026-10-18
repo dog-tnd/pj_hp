@@ -379,12 +379,12 @@ const postUrl = (post: BlogPost) => `/blog/${post.id}`;
       </div>
     </section>
 
-    <!-- 入会の案内（明るい面）。メンバーは通年で募集（spec 005 D9）。左右に並べるのは 1280px 以上（1024px では左の文字が狭くなりすぎるため） -->
+    <!-- 入会の案内（明るい面）。メンバーは通年で募集（spec 005 D9）。1024px 以上はボタンを右に並べる -->
     <section
       aria-labelledby="join-heading"
       class="mx-auto mt-[72px] max-w-[1440px] px-6 lg:mt-[120px] lg:px-20"
     >
-      <div class="relative isolate grid grid-cols-1 items-center gap-6 overflow-hidden rounded-3xl border border-blue-100 bg-white px-6 pb-8 pt-9 lg:gap-10 lg:rounded-[28px] lg:px-14 lg:py-16 custom-md:grid-cols-[minmax(0,1fr)_auto] custom-md:gap-12 custom-md:px-20 custom-md:py-[72px]">
+      <div class="relative isolate grid grid-cols-1 items-center gap-6 overflow-hidden rounded-3xl border border-blue-100 bg-white px-6 pb-8 pt-9 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-12 lg:rounded-[28px] lg:px-14 lg:py-16 custom-md:px-20 custom-md:py-[72px]">
         <div
           aria-hidden="true"
           class="absolute -right-24 -top-24 -z-10 h-[260px] w-[260px] rotate-12 rounded-[40%] bg-gradient-to-br from-blue-400 to-teal-300 opacity-[0.28] blur-[40px] lg:-right-20 lg:-top-[120px] lg:h-[420px] lg:w-[420px] lg:blur-[48px]"
@@ -412,23 +412,13 @@ const postUrl = (post: BlogPost) => `/blog/${post.id}`;
             Discord に参加できます。
           </p>
         </div>
-        <div class="flex items-center gap-4 lg:gap-7">
-          <img
-            src="/mainCharm.svg"
-            alt=""
-            aria-hidden="true"
-            width="289"
-            height="358"
-            class="h-auto w-16 flex-none -rotate-[8deg] lg:w-[132px]"
-          />
-          <button
-            type="button"
-            data-open-join
-            class="inline-flex h-[52px] flex-1 items-center justify-center rounded-full bg-[#F5BF48] px-8 text-base font-bold text-white shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-colors hover:bg-[#E9AF2E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-14 lg:flex-none lg:min-w-[260px]"
-          >
-            入会申し込み
-          </button>
-        </div>
+        <button
+          type="button"
+          data-open-join
+          class="inline-flex h-[52px] items-center justify-center rounded-full bg-[#F5BF48] px-8 text-base font-bold text-white shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-colors hover:bg-[#E9AF2E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-14 lg:min-w-[260px]"
+        >
+          入会申し込み
+        </button>
       </div>
     </section>
   </div>
