@@ -32,7 +32,7 @@ const NewsCard: FC<NewsCardProps> = ({
       className={`${sizeClass} overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col mx-auto`}
     >
       {/* Image Section */}
-      <div className="relative h-48 w-full overflow-hidden flex-shrink-0">
+      <div className="relative h-48 w-full overflow-hidden shrink-0">
         <img
           src={image}
           alt="Card layout"
@@ -41,7 +41,7 @@ const NewsCard: FC<NewsCardProps> = ({
       </div>
 
       {/* Content Section with specific padding */}
-      <div className="p-4 flex flex-col flex-grow">
+      <div className="p-4 flex flex-col grow">
         {/* Title with 16px padding - 2行に制限 */}
         <h2
           className="text-xl font-bold mb-2 px-4 overflow-hidden"

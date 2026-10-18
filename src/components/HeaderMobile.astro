@@ -41,9 +41,9 @@ const isCurrent = (href: string) =>
       data-open-menu
       class="w-11 h-11 rounded-[10px] flex flex-col items-center justify-center gap-1.5"
     >
-      <span class="h-0.5 w-[22px] bg-gray-900 rounded-sm"></span>
-      <span class="h-0.5 w-[22px] bg-gray-900 rounded-sm"></span>
-      <span class="h-0.5 w-[14px] bg-gray-900 rounded-sm"></span>
+      <span class="h-0.5 w-[22px] bg-gray-900 rounded-xs"></span>
+      <span class="h-0.5 w-[22px] bg-gray-900 rounded-xs"></span>
+      <span class="h-0.5 w-[14px] bg-gray-900 rounded-xs"></span>
     </button>
   </div>
 </header>
@@ -54,7 +54,7 @@ const isCurrent = (href: string) =>
   data-scroll-lock
   class="w-screen h-dvh max-w-none max-h-none m-0 p-0 border-0 bg-[#111827] text-white"
 >
-  <div class="flex h-14 items-center justify-between pl-4 pr-[calc(0.75rem_+_var(--scrollbar-width,0px))] md:pl-8 md:pr-[calc(1.5rem_+_var(--scrollbar-width,0px))]">
+  <div class="flex h-14 items-center justify-between pl-4 pr-[calc(0.75rem+var(--scrollbar-width,0px))] md:pl-8 md:pr-[calc(1.5rem+var(--scrollbar-width,0px))]">
     <a href="/" aria-label="TND ホーム" class="flex items-center gap-2">
       <img src="/logo.png" alt="" class="w-7 h-7 rounded-full" />
       <span
@@ -127,7 +127,7 @@ const isCurrent = (href: string) =>
   type="button"
   data-open-join
   data-floating-join
-  class="fixed right-[calc(1rem_+_var(--scrollbar-width,0px))] bottom-7 z-40 h-[52px] px-[22px] rounded-full bg-[#F5BF48] text-white text-[15px] font-bold shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-opacity duration-200 motion-reduce:transition-none"
+  class="fixed right-[calc(1rem+var(--scrollbar-width,0px))] bottom-7 z-40 h-[52px] px-[22px] rounded-full bg-[#F5BF48] text-white text-[15px] font-bold shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-opacity duration-200 motion-reduce:transition-none"
 >
   入会申し込み
 </button>

@@ -27,7 +27,7 @@ const { sections } = Astro.props;
             href={`#cat-${section.anchor}`}
             data-faq-cat={section.anchor}
             aria-current={i === 0 ? "location" : undefined}
-            class="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:border-gray-400 aria-[current=location]:border-gray-900 aria-[current=location]:bg-gray-900 aria-[current=location]:font-bold aria-[current=location]:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-10 lg:px-4"
+            class="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:border-gray-400 aria-[current=location]:border-gray-900 aria-[current=location]:bg-gray-900 aria-[current=location]:font-bold aria-[current=location]:text-white focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-10 lg:px-4"
           >
             {section.name}
             <span class="font-['Inter'] text-xs opacity-70">
@@ -41,7 +41,7 @@ const { sections } = Astro.props;
     <button
       type="button"
       data-faq-toggle-all
-      class="hidden min-h-[44px] shrink-0 px-1 text-[15px] font-medium text-blue-600 hover:text-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:block"
+      class="hidden min-h-[44px] shrink-0 px-1 text-[15px] font-medium text-blue-600 hover:text-blue-700 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:block"
     >
       すべて開く
     </button>

@@ -16,7 +16,7 @@ const { sections } = Astro.props;
 <div class="mx-auto max-w-[1440px] px-6 lg:px-20">
   <div class="grid grid-cols-1 gap-5 pt-[72px] lg:pt-[104px] custom-md:grid-cols-[minmax(0,1fr)_480px] custom-md:items-end custom-md:gap-16">
     <div>
-      <p class="text-[11px] font-medium leading-relaxed tracking-[0.2em] text-gray-500 lg:text-sm lg:tracking-[0.22em]">
+      <p class="text-[11px] font-medium leading-relaxed tracking-[0.2em] text-gray-500 lg:text-sm lg:leading-5 lg:tracking-[0.22em]">
         TOKYO UNIVERSITY OF SCIENCE /
         <span class="whitespace-nowrap">NODA CAMPUS</span>
       </p>
@@ -47,7 +47,7 @@ const { sections } = Astro.props;
     <button
       type="button"
       data-faq-toggle-all
-      class="min-h-[44px] px-1 text-sm font-medium text-blue-600 hover:text-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+      class="min-h-[44px] px-1 text-sm font-medium text-blue-600 hover:text-blue-700 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
     >
       すべて開く
     </button>
@@ -70,7 +70,7 @@ const { sections } = Astro.props;
         <h2
           id={`cat-${section.anchor}`}
           tabindex="-1"
-          class="mt-2 flex scroll-mt-[176px] items-baseline gap-2 text-[19px] font-bold focus:outline-none lg:mt-2.5 lg:scroll-mt-[225px] lg:gap-2.5 lg:text-2xl"
+          class="mt-2 flex scroll-mt-[176px] items-baseline gap-2 text-[19px] font-bold focus:outline-hidden lg:mt-2.5 lg:scroll-mt-[225px] lg:gap-2.5 lg:text-2xl"
         >
           {section.name}
           <span class="font-['Inter'] text-[13px] font-normal text-gray-500 lg:text-sm">

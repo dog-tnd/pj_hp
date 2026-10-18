@@ -109,20 +109,19 @@ const fullImageURL = image.startsWith("http") ? image : `${siteURL}${image}`;
   </head>
   <body class="bg-gray-50">
     <SiteHeader />
-    <!-- overflow-hidden だと中の position: sticky（記事の目次）が効かないため、
-         スクロールコンテナを作らない overflow-clip で切る。clip を解釈しない古いブラウザでは
-         overflow-hidden が残り、見た目は今までどおりになる（Tailwind の出力順で clip が後に来る） -->
-    <div class="relative min-h-screen overflow-hidden overflow-clip">
+    <!-- overflow-hidden だと中の position: sticky（記事の目次・FAQ のカテゴリ）が効かないため、
+         スクロールコンテナを作らない overflow-clip で切る。Tailwind 4 の対応ブラウザ（Safari 16.4 以降）はすべて clip を解釈する -->
+    <div class="relative min-h-screen overflow-clip">
       <!-- 背景のぼかし。左右交互に置き、ページの高さより下のものは overflow-clip で切れる。
            lg 未満は小さめの3個、lg 以上は4個（spec 004） -->
       <div
         aria-hidden="true"
         class="pointer-events-none absolute inset-0 -z-10"
       >
-        <div class="absolute -right-[140px] -top-10 h-[340px] w-[340px] rotate-12 rounded-[40%] bg-gradient-to-br from-blue-400 to-teal-300 opacity-[0.22] blur-[48px] lg:-right-[120px] lg:-top-20 lg:h-[600px] lg:w-[600px] lg:blur-3xl"></div>
-        <div class="absolute -left-[160px] top-[900px] h-[320px] w-[320px] -rotate-12 rounded-[40%] bg-gradient-to-br from-tnd-blue to-tnd-violet opacity-[0.16] blur-[48px] lg:-left-[220px] lg:top-[640px] lg:h-[540px] lg:w-[540px] lg:blur-3xl"></div>
-        <div class="absolute -right-[150px] top-[1800px] h-[330px] w-[330px] rotate-12 rounded-[40%] bg-gradient-to-br from-tnd-teal to-tnd-mint opacity-[0.16] blur-[48px] lg:-right-[200px] lg:top-[1260px] lg:h-[560px] lg:w-[560px] lg:blur-3xl"></div>
-        <div class="absolute -left-[160px] top-[1880px] hidden h-[500px] w-[500px] -rotate-12 rounded-[40%] bg-gradient-to-br from-blue-400 to-teal-300 opacity-[0.16] blur-3xl lg:block"></div>
+        <div class="absolute right-[-140px] -top-10 h-[340px] w-[340px] rotate-12 rounded-[40%] bg-linear-to-br/srgb from-blue-400 to-teal-300 opacity-[0.22] blur-[48px] lg:right-[-120px] lg:-top-20 lg:h-[600px] lg:w-[600px] lg:blur-3xl"></div>
+        <div class="absolute left-[-160px] top-[900px] h-[320px] w-[320px] -rotate-12 rounded-[40%] bg-linear-to-br/srgb from-tnd-blue to-tnd-violet opacity-[0.16] blur-[48px] lg:left-[-220px] lg:top-[640px] lg:h-[540px] lg:w-[540px] lg:blur-3xl"></div>
+        <div class="absolute right-[-150px] top-[1800px] h-[330px] w-[330px] rotate-12 rounded-[40%] bg-linear-to-br/srgb from-tnd-teal to-tnd-mint opacity-[0.16] blur-[48px] lg:right-[-200px] lg:top-[1260px] lg:h-[560px] lg:w-[560px] lg:blur-3xl"></div>
+        <div class="absolute left-[-160px] top-[1880px] hidden h-[500px] w-[500px] -rotate-12 rounded-[40%] bg-linear-to-br/srgb from-blue-400 to-teal-300 opacity-[0.16] blur-3xl lg:block"></div>
       </div>
       <main class="pb-24 lg:pb-0">
         <slot />

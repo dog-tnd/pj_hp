@@ -18,7 +18,7 @@ const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encod
 const labeled = variant === "labeled";
 
 const focusRing =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600";
+  "focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600";
 const iconButton = `inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-900 transition-colors hover:bg-gray-100 ${focusRing}`;
 const pillButton = `inline-flex h-11 items-center justify-center gap-2 rounded-full px-[18px] text-sm font-medium transition-colors ${focusRing}`;
 ---
@@ -98,7 +98,7 @@ const pillButton = `inline-flex h-11 items-center justify-center gap-2 rounded-f
     aria-label={labeled ? undefined : "リンクをコピー"}
   >
     <svg
-      class="h-4 w-4 group-data-[copied]:hidden"
+      class="h-4 w-4 group-data-copied:hidden"
       fill="none"
       stroke="currentColor"
       stroke-width="2"
@@ -111,7 +111,7 @@ const pillButton = `inline-flex h-11 items-center justify-center gap-2 rounded-f
       <path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"></path>
     </svg>
     <svg
-      class="hidden h-4 w-4 text-blue-600 group-data-[copied]:block"
+      class="hidden h-4 w-4 text-blue-600 group-data-copied:block"
       fill="none"
       stroke="currentColor"
       stroke-width="2.5"
@@ -124,8 +124,8 @@ const pillButton = `inline-flex h-11 items-center justify-center gap-2 rounded-f
     </svg>
     {labeled && (
       <>
-        <span class="group-data-[copied]:hidden">リンクをコピー</span>
-        <span class="hidden group-data-[copied]:inline">コピーしました</span>
+        <span class="group-data-copied:hidden">リンクをコピー</span>
+        <span class="hidden group-data-copied:inline">コピーしました</span>
       </>
     )}
   </button>

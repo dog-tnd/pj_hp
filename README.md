@@ -2,7 +2,8 @@
 
 東京理科大学プログラミングサークル TND の公式サイトです。
 
-- **フレームワーク**: Astro 5（静的サイト生成）
+- **フレームワーク**: Astro 7（静的サイト生成）
+- **スタイル**: Tailwind CSS 4（`@tailwindcss/vite`）と `@tailwindcss/typography`。詳しくは下の「スタイル（Tailwind CSS 4）」
 - **ブログ記事・よくある質問**: microCMS（ヘッドレス CMS）から取得
 - **本番ホスティング**: GitHub Pages
 - **下書きプレビュー**: Vercel（`/blog/preview` のみ SSR）
@@ -94,6 +95,21 @@ URL は microCMS 管理画面の「画面プレビュー」から開けます。
 - 質問が1件も無いカテゴリは表示されません
 - 公開中の質問が0件、カテゴリが未選択・複数選ばれている質問がある、カテゴリの選択肢が「名前｜英字ラベル」の形でない、または同じ英字ラベルが2つのカテゴリにあるときは、**ビルドが失敗して公開されません**（直前の公開内容が残ります）。GitHub Actions のログに理由が出ます
 - よくある質問には Webhook を設定していないため、公開した内容は **6 時間ごとの定期リビルドで反映されます**（最大 6 時間かかります）。すぐに反映したいときは、GitHub Actions の「Deploy Astro site to GitHub Pages (Organization)」を手動で実行（Run workflow）してください
+
+## スタイル（Tailwind CSS 4）
+
+Tailwind CSS 4 を Vite プラグイン（`@tailwindcss/vite`、`astro.config.mjs` で読み込み）で使っています。人が書くときも AI に書かせるときも、以下に従ってください。
+
+- **設定は `src/styles/tailwind.css` に CSS で書く**。色・画面幅は `@theme`、typography は `@plugin` とその下の上書き。`tailwind.config.cjs`・`postcss.config.mjs` はありません（作らない）
+- **画面幅は `md`（768px）・`lg`（1024px）・`custom-md`（1280px）だけ**。Tailwind の既定の `sm`・`xl`・`2xl` は消してあり、使えません
+- **色は v3 の値に戻してある**。使っている系統（gray・blue・indigo など）は `@theme` に v3 の値を書いてあり、見た目は v3 のときと同じです。ほかの系統（red など）を使うときは、v3 の値を `@theme` に足してから使います
+- **クラス名は v4 の名前で書く**。例：`shadow-xs`（v3 の `shadow-sm`）、`shadow-sm`（v3 の `shadow`）、`rounded-xs`・`rounded-sm`、`outline-hidden`（v3 の `outline-none`）、`bg-linear-to-r`（v3 の `bg-gradient-to-r`）、`shrink-0`・`grow`。グラデーションは v3 と同じ混ざり方にするため `/srgb` を付けます（`bg-linear-to-br/srgb`）
+- **`lg:text-lg` のような名前付きの文字サイズを画面幅で切り替えるときは、行間も同じ幅で書く**（例：`leading-[1.9] lg:text-lg lg:leading-7`）。v4 では `text-*` が `leading-*` を上書きしないため、書かないと行間が変わります
+- **同じ要素に、同じプロパティのクラスを2つ書かない**（例：`overflow-hidden overflow-clip`）。v4 は CSS の出力順が v3 と違い、どちらが効くかがクラスの並びでは決まりません
+- **非表示の子を含む並びには `space-y-*` ではなく `flex flex-col gap-*` を使う**。v4 の `space-y-*` は「最後以外の子の下」に余白を付けるため、後ろの子を `hidden` にすると余白が残ります
+- `hover:` は v3 と同じく、タップした端末でも効くようにしてあります（`@custom-variant hover`）。`button` は `cursor: pointer` を土台の CSS で付けてあります
+- 対応ブラウザは Safari 16.4・Chrome 111・Firefox 128 以降です（Tailwind CSS 4 の対応範囲）
+- CSS の圧縮は `astro.config.mjs` で esbuild にしています。Vite 8 の既定（Lightning CSS）だと、ヘッダーの `animation` と `animation-timeline` が一つにまとめられ、スクロール連動が効かなくなるためです
 
 ## ビルド・型チェック
 

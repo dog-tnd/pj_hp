@@ -5,6 +5,7 @@ import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
+import tailwindcss from "@tailwindcss/vite";
 
 // Vercel ビルド時のみ SSR プレビュー（/blog/preview）を有効化する。
 // 本番（GitHub Pages）の静的ビルドには影響しない。
@@ -73,6 +74,7 @@ export default defineConfig({
   // Astro 7 の既定（"jsx"）はインライン要素の間の空白を消すため、6 までの扱いに固定する
   compressHTML: true,
   vite: {
+    plugins: [tailwindcss()],
     build: {
       // Vite 8 の既定（Lightning CSS）は animation と animation-timeline を一括指定にまとめ、
       // ブラウザが無効として捨てるため（ヘッダーのスクロール連動が効かなくなる）、Vite 7 までの esbuild で圧縮する

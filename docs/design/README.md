@@ -5,6 +5,7 @@
 - 決まりを変えるときは、ページの spec より先にこのファイルを直す
 - ここに無いことは、各ページの spec・キャンバスで決めてよい。複数のページで使うことになったら、ここに書き足す
 - 数値は Tailwind のクラスで書く（`lg:` などは下の「画面幅」）。色・余白は直書きせず、既存のトークンを使う
+- Tailwind は 4 系。クラス名や行間の書き方の注意は、リポジトリ直下の README の「スタイル（Tailwind CSS 4）」
 
 ## 適用状況
 
@@ -48,7 +49,7 @@
 | 英字の見出し | `text-blue-500` |
 | リンク・文字だけのボタン | `text-blue-600`（ホバー `text-blue-700`） |
 | 入会申し込み（CTA） | `#F5BF48`（ホバー `#E9AF2E`）。**入会申し込みにだけ使う** |
-| 背景のぼかし | `tnd` の色（`tailwind.config.cjs`）。背景のぼかしにだけ使う |
+| 背景のぼかし | `tnd` の色（`src/styles/tailwind.css` の `@theme`）。背景のぼかしにだけ使う |
 | マシュマロへの導線 | `marshmallow` の色。マシュマロの導線にだけ使う |
 
 ### 背景
@@ -74,7 +75,7 @@
 | 要素 | クラス |
 |---|---|
 | 囲み | `grid grid-cols-1 gap-5 pt-[72px] lg:pt-[104px] custom-md:grid-cols-[minmax(0,1fr)_480px] custom-md:items-end custom-md:gap-16` |
-| 大学名 | `text-[11px] font-medium leading-relaxed tracking-[0.2em] text-gray-500 lg:text-sm lg:tracking-[0.22em]`。文言は `TOKYO UNIVERSITY OF SCIENCE / NODA CAMPUS`（`NODA CAMPUS` は `whitespace-nowrap`） |
+| 大学名 | `text-[11px] font-medium leading-relaxed tracking-[0.2em] text-gray-500 lg:text-sm lg:leading-5 lg:tracking-[0.22em]`。文言は `TOKYO UNIVERSITY OF SCIENCE / NODA CAMPUS`（`NODA CAMPUS` は `whitespace-nowrap`） |
 | 英字の大見出し | `mt-3.5 text-[42px] leading-none text-blue-500 md:text-[64px] lg:mt-5 lg:text-[72px] custom-md:text-[92px]`、Rubik Doodle Shadow |
 | h1 | `mt-4 text-[22px] font-bold tracking-[0.04em] text-gray-900 lg:mt-6 lg:text-[30px]` |
 | 説明文 | `max-w-[560px] text-[15px] leading-[1.9] text-gray-600 lg:text-lg lg:leading-loose custom-md:max-w-none`。`custom-md` 以上では右の列（480px）に置き、下端をそろえる |
@@ -115,7 +116,7 @@
 | 面 | `rounded-[14px] border border-gray-200 bg-white px-5 py-[22px] lg:px-7 lg:py-[26px]` |
 | 小さな英字のラベル | `text-xs font-medium tracking-[0.16em] text-gray-500 lg:text-sm lg:tracking-[0.18em]` |
 | タイトル | `text-[17px] font-bold lg:text-xl` |
-| 補足 | `text-[13px] leading-[1.7] text-gray-500 lg:text-sm` |
+| 補足 | `text-[13px] leading-[1.7] text-gray-500 lg:text-sm lg:leading-5` |
 
 - カードを並べるときは `md` 以上で横並び（`md:flex-row md:gap-5`）、`md` 未満は縦に積む（`gap-4`）
 
