@@ -14,6 +14,9 @@ const isCurrent = (href: string) =>
     : pathname === href || pathname === `${href}/`;
 ---
 
+<!-- ヘッダーは画面に固定し、元の場所には高さ 80px の空きを置く。
+     ページの流れの中（sticky）で 80px → 64px に縮めると、その分ページ全体が上に詰まり、スクロール中にかくっと跳ねるため -->
+<div class="header-spacer" aria-hidden="true"></div>
 <header class="site-header" data-header>
   <div class="header-inner">
     <a class="brand" href="/" aria-label="TND ホーム">
@@ -51,23 +54,32 @@ const isCurrent = (href: string) =>
 </script>
 
 <style>
+  .header-spacer {
+    height: 80px;
+  }
+
+  /* 高さ・背景・影・ぼかしを同じ時間で一緒に変える（背景だけ先に切り替わってずれて見えないように） */
   .site-header {
-    position: sticky;
+    position: fixed;
     top: 0;
+    right: 0;
+    left: 0;
     z-index: 50;
     display: block;
-    width: 100%;
     height: 80px;
-    background: transparent;
+    background-color: rgba(249, 250, 251, 0);
+    box-shadow: 0 1px 0 rgba(17, 24, 39, 0);
+    backdrop-filter: blur(0);
     transition:
       height 180ms ease,
       background-color 180ms ease,
-      box-shadow 180ms ease;
+      box-shadow 180ms ease,
+      backdrop-filter 180ms ease;
   }
 
   .site-header.scrolled {
     height: 64px;
-    background: rgba(249, 250, 251, 0.97);
+    background-color: rgba(249, 250, 251, 0.97);
     box-shadow: 0 1px 0 rgba(17, 24, 39, 0.08);
     backdrop-filter: blur(12px);
   }
