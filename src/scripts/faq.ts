@@ -16,31 +16,54 @@ const isOpen = (button: HTMLButtonElement) =>
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-// 開くときだけ、高さ 0 から回答の高さまで広げる（閉じるときはすぐ閉じる）
-const animateOpen = (panel: HTMLElement) => {
-  if (reducedMotion.matches) return;
+// 回答の高さと透明度を変えて、開く・閉じるの動きを付ける
+const animatePanel = (
+  panel: HTMLElement,
+  from: { height: number; opacity: number },
+  to: { height: number; opacity: number },
+) => {
   panel.style.overflow = "hidden";
   const animation = panel.animate(
     [
-      { height: "0px", opacity: 0 },
-      { height: `${panel.scrollHeight}px`, opacity: 1 },
+      { height: `${from.height}px`, opacity: from.opacity },
+      { height: `${to.height}px`, opacity: to.opacity },
     ],
     { duration: 200, easing: "ease-out" },
   );
-  const clear = () => panel.style.removeProperty("overflow");
+  // cancel は後から非同期に届くので、次の動きが始まっていれば overflow を残す
+  const clear = () => {
+    if (panel.getAnimations().length === 0)
+      panel.style.removeProperty("overflow");
+  };
   animation.addEventListener("finish", clear);
   animation.addEventListener("cancel", clear);
+  return animation;
 };
 
-// animate は質問を1つ押したときだけ true。すべて開く・ハッシュ・ページ内検索ではすぐ開く
+// animate は質問を1つ押したときだけ true。すべて開く・ハッシュ・ページ内検索ではすぐ切り替える
 const setOpen = (button: HTMLButtonElement, open: boolean, animate = false) => {
   const panel = panelOf(button);
   if (!panel) return;
   button.setAttribute("aria-expanded", String(open));
+  // 動きの途中で押されたら、今の高さ・透明度から続ける
+  const from = panel.hasAttribute("hidden")
+    ? { height: 0, opacity: 0 }
+    : {
+        height: panel.getBoundingClientRect().height,
+        opacity: parseFloat(getComputedStyle(panel).opacity),
+      };
   for (const animation of panel.getAnimations()) animation.cancel();
+  const motion = animate && !reducedMotion.matches;
   if (open) {
     panel.removeAttribute("hidden");
-    if (animate) animateOpen(panel);
+    if (motion)
+      animatePanel(panel, from, { height: panel.scrollHeight, opacity: 1 });
+  } else if (motion) {
+    // 閉じ終わってから hidden を付ける（付けた時点で中身が消えるため）
+    animatePanel(panel, from, { height: 0, opacity: 0 }).addEventListener(
+      "finish",
+      () => panel.setAttribute("hidden", "until-found"),
+    );
   } else panel.setAttribute("hidden", "until-found");
 };
 
