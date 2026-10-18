@@ -16,7 +16,6 @@
     "@astrojs/check": "^0.9.6",
     "@astrojs/react": "^4.4.2",
     "@astrojs/sitemap": "^3.7.4",
-    "@astrojs/tailwind": "^6.0.2",
     "@tailwindcss/typography": "^0.5.15",
     "astro": "^5.16.11",
     "microcms-js-sdk": "^3.4.0",

@@ -4,7 +4,6 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel";
 
 // Vercel ビルド時のみ SSR プレビュー（/blog/preview）を有効化する。
@@ -61,7 +60,6 @@ function devPagesRoutes() {
 export default defineConfig({
   integrations: [
     react(),
-    tailwind(),
     blogPreviewRoute(),
     devPagesRoutes(),
     // ビルドされた全ページ（microCMS の記事を含む）から sitemap を自動生成する
