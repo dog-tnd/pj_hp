@@ -1,5 +1,6 @@
 // よくある質問のデータ変換。microCMS の faq（API は1つ）から、表示用の形にそろえる。
 // microCMS の無料枠の API 数の都合で、カテゴリは faq のセレクトフィールドで持つ（spec 004 D3）。
+// 英字ラベルは、カテゴリとずれないよう選択肢に書き足してある（`一般的な質問｜GENERAL`。spec 004 D10）。
 // env に依存しないので、dev ページの固定データもこの関数を通して表示する。
 
 export type FaqItem = {
@@ -23,9 +24,8 @@ export type FaqEntryInput = {
   id: string;
   question: string;
   answer: string;
-  // セレクトフィールドは選んだ項目の配列で返る（複数選択なしでも配列）
+  // セレクトフィールドは選んだ項目の配列で返る（複数選択なしでも配列）。値は `名前｜英字ラベル`
   category: string[];
-  categoryEn: string[];
   sortOrder: number;
   createdAt: string;
 };
@@ -35,6 +35,13 @@ const bySortOrder = (a: FaqEntryInput, b: FaqEntryInput) =>
   Date.parse(a.createdAt) - Date.parse(b.createdAt);
 
 const toAnchor = (name: string) => name.trim().replace(/\s+/g, "-");
+
+// `一般的な質問｜GENERAL` を名前と英字ラベルに分ける。区切りは全角の ｜（半角の | も可）。形が違えば null
+const parseCategory = (value: string) => {
+  const parts = value.split(/[｜|]/).map((part) => part.trim());
+  if (parts.length !== 2 || !parts[0] || !parts[1]) return null;
+  return { name: parts[0], en: parts[1] };
+};
 
 /**
  * 回答のテキストを段落と行に分ける。改行コードをそろえ、空行（空白だけの行も含む）で段落を分ける。
@@ -59,7 +66,8 @@ export function toParagraphs(answer: string): string[][] {
  * 質問をカテゴリごとのセクションにまとめる。
  * 質問は sortOrder（同じなら作成日時）の順に並べ、カテゴリはその中で最初に出てきた順
  * （＝カテゴリ内の最小の sortOrder の順）にする。
- * データが壊れているとき（質問0件・カテゴリや英字ラベルが1つに決まらない・カテゴリと英字ラベルが1対1でない）は
+ * データが壊れているとき（質問0件・カテゴリが1つに決まらない・選択肢が `名前｜英字ラベル` の形でない・
+ * カテゴリと英字ラベルが1対1でない）は
  * 例外を投げてビルドを止める。
  * 直前のデプロイが残るので、壊れたページを公開するよりよい。
  */
@@ -72,25 +80,26 @@ export function toFaqSections(entries: FaqEntryInput[]): FaqSection[] {
 
   const sections = new Map<string, FaqSection>();
   for (const entry of [...entries].sort(bySortOrder)) {
-    const name = entry.category?.[0]?.trim();
-    if (!name || entry.category.length !== 1) {
+    const value = entry.category?.[0]?.trim();
+    if (!value || entry.category.length !== 1) {
       throw new Error(
         `[faq] 質問「${entry.question}」のカテゴリが1つに決まっていません（未設定か、複数選ばれています）。`,
       );
     }
-    const en = entry.categoryEn?.[0]?.trim();
-    if (!en || entry.categoryEn.length !== 1) {
+    const parsed = parseCategory(value);
+    if (!parsed) {
       throw new Error(
-        `[faq] 質問「${entry.question}」のカテゴリの英字ラベルが1つに決まっていません（未設定か、複数選ばれています）。`,
+        `[faq] カテゴリ「${value}」が「名前｜英字ラベル」の形になっていません（例：一般的な質問｜GENERAL）。microCMS の faq の category の選択肢を確認してください。`,
       );
     }
+    const { name, en } = parsed;
     let section = sections.get(name);
     if (!section) {
       section = { anchor: toAnchor(name), name, en, items: [] };
       sections.set(name, section);
     } else if (section.en !== en) {
       throw new Error(
-        `[faq] カテゴリ「${name}」の英字ラベルが質問によって違います（${section.en} と ${en}）。質問「${entry.question}」を確認してください。`,
+        `[faq] カテゴリ「${name}」に、英字ラベルの違う選択肢があります（${section.en} と ${en}）。microCMS の faq の category の選択肢を確認してください。`,
       );
     }
     section.items.push({
@@ -99,7 +108,7 @@ export function toFaqSections(entries: FaqEntryInput[]): FaqSection[] {
       paragraphs: toParagraphs(entry.answer),
     });
   }
-  // カテゴリと英字ラベルは1対1にする。別のカテゴリに同じ英字ラベルが選ばれていたら、どちらかの選び間違い
+  // カテゴリと英字ラベルは1対1にする。別のカテゴリに同じ英字ラベルが書かれていたら、どちらかの書き間違い
   const byEn = new Map<string, string>();
   for (const section of sections.values()) {
     const other = byEn.get(section.en);

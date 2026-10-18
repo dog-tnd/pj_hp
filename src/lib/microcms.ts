@@ -101,13 +101,11 @@ export async function getAllCategories(): Promise<Category[]> {
 }
 
 // faq エンドポイント（よくある質問）。API 数の上限のため1つだけで、カテゴリはセレクトフィールドで持つ。
-// セレクトフィールドは選んだ項目の配列で返る（複数選択なしでも配列）
+// セレクトフィールドは選んだ項目の配列で返る（複数選択なしでも配列）。category の値は `一般的な質問｜GENERAL` の形
 export type FaqEntry = MicroCMSBase & {
   question: string;
   answer: string;
   category: string[];
-  // カテゴリの英字ラベル（GENERAL など）。同じカテゴリの質問には同じものを選ぶ
-  categoryEn: string[];
   sortOrder: number;
 };
 
