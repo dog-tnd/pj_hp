@@ -1,5 +1,7 @@
 ---
+import "../styles/tailwind.css";
 import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
 
 interface Props {
   title: string;
@@ -14,8 +16,8 @@ interface Props {
 
 const {
   title,
-  description = "「TND」は東京理科大学野田キャンパスで活動するプログラミングサークルです。Web開発やデータサイエンスに挑戦し、メンバーと共に成長を目指しています。",
-  image = "/mainCharm.svg",
+  description = "TNDは東京理科大学野田キャンパスで活動するプログラミングサークルです。2024年設立、約20名のメンバーがWeb開発とデータサイエンスに、ハッカソンやチーム開発を通して取り組んでいます。",
+  image = "/og.png",
   canonicalURL = Astro.url.href,
   keywords = [
     "東京理科大学",
@@ -32,6 +34,64 @@ const {
 
 const siteURL = "https://tus-tnd.com";
 const fullImageURL = image.startsWith("http") ? image : `${siteURL}${image}`;
+
+// サイト全体の構造化データ。Google や AI による概要に「TND とは何か」を伝える。
+// 説明文にはサイト内のどこかに表示されている事実だけを書く（spec 003・006）。
+// TND は大学の非公認サークルのため、memberOf / parentOrganization は付けない。
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${siteURL}/#organization`,
+      name: "TND",
+      alternateName: [
+        "東京理科大学プログラミングサークルTND",
+        "TND 東京理科大学プログラミングサークル",
+      ],
+      description:
+        "東京理科大学の学生によるプログラミングサークル。野田キャンパスを拠点に2024年に設立し、約20名が所属。Web開発とデータサイエンスの2つのチームがあり、ハッカソンやチーム開発に取り組んでいる。メンバーの9割は大学からプログラミングを始めた。",
+      url: `${siteURL}/`,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteURL}/logo.png`,
+        width: 192,
+        height: 192,
+      },
+      foundingDate: "2024",
+      location: {
+        "@type": "Place",
+        name: "東京理科大学 野田キャンパス",
+        address: {
+          "@type": "PostalAddress",
+          addressRegion: "千葉県",
+          addressLocality: "野田市",
+          addressCountry: "JP",
+        },
+      },
+      knowsAbout: [
+        "プログラミング",
+        "Web開発",
+        "フロントエンド",
+        "バックエンド",
+        "データサイエンス",
+        "機械学習",
+        "AIエージェント",
+        "ハッカソン",
+      ],
+      sameAs: ["https://x.com/TokyorikaND", "https://github.com/dog-tnd"],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteURL}/#website`,
+      name: "TND",
+      alternateName: "東京理科大学プログラミングサークルTND",
+      url: `${siteURL}/`,
+      inLanguage: "ja",
+      publisher: { "@id": `${siteURL}/#organization` },
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -56,35 +116,22 @@ const fullImageURL = image.startsWith("http") ? image : `${siteURL}${image}`;
       property="og:site_name"
       content="TND - 東京理科大学プログラミングサークル"
     />
+    <meta property="og:locale" content="ja_JP" />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={fullImageURL} />
-    <meta property="twitter:site" content="@TokyorikaND" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={fullImageURL} />
+    <meta name="twitter:site" content="@TokyorikaND" />
 
     <!-- JSON-LD structured data -->
-    <script type="application/ld+json" is:inline>
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "TND",
-        "description": "東京理科大学野田キャンパスで活動するプログラミングサークル",
-        "url": "https://tus-tnd.com",
-        "logo": "https://tus-tnd.com/logo.png",
-        "sameAs": [
-          "https://x.com/TokyorikaND",
-          "https://discord.gg/k3qMBEn3CC"
-        ],
-        "foundingDate": "2024",
-        "memberOf": {
-          "@type": "Organization",
-          "name": "東京理科大学"
-        }
-      }
-    </script>
+    <!-- 文字列中の "</script>" で script が閉じないよう < をエスケープする -->
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")}
+    ></script>
     <title>{title}</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Rubik+Doodle+Shadow&display=swap"
@@ -108,14 +155,25 @@ const fullImageURL = image.startsWith("http") ? image : `${siteURL}${image}`;
   </head>
   <body class="bg-gray-50">
     <SiteHeader />
-    <div class="relative min-h-screen overflow-hidden">
-      <!-- Gradient shape -->
-      <div class="absolute right-0 top-0 -z-10">
-        <div class="h-[600px] w-[600px] rotate-12 transform rounded-[40%] bg-gradient-to-br from-blue-400 to-teal-300 opacity-20 blur-3xl"></div>
+    <!-- overflow-hidden だと中の position: sticky（記事の目次・FAQ のカテゴリ）が効かないため、
+         スクロールコンテナを作らない overflow-clip で切る。Tailwind 4 の対応ブラウザ（Safari 16.4 以降）はすべて clip を解釈する -->
+    <!-- pb-24 は、スマホで右下に常に出る入会申し込みのボタンにフッターが隠れないための余白 -->
+    <div class="relative min-h-screen overflow-clip pb-24 lg:pb-0">
+      <!-- 背景のぼかし。左右交互に置き、ページの高さより下のものは overflow-clip で切れる。
+           lg 未満は小さめの3個、lg 以上は4個（spec 004） -->
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 -z-10"
+      >
+        <div class="absolute right-[-140px] -top-10 h-[340px] w-[340px] rotate-12 rounded-[40%] bg-linear-to-br/srgb from-blue-400 to-teal-300 opacity-[0.22] blur-[48px] lg:right-[-120px] lg:-top-20 lg:h-[600px] lg:w-[600px] lg:blur-3xl"></div>
+        <div class="absolute left-[-160px] top-[900px] h-[320px] w-[320px] -rotate-12 rounded-[40%] bg-linear-to-br/srgb from-tnd-blue to-tnd-violet opacity-[0.16] blur-[48px] lg:left-[-220px] lg:top-[640px] lg:h-[540px] lg:w-[540px] lg:blur-3xl"></div>
+        <div class="absolute right-[-150px] top-[1800px] h-[330px] w-[330px] rotate-12 rounded-[40%] bg-linear-to-br/srgb from-tnd-teal to-tnd-mint opacity-[0.16] blur-[48px] lg:right-[-200px] lg:top-[1260px] lg:h-[560px] lg:w-[560px] lg:blur-3xl"></div>
+        <div class="absolute left-[-160px] top-[1880px] hidden h-[500px] w-[500px] -rotate-12 rounded-[40%] bg-linear-to-br/srgb from-blue-400 to-teal-300 opacity-[0.16] blur-3xl lg:block"></div>
       </div>
-      <main class="pb-24 lg:pb-0">
+      <main>
         <slot />
       </main>
+      <SiteFooter />
     </div>
     <style is:global>
       body {

@@ -1,0 +1,117 @@
+---
+// よくある質問ページの本体。sections は utils/faq.ts の toFaqSections で作ったもの（本番は microCMS、dev ページは固定データ）
+import type { FaqSection } from "../../utils/faq";
+import FaqCategoryNav from "./FaqCategoryNav.astro";
+import FaqItem from "./FaqItem.astro";
+import FaqMoreQuestions from "./FaqMoreQuestions.astro";
+
+interface Props {
+  sections: FaqSection[];
+}
+
+const { sections } = Astro.props;
+---
+
+<!-- ページの見出し（docs/design/README.md「ページの見出し」） -->
+<div class="mx-auto max-w-[1440px] px-6 lg:px-20">
+  <div class="grid grid-cols-1 gap-5 pt-[72px] lg:pt-[104px] custom-md:grid-cols-[minmax(0,1fr)_480px] custom-md:items-end custom-md:gap-16">
+    <div>
+      <p class="text-[11px] font-medium leading-relaxed tracking-[0.2em] text-gray-500 lg:text-sm lg:leading-5 lg:tracking-[0.22em]">
+        TOKYO UNIVERSITY OF SCIENCE /
+        <span class="whitespace-nowrap">NODA CAMPUS</span>
+      </p>
+      <p
+        aria-hidden="true"
+        class="mt-3.5 font-['Rubik_Doodle_Shadow'] text-[42px] leading-none text-blue-500 md:text-[64px] lg:mt-5 lg:text-[72px] custom-md:text-[92px]"
+      >
+        FAQ
+      </p>
+      <h1 class="mt-4 text-[22px] font-bold tracking-[0.04em] text-gray-900 lg:mt-6 lg:text-[30px]">
+        よくある質問
+      </h1>
+    </div>
+    <p class="max-w-[560px] text-[15px] leading-[1.9] text-gray-600 lg:text-lg lg:leading-loose custom-md:max-w-none">
+      よくある質問をまとめました。ご不明な点がございましたら、お気軽にお問い合わせください。
+    </p>
+  </div>
+</div>
+
+<!-- カテゴリの一覧。スクロールしたらヘッダーの直下（lg 未満 56px・lg 以上は縮んだ後の 64px）に追従する -->
+<div class="sticky top-14 z-40 mt-10 lg:top-16 lg:mt-16">
+  <FaqCategoryNav sections={sections} />
+</div>
+
+<div class="mx-auto max-w-[1440px] px-6 lg:px-20 lg:pt-2">
+  <!-- lg 以上の「すべて開く」はカテゴリの行の右端にある -->
+  <div class="flex justify-end pt-2 lg:hidden">
+    <button
+      type="button"
+      data-faq-toggle-all
+      class="min-h-[44px] px-1 text-sm font-medium text-blue-600 hover:text-blue-700 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+    >
+      すべて開く
+    </button>
+  </div>
+
+  <!-- カテゴリごとの項目（docs/design/README.md「項目の見出し」）。
+       見出しの着地位置は、項目の上の線がカテゴリの行の下端にそろう値（spec 004 design「レスポンシブ」） -->
+  {sections.map((section) => (
+    <section
+      aria-labelledby={`cat-${section.anchor}`}
+      class="grid grid-cols-1 gap-3.5 border-t border-gray-200 py-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 lg:py-[52px]"
+    >
+      <div>
+        <p
+          aria-hidden="true"
+          class="font-['Rubik_Doodle_Shadow'] text-2xl leading-tight text-blue-500 lg:text-[28px]"
+        >
+          {section.en}
+        </p>
+        <h2
+          id={`cat-${section.anchor}`}
+          tabindex="-1"
+          class="mt-2 flex scroll-mt-[176px] items-baseline gap-2 text-[19px] font-bold focus:outline-hidden lg:mt-2.5 lg:scroll-mt-[225px] lg:gap-2.5 lg:text-2xl"
+        >
+          {section.name}
+          <span class="font-['Inter'] text-[13px] font-normal text-gray-500 lg:text-sm">
+            {section.items.length}
+            <span class="sr-only">件</span>
+          </span>
+        </h2>
+      </div>
+      <div class="min-w-0 self-start rounded-[14px] border border-gray-200 bg-white px-[18px] py-0.5 lg:px-7 lg:py-1">
+        {section.items.map((item) => (
+          <FaqItem item={item} />
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <FaqMoreQuestions />
+</div>
+
+<!-- JavaScript が動かないときは、閉じた回答を開けないので最初から表示する -->
+<noscript>
+  <style>
+    [data-faq-answer] {
+      display: block !important;
+      content-visibility: visible !important;
+    }
+    [data-faq-toggle-all] {
+      display: none;
+    }
+  </style>
+</noscript>
+
+<script>
+  import "../../scripts/faq";
+</script>
+
+<style>
+  /* カテゴリへの移動をなめらかにする。動きを減らす設定のときは即時に移動する */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html) {
+      scroll-behavior: smooth;
+    }
+  }
+</style>

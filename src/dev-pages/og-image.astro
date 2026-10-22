@@ -1,0 +1,76 @@
+---
+// OG 画像（public/og.png）の元の画面。1200×630 に固定し、Chrome のヘッドレスで撮って PNG にする（手順は README）。
+// ヘッダー・フッターを入れないため Layout は使わず、tailwind とフォントを自分で読み込む（spec 006）。
+// 人数など変わりうる事実は入れない。
+import "../styles/tailwind.css";
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>OG 画像（dev限定）</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik+Doodle+Shadow&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <style is:global>
+      body {
+        margin: 0;
+      }
+
+      /* dev のときに画面の下に出る Astro のツールバーを写さない */
+      astro-dev-toolbar {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="relative isolate grid h-[630px] w-[1200px] grid-cols-[minmax(0,1fr)_360px] items-center gap-10 overflow-hidden bg-gray-50 px-20 py-[72px] font-['Noto_Sans_JP'] text-gray-900">
+      <!-- 背景のぼかし（サイトと同じ色） -->
+      <div
+        aria-hidden="true"
+        class="absolute -right-[140px] -top-40 -z-10 h-[560px] w-[560px] rotate-12 rounded-[40%] bg-linear-to-br/srgb from-blue-400 to-teal-300 opacity-30 blur-[64px]"
+      ></div>
+      <div
+        aria-hidden="true"
+        class="absolute -bottom-[260px] -left-[200px] -z-10 h-[520px] w-[520px] -rotate-12 rounded-[40%] bg-linear-to-br/srgb from-tnd-blue to-tnd-violet opacity-20 blur-[64px]"
+      ></div>
+
+      <div>
+        <p class="text-lg font-medium tracking-[0.22em] text-gray-500">
+          TOKYO UNIVERSITY OF SCIENCE / NODA CAMPUS
+        </p>
+        <p class="-ml-2 mt-2.5 font-['Rubik_Doodle_Shadow'] text-[184px] leading-[0.9] text-blue-500">
+          TND
+        </p>
+        <p class="mt-7 text-5xl font-bold leading-[1.4] tracking-[0.02em]">
+          <span class="whitespace-nowrap">東京理科大学</span>
+          <span class="whitespace-nowrap">野田キャンパスの</span>
+          <br />
+          <span class="whitespace-nowrap">プログラミングサークル</span>
+        </p>
+        <p class="mt-7 font-['Inter'] text-[22px] font-semibold text-blue-700">
+          tus-tnd.com
+        </p>
+      </div>
+
+      <div class="relative h-full">
+        <img
+          src="/mainCharm.svg"
+          alt=""
+          class="absolute left-1/2 top-1/2 w-80 -translate-x-1/2 -translate-y-1/2 -rotate-6"
+        />
+      </div>
+    </div>
+  </body>
+</html>

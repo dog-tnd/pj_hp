@@ -1,6 +1,5 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import TwoLine from "../../components/TwoLine.astro";
 import NewsCard from "../../components/NewsCard";
 import {
   getAllPosts,
@@ -31,83 +30,104 @@ const primaryTags = allTagsSorted.slice(0, 8);
 const remainingTags = allTagsSorted.slice(8);
 ---
 
-<Layout title="ブログ | プログラミングサークル TND">
-  <header>
-    <TwoLine />
-  </header>
-
-  <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-    <!-- Hero Section -->
-    <section class="mb-16">
-      <h2
-        class="mb-8 text-gray-900 md:pt-[3rem]"
-        style="color: #000; font-family: 'Rubik Doodle Shadow'; font-size: 38px; font-style: normal; font-weight: 400; line-height: normal;"
-      >
-        Blog
-      </h2>
-      <div class="prose prose-lg max-w-xg text-gray-600 md:max-w-md lg:max-w-xl">
-        <p>
-          TNDメンバーが書いた技術記事や活動報告を紹介しています。プログラミングやWeb開発に関する知見を共有しています。
+<Layout
+  title="ブログ | プログラミングサークル TND"
+  description="東京理科大学のプログラミングサークルTNDのテックブログ。メンバーが書いたプログラミングやWeb開発の技術記事、イベントなどの活動報告を掲載しています。"
+>
+  <!-- Layout が <main> を持つので div。幅と余白は docs/design/README.md に合わせる -->
+  <div class="mx-auto max-w-[1440px] px-6 lg:px-20">
+    <!-- ページの見出し（docs/design/README.md「ページの見出し」） -->
+    <div class="grid grid-cols-1 gap-5 pt-[72px] lg:pt-[104px] custom-md:grid-cols-[minmax(0,1fr)_480px] custom-md:items-end custom-md:gap-16">
+      <div>
+        <p class="text-[11px] font-medium leading-relaxed tracking-[0.2em] text-gray-500 lg:text-sm lg:leading-5 lg:tracking-[0.22em]">
+          TOKYO UNIVERSITY OF SCIENCE /
+          <span class="whitespace-nowrap">NODA CAMPUS</span>
         </p>
+        <p
+          aria-hidden="true"
+          class="mt-3.5 font-['Rubik_Doodle_Shadow'] text-[42px] leading-none text-blue-500 md:text-[64px] lg:mt-5 lg:text-[72px] custom-md:text-[92px]"
+        >
+          BLOG
+        </p>
+        <h1 class="mt-4 text-[22px] font-bold tracking-[0.04em] text-gray-900 lg:mt-6 lg:text-[30px]">
+          テックブログ
+        </h1>
       </div>
+      <p class="max-w-[560px] text-[15px] leading-[1.9] text-gray-600 lg:text-lg lg:leading-loose custom-md:max-w-none">
+        TNDメンバーが書いた技術記事や活動報告を紹介しています。プログラミングやWeb開発に関する知見を共有しています。
+      </p>
+    </div>
 
-      <!-- タグフィルター -->
-      <div class="mt-8 md:mr-44 custom-md:mr-0">
-        <h3 class="text-lg font-semibold mb-4 text-gray-900">タグで絞り込み</h3>
-        <div class="flex flex-wrap gap-2">
-          <button
-            class="px-3 py-1 bg-blue-500 text-white rounded-full text-sm hover:bg-blue-600 active:bg-blue-700 transition-colors tag-filter active"
-            data-tag="all"
+    <div class="pt-12 lg:pt-24">
+      <!-- すべての記事（デザインシステム「項目の見出し」の上置き。カードの一覧は幅が要るので見出しを上に置く） -->
+      <section
+        id="all-posts"
+        aria-labelledby="all-posts-heading"
+        class="grid grid-cols-1 gap-3.5 border-t border-gray-200 pt-8 animate-fade-in animation-delay-300 lg:gap-8 lg:pt-[52px]"
+      >
+        <div>
+          <p
+            aria-hidden="true"
+            class="font-['Rubik_Doodle_Shadow'] text-2xl leading-tight text-blue-500 lg:text-[28px]"
           >
-            すべて
-          </button>
-          {primaryTags.map((tag) => (
-            <button
-              class={`px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors tag-filter`}
-              data-tag={tag}
-            >
-              {tag}
-            </button>
-          ))}
-          {remainingTags.length > 0 && (
-            <>
-              <div id="remaining-tags" class="hidden flex-wrap gap-2">
-                {remainingTags.map((tag) => (
-                  <button
-                    class={`px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors tag-filter`}
-                    data-tag={tag}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-              <button
-                id="show-all-tags"
-                class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm hover:bg-gray-200 transition-colors border border-gray-300"
-              >
-                +{remainingTags.length}個すべて表示
-              </button>
-              <button
-                id="hide-tags"
-                class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm hover:bg-gray-200 transition-colors border border-gray-300 hidden"
-              >
-                折りたたむ
-              </button>
-            </>
-          )}
+            ALL POSTS
+          </p>
+          <h2
+            id="all-posts-heading"
+            class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl"
+          >
+            すべての記事
+          </h2>
         </div>
-      </div>
-    </section>
 
-    <!-- すべての記事 -->
-    <section id="all-posts" class="py-16 animate-fade-in animation-delay-300">
-      <div class="container mx-auto px-4">
-        <h2 class="text-2xl font-bold mb-8 flex items-center">
-          <span class="w-8 h-8 bg-blue-500 rounded-full mr-3 flex items-center justify-center text-white">
-            📝
-          </span>
-          すべての記事
-        </h2>
+        <!-- タグフィルター（絞り込む記事の一覧のすぐ上に置く。ボタンの見た目と動きは今のまま） -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4 text-gray-900">
+            タグで絞り込み
+          </h3>
+          <div class="flex flex-wrap gap-2">
+            <button
+              class="px-3 py-1 bg-blue-500 text-white rounded-full text-sm hover:bg-blue-600 active:bg-blue-700 transition-colors tag-filter active"
+              data-tag="all"
+            >
+              すべて
+            </button>
+            {primaryTags.map((tag) => (
+              <button
+                class={`px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors tag-filter`}
+                data-tag={tag}
+              >
+                {tag}
+              </button>
+            ))}
+            {remainingTags.length > 0 && (
+              <>
+                <div id="remaining-tags" class="hidden flex-wrap gap-2">
+                  {remainingTags.map((tag) => (
+                    <button
+                      class={`px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors tag-filter`}
+                      data-tag={tag}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  id="show-all-tags"
+                  class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm hover:bg-gray-200 transition-colors border border-gray-300"
+                >
+                  +{remainingTags.length}個すべて表示
+                </button>
+                <button
+                  id="hide-tags"
+                  class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm hover:bg-gray-200 transition-colors border border-gray-300 hidden"
+                >
+                  折りたたむ
+                </button>
+              </>
+            )}
+          </div>
+        </div>
 
         <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 custom-md:grid-cols-3 gap-6 w-full"
@@ -138,15 +158,9 @@ const remainingTags = allTagsSorted.slice(8);
             );
           })}
         </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="mt-24 border-t border-gray-200 py-8">
-    <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-      <p class="text-sm text-gray-500">© 2026 TND All Rights Reserved.</p>
+      </section>
     </div>
-  </footer>
+  </div>
 
   <script is:inline>
     // タグフィルタリング機能

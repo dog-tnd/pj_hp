@@ -41,9 +41,9 @@ const isCurrent = (href: string) =>
       data-open-menu
       class="w-11 h-11 rounded-[10px] flex flex-col items-center justify-center gap-1.5"
     >
-      <span class="h-0.5 w-[22px] bg-gray-900 rounded-sm"></span>
-      <span class="h-0.5 w-[22px] bg-gray-900 rounded-sm"></span>
-      <span class="h-0.5 w-[14px] bg-gray-900 rounded-sm"></span>
+      <span class="h-0.5 w-[22px] bg-gray-900 rounded-xs"></span>
+      <span class="h-0.5 w-[22px] bg-gray-900 rounded-xs"></span>
+      <span class="h-0.5 w-[14px] bg-gray-900 rounded-xs"></span>
     </button>
   </div>
 </header>
@@ -54,7 +54,7 @@ const isCurrent = (href: string) =>
   data-scroll-lock
   class="w-screen h-dvh max-w-none max-h-none m-0 p-0 border-0 bg-[#111827] text-white"
 >
-  <div class="flex h-14 items-center justify-between pl-4 pr-[calc(0.75rem_+_var(--scrollbar-width,0px))] md:pl-8 md:pr-[calc(1.5rem_+_var(--scrollbar-width,0px))]">
+  <div class="flex h-14 items-center justify-between pl-4 pr-[calc(0.75rem+var(--scrollbar-width,0px))] md:pl-8 md:pr-[calc(1.5rem+var(--scrollbar-width,0px))]">
     <a href="/" aria-label="TND ホーム" class="flex items-center gap-2">
       <img src="/logo.png" alt="" class="w-7 h-7 rounded-full" />
       <span
@@ -126,7 +126,8 @@ const isCurrent = (href: string) =>
 <button
   type="button"
   data-open-join
-  class="fixed right-[calc(1rem_+_var(--scrollbar-width,0px))] bottom-7 z-40 h-[52px] px-[22px] rounded-full bg-[#F5BF48] text-white text-[15px] font-bold shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)]"
+  data-floating-join
+  class="fixed right-[calc(1rem+var(--scrollbar-width,0px))] bottom-7 z-40 h-[52px] px-[22px] rounded-full bg-[#F5BF48] text-white text-[15px] font-bold shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-opacity duration-200 motion-reduce:transition-none"
 >
   入会申し込み
 </button>
@@ -236,11 +237,9 @@ const isCurrent = (href: string) =>
     closeMenu();
   });
 
-  // メニュー内の「入会申し込み」。モーダルは JoinDialog が開くので、ここではメニューを即時に閉じるだけ。
-  // フェードさせないのは、モーダルへのフォーカス移動と重なって不具合が出やすいため
-  menuJoinButton.addEventListener("click", () => {
-    if (menu.open) menu.close();
-  });
+  // メニュー内の「入会申し込み」。モーダルは JoinDialog が開いてメニューの上に重なるので、
+  // メニューはその後ろでフェードアウトさせる（即時に閉じると、暗い背景が急に消えて不自然なため）
+  menuJoinButton.addEventListener("click", closeMenu);
 
   // Escapeキーで閉じた場合も close イベントで拾えるので、ここで状態を戻す
   menu.addEventListener("close", () => {
@@ -250,10 +249,47 @@ const isCurrent = (href: string) =>
     menu.removeAttribute("data-closing");
     openMenuButton.setAttribute("aria-expanded", "false");
     syncScrollLock();
+    // 入会モーダルが上に開いているときは、メニューを閉じたことでフォーカスが後ろへ戻らないよう、モーダルへ移す
+    const join = document.getElementById(
+      "join-dialog",
+    ) as HTMLDialogElement | null;
+    if (join?.open && !join.contains(document.activeElement)) {
+      join.querySelector<HTMLElement>("[data-close-join]")?.focus();
+    }
   });
 
   // 余白（dialog 自身）のクリックで閉じる
   menu.addEventListener("click", (e) => {
     if (e.target === menu) closeMenu();
   });
+
+  // ページ内にも「入会申し込み」がある画面では、両方が重なって見える瞬間ができる。
+  // ページ内のボタンが画面に入っている間だけ追従CTAを消して、重複を避ける。
+  const floatingJoin = document.querySelector<HTMLElement>(
+    "[data-floating-join]",
+  );
+  const inlineJoins = document.querySelectorAll("[data-join-inline]");
+
+  if (
+    floatingJoin &&
+    inlineJoins.length > 0 &&
+    "IntersectionObserver" in window
+  ) {
+    // 複数あっても「1つでも見えていれば隠す」で判定できるよう、見えている要素を集合で持つ
+    const visible = new Set<Element>();
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) visible.add(entry.target);
+        else visible.delete(entry.target);
+      }
+      const hide = visible.size > 0;
+      floatingJoin.classList.toggle("opacity-0", hide);
+      // 透明なだけだと押せてしまうので、クリックとフォーカスの両方を止める
+      floatingJoin.classList.toggle("pointer-events-none", hide);
+      floatingJoin.toggleAttribute("inert", hide);
+    });
+
+    inlineJoins.forEach((element) => observer.observe(element));
+  }
 </script>

@@ -15,20 +15,20 @@ export async function getStaticPaths() {
   const posts = await getAllPosts();
 
   return posts.map((post, index) => {
-    // 前後の記事を取得
+    // 前後の記事を取得。posts は新しい順なので、前＝1つ古い記事（index + 1）、次＝1つ新しい記事（index - 1）
     const prevPost =
-      index > 0
-        ? {
-            url: `/blog/${posts[index - 1].id}`,
-            title: posts[index - 1].title,
-          }
-        : undefined;
-
-    const nextPost =
       index < posts.length - 1
         ? {
             url: `/blog/${posts[index + 1].id}`,
             title: posts[index + 1].title,
+          }
+        : undefined;
+
+    const nextPost =
+      index > 0
+        ? {
+            url: `/blog/${posts[index - 1].id}`,
+            title: posts[index - 1].title,
           }
         : undefined;
 
@@ -117,13 +117,11 @@ const toAbsoluteUrl = (url: string) => new URL(url, Astro.site).href;
         image: toAbsoluteUrl(getAuthorImageUrl(post)),
         jobTitle: post.role,
       },
+      // 詳細（ロゴなど）は Layout の Organization が持つ。参照を解決しないツールのため型と名前は残す
       publisher: {
         "@type": "Organization",
+        "@id": "https://tus-tnd.com/#organization",
         name: "TND",
-        logo: {
-          "@type": "ImageObject",
-          url: "https://tus-tnd.com/logo.png",
-        },
       },
       datePublished: new Date(post.publishedAt!).toISOString(),
       dateModified: new Date(post.updatedAt).toISOString(),
@@ -144,10 +142,4 @@ const toAbsoluteUrl = (url: string) => new URL(url, Astro.site).href;
     nextPost={nextPost}
     relatedPosts={relatedPosts}
   />
-
-  <footer class="mt-24 border-t border-gray-200 py-8">
-    <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-      <p class="text-sm text-gray-500">© 2026 TND All Rights Reserved.</p>
-    </div>
-  </footer>
 </Layout>

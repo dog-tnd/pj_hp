@@ -138,7 +138,10 @@ const steps = [
 const posts = (await getAllPosts()).slice(0, 3);
 ---
 
-<Layout title="私たちについて | プログラミングサークル TND">
+<Layout
+  title="私たちについて | プログラミングサークル TND"
+  description="東京理科大学野田キャンパスのプログラミングサークルTND。ウェブ開発・デザイン・データサイエンスの3班で学び、ハッカソンやチーム開発に取り組みます。会費は年間4,000円、募集は毎年4〜5月です。"
+>
   <div class="about-page">
     <section
       id="about"
@@ -550,9 +553,6 @@ const posts = (await getAllPosts()).slice(0, 3);
       </div>
     </section>
   </div>
-  <footer class="about-footer">
-    <p>© 2026 TND All Rights Reserved.</p>
-  </footer>
 </Layout>
 
 <style>
@@ -1112,14 +1112,6 @@ const posts = (await getAllPosts()).slice(0, 3);
     font-size: 11px;
     color: #6b7280;
   }
-  .about-footer {
-    border-top: 1px solid #e5e7eb;
-    text-align: center;
-    background: #f9fafb;
-    padding: 24px 16px;
-    color: #6b7280;
-    font-size: 11px;
-  }
   @media (max-width: 767px) {
     .section-shell {
       width: calc(100% - 40px);
@@ -1379,9 +1371,6 @@ const posts = (await getAllPosts()).slice(0, 3);
     }
     .company-contact span {
       text-align: center;
-    }
-    .about-footer {
-      padding: 20px 16px 26px;
     }
   }
   @media (min-width: 768px) and (max-width: 1050px) {

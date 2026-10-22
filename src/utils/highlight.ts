@@ -45,8 +45,8 @@ function getHighlighter(): Promise<Highlighter> {
 const CODE_BLOCK = /<pre[^>]*>\s*<code([^>]*)>([\s\S]*?)<\/code>\s*<\/pre>/gi;
 const LANG_IN_CLASS = /class\s*=\s*["'][^"']*language-([\w+#.-]+)/i;
 
-// HTML エンティティを元のコード文字列へ戻す（&amp; は二重デコードを避けるため最後）
-function decodeEntities(text: string): string {
+// HTML エンティティを元の文字列へ戻す（&amp; は二重デコードを避けるため最後）。目次の見出しでも使う
+export function decodeEntities(text: string): string {
   return text
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")

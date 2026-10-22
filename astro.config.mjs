@@ -4,8 +4,8 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel";
+import tailwindcss from "@tailwindcss/vite";
 
 // Vercel ビルド時のみ SSR プレビュー（/blog/preview）を有効化する。
 // 本番（GitHub Pages）の静的ビルドには影響しない。
@@ -61,7 +61,6 @@ function devPagesRoutes() {
 export default defineConfig({
   integrations: [
     react(),
-    tailwind(),
     blogPreviewRoute(),
     devPagesRoutes(),
     // ビルドされた全ページ（microCMS の記事を含む）から sitemap を自動生成する
@@ -72,6 +71,16 @@ export default defineConfig({
     }),
   ],
   output: "static",
+  // Astro 7 の既定（"jsx"）はインライン要素の間の空白を消すため、6 までの扱いに固定する
+  compressHTML: true,
+  vite: {
+    plugins: [tailwindcss()],
+    build: {
+      // Vite 8 の既定（Lightning CSS）は animation と animation-timeline を一括指定にまとめ、
+      // ブラウザが無効として捨てるため（ヘッダーのスクロール連動が効かなくなる）、Vite 7 までの esbuild で圧縮する
+      cssMinify: "esbuild",
+    },
+  },
   site: "https://tus-tnd.com/",
   base: "",
   adapter: ssrPreview ? vercel() : undefined,
