@@ -1,22 +1,19 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import NewsCard from "../../components/NewsCard";
-import {
-  getAllPosts,
-  getImageUrl,
-  getAuthorImageUrl,
-} from "../../lib/microcms";
+import { getPostCardItems } from "../../lib/post-cards";
+import { externalAriaLabel } from "../../utils/post-card";
 import { formatDotDate } from "../../utils/date";
 
-// ブログ記事の取得（microCMS から公開済み記事を全件取得、publishedAt 降順）
-const sortedPosts = await getAllPosts();
+// 自サイトの記事と外部サイトの記事を、公開日時の新しい順に1つの並びにする（spec 008）
+const sortedPosts = await getPostCardItems();
 
-// すべてのタグを収集（使用頻度順）。tags は categories 参照なので name を集計
+// すべてのタグを収集（使用頻度順）。tags はカテゴリの名前の配列
 const tagCounts = new Map<string, number>();
 sortedPosts
-  .flatMap((post) => post.tags || [])
+  .flatMap((post) => post.tags)
   .forEach((tag) => {
-    tagCounts.set(tag.name, (tagCounts.get(tag.name) || 0) + 1);
+    tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
   });
 
 // 使用頻度順にソートされた全タグ
@@ -134,8 +131,7 @@ const remainingTags = allTagsSorted.slice(8);
           id="posts-container"
         >
           {sortedPosts.map((post, index) => {
-            const postUrl = `/blog/${post.id}`;
-            const postTags = (post.tags || []).map((tag) => tag.name);
+            const postTags = post.tags;
 
             return (
               <div
@@ -144,14 +140,18 @@ const remainingTags = allTagsSorted.slice(8);
                 data-tags={JSON.stringify(postTags)}
               >
                 <NewsCard
-                  image={getImageUrl(post)}
+                  image={post.image}
                   title={post.title}
                   description={post.description}
                   author={post.author}
                   role={post.role}
-                  authorImage={getAuthorImageUrl(post)}
+                  authorImage={post.authorImage}
                   date={formatDotDate(post.publishedAt)}
-                  url={postUrl}
+                  url={post.url}
+                  external={
+                    post.external ? { label: post.external.label } : undefined
+                  }
+                  ariaLabel={externalAriaLabel(post)}
                   client:load
                 />
               </div>
