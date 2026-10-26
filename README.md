@@ -4,7 +4,7 @@
 
 - **フレームワーク**: Astro 7（静的サイト生成）
 - **スタイル**: Tailwind CSS 4（`@tailwindcss/vite`）と `@tailwindcss/typography`。詳しくは下の「スタイル（Tailwind CSS 4）」
-- **ブログ記事・よくある質問**: microCMS（ヘッドレス CMS）から取得
+- **ブログ記事・外部サイトの記事・よくある質問**: microCMS（ヘッドレス CMS）から取得
 - **本番ホスティング**: GitHub Pages
 - **下書きプレビュー**: Vercel（`/blog/preview` のみ SSR）
 
@@ -111,6 +111,21 @@ URL は microCMS 管理画面の「画面プレビュー」から開けます。
 - 公開中の質問が0件、カテゴリが未選択・複数選ばれている質問がある、カテゴリの選択肢が「名前｜英字ラベル」の形でない、または同じ英字ラベルが2つのカテゴリにあるときは、**ビルドが失敗して公開されません**（直前の公開内容が残ります）。GitHub Actions のログに理由が出ます
 - よくある質問には Webhook を設定していないため、公開した内容は **6 時間ごとの定期リビルドで反映されます**（最大 6 時間かかります）。すぐに反映したいときは、GitHub Actions の「Deploy Astro site to GitHub Pages (Organization)」を手動で実行（Run workflow）してください
 
+## 外部サイトの記事の載せ方
+
+Zenn・Qiita などに書いた記事は、microCMS の「外部サイト」API（エンドポイント `external-posts`）に登録すると、`/blog` の一覧とトップの新着記事に、自サイトの記事と混ざって並びます（spec 008）。押すと新しいタブで外部サイトが開きます。
+
+- `url`（記事の URL）・`site`（サイトの種類：Zenn／Qiita／その他）・`title`（32字以内）・`description`（55字以内）・`author`（著者名）は必須です
+- `role`（役割）・`authorImage`（著者アイコン。ブログと同じ画像を選べます）・`image`（サムネイル）・`tags`（タグ。ブログと同じタグ）は任意です。サムネイルと著者アイコンが空のときは、サンプル画像が出ます
+- 並び順と日付は、microCMS の**公開日時**です。昔の記事を後から登録するときは、公開日時を外部サイトで公開した日に変えてください
+- 外部サイトの記事は、自サイトの記事ページ（`/blog/<id>`）を作らず、記事ページの「関連記事」「前後の記事」にも出ません
+
+次の記事は表示されません（ビルドは止まらず、GitHub Actions のログに理由が出ます）:
+
+- URL が `https://` で始まらない
+- サイトの種類が Zenn なのに `zenn.dev`、Qiita なのに `qiita.com` の URL でない
+- サイトの種類が選ばれていない
+
 ## スタイル（Tailwind CSS 4）
 
 Tailwind CSS 4 を Vite プラグイン（`@tailwindcss/vite`、`astro.config.mjs` で読み込み）で使っています。人が書くときも AI に書かせるときも、以下に従ってください。
@@ -140,7 +155,7 @@ pnpm astro check
 
 ## デプロイ
 
-- `main` への push、または **microCMS の Webhook**（ブログ記事の公開・更新・公開終了・削除）で GitHub Actions が走り、GitHub Pages へ自動デプロイされます
+- `main` への push、または **microCMS の Webhook**（ブログ記事・外部サイトの記事の公開・更新・公開終了・削除）で GitHub Actions が走り、GitHub Pages へ自動デプロイされます
 - Webhook を取りこぼした場合の保険として、**6 時間ごとの定期リビルド**も設定されています。よくある質問は Webhook を使わず、この定期リビルドで反映します
 
 ## プレビュー環境（Vercel）について
