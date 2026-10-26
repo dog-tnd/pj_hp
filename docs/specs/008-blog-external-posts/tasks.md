@@ -7,7 +7,7 @@
   - 混ざり方の確認用に、外部サイトの記事を公開する。本番（`main`）はこの API を読まないので、公開しても本番の表示は変わらない。テスト用の記事は `main` へのマージ前に公開を終える
 - [x] 1. spec（requirements / design / tasks）を追加
 - [x] 2. 今の `/blog` と `/` を 1440 / 375px で撮る（変える前の記録。コミットしない）
-- [ ] 3. `src/utils/post-card.ts`（共通の形・URL の確認・変換・並べ替え）を作る。`microcms.ts` に `ExternalPost` と `getAllExternalPosts()` を足し、`src/lib/post-cards.ts` を作る（まだどこからも呼ばない）
+- [x] 3. `src/utils/post-card.ts`（共通の形・URL の確認・変換・並べ替え）を作る。`microcms.ts` に `ExternalPost` と `getAllExternalPosts()` を足し、`src/lib/post-cards.ts` を作る（まだどこからも呼ばない）
 - [ ] 4. `NewsCard` に外部サイトのバッジ（`external`・`ariaLabel`）を足し、`ExternalMark` を作る。`/dev/news-card` に外部サイトの記事のサンプルを足す。デザインシステムの「部品」に「外部サイトの記事の印」を足す
 - [ ] 5. `/blog` を `getPostCardItems()` に替え、外部サイトの記事にバッジを付ける（タスク 0 の後）。デザインシステムの「適用状況」を直す
 - [ ] 6. トップの新着記事を `getPostCardItems()` に替え、外部サイトの記事にバッジを付ける
