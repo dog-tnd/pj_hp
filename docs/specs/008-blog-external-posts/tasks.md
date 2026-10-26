@@ -10,7 +10,7 @@
 - [x] 3. `src/utils/post-card.ts`（共通の形・URL の確認・変換・並べ替え）を作る。`microcms.ts` に `ExternalPost` と `getAllExternalPosts()` を足し、`src/lib/post-cards.ts` を作る（まだどこからも呼ばない）
 - [x] 4. `NewsCard` に外部サイトのバッジ（`external`・`ariaLabel`）を足し、`ExternalMark` を作る。`/dev/news-card` に外部サイトの記事のサンプルを足す。デザインシステムの「部品」に「外部サイトの記事の印」を足す
 - [x] 5. `/blog` を `getPostCardItems()` に替え、外部サイトの記事にバッジを付ける（タスク 0 の後）。デザインシステムの「適用状況」を直す
-- [ ] 6. トップの新着記事を `getPostCardItems()` に替え、外部サイトの記事にバッジを付ける
+- [x] 6. トップの新着記事を `getPostCardItems()` に替え、外部サイトの記事にバッジを付ける
 - [ ] 7. README に「外部サイトの記事の載せ方」（API の項目、昔の記事は公開日時を変える、URL が弾かれる条件）を書く
 - [ ] 検証: `pnpm build` がエラー0
 - [ ] 検証: `/dev/news-card` と `/blog`・`/` を 320 / 375 / 768 / 1024 / 1280 / 1440px で表示し、横スクロールが無いこと

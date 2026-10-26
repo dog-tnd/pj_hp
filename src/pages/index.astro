@@ -1,10 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getAllPosts, getImageUrl, type BlogPost } from "../lib/microcms";
+import ExternalMark from "../components/blog/ExternalMark.astro";
+import { getPostCardItems } from "../lib/post-cards";
+import { externalAriaLabel } from "../utils/post-card";
 import { formatDotDate } from "../utils/date";
 
-// ブログ記事の取得（microCMS から公開済み記事を全件取得、publishedAt 降順）
-const sortedPosts = await getAllPosts();
+// 自サイトの記事と外部サイトの記事を、公開日時の新しい順に1つの並びにする（spec 008）
+const sortedPosts = await getPostCardItems();
 
 // 新着記事：最新の1件を大きく、続く3件を一覧で出す（spec 005）
 const [featuredPost, ...restPosts] = sortedPosts.slice(0, 4);
@@ -52,7 +54,15 @@ const activities = [
   },
 ];
 
-const postUrl = (post: BlogPost) => `/blog/${post.id}`;
+// 外部サイトの記事は新しいタブで開く（spec 008）
+const linkAttrs = (post: (typeof sortedPosts)[number]) =>
+  post.external
+    ? {
+        target: "_blank",
+        rel: "noopener",
+        "aria-label": externalAriaLabel(post),
+      }
+    : {};
 ---
 
 <Layout
@@ -303,16 +313,25 @@ const postUrl = (post: BlogPost) => `/blog/${post.id}`;
         {featuredPost && (
           <div class="mt-5 grid grid-cols-1 gap-2 md:grid-cols-2 md:items-stretch md:gap-6 lg:mt-8 lg:gap-10">
             <a
-              href={postUrl(featuredPost)}
+              href={featuredPost.url}
+              {...linkAttrs(featuredPost)}
               class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             >
-              <img
-                src={getImageUrl(featuredPost)}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                class="aspect-2/1 w-full bg-gray-100 object-cover"
-              />
+              <span class="relative block">
+                <img
+                  src={featuredPost.image}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  class="aspect-2/1 w-full bg-gray-100 object-cover"
+                />
+                {featuredPost.external && (
+                  <ExternalMark
+                    label={featuredPost.external.label}
+                    variant="overlay"
+                  />
+                )}
+              </span>
               <div class="px-4 pb-[22px] pt-[18px] lg:px-7 lg:pb-[26px] lg:pt-[22px]">
                 <p class="font-['Inter'] text-xs text-gray-500 lg:text-[13px] lg:leading-4">
                   {formatDotDate(featuredPost.publishedAt)}
@@ -325,7 +344,9 @@ const postUrl = (post: BlogPost) => `/blog/${post.id}`;
                 </p>
                 <p class="mt-2.5 text-[13px] text-gray-700 lg:mt-3">
                   {featuredPost.author}
-                  <span class="text-gray-500">・{featuredPost.role}</span>
+                  {featuredPost.role && (
+                    <span class="text-gray-500">・{featuredPost.role}</span>
+                  )}
                 </p>
               </div>
             </a>
@@ -341,11 +362,12 @@ const postUrl = (post: BlogPost) => `/blog/${post.id}`;
                     ]}
                   >
                     <a
-                      href={postUrl(post)}
+                      href={post.url}
+                      {...linkAttrs(post)}
                       class="group grid flex-1 grid-cols-[88px_minmax(0,1fr)] items-center gap-3 py-4 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:grid-cols-[112px_minmax(0,1fr)] lg:gap-5 custom-md:grid-cols-[176px_minmax(0,1fr)]"
                     >
                       <img
-                        src={getImageUrl(post)}
+                        src={post.image}
                         alt=""
                         loading="lazy"
                         decoding="async"
@@ -358,8 +380,19 @@ const postUrl = (post: BlogPost) => `/blog/${post.id}`;
                         <h3 class="mt-1 max-w-[16em] text-sm font-bold leading-[1.55] group-hover:text-blue-700 lg:mt-1.5 lg:text-[17px]">
                           {post.title}
                         </h3>
-                        <p class="mt-1 text-xs text-gray-500 lg:mt-1.5 lg:text-[13px] lg:leading-4">
-                          {post.author}・{post.role}
+                        <!-- flex にして、名前と「・Zenn」の間に改行のすき間が入らないようにする -->
+                        <p class="mt-1 flex flex-wrap items-center text-xs text-gray-500 lg:mt-1.5 lg:text-[13px] lg:leading-4">
+                          <span>
+                            {post.role
+                              ? `${post.author}・${post.role}`
+                              : post.author}
+                          </span>
+                          {post.external && (
+                            <ExternalMark
+                              label={post.external.label}
+                              variant="inline"
+                            />
+                          )}
                         </p>
                       </div>
                     </a>
