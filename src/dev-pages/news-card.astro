@@ -1,6 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import NewsCard from "../components/NewsCard";
+import { externalAriaLabel, toPostCardItems } from "../utils/post-card";
+import type { ExternalPost } from "../lib/microcms";
+import { formatDotDate } from "../utils/date";
 
 // microCMS を呼ばずにカードのレイアウトを確認するためのサンプル。
 // タイトル・説明の長さを変えて、行数が増えたときに崩れないかを見る。
@@ -33,6 +36,91 @@ const common = {
   date: "2025.09.19",
   url: "#",
 };
+
+// 外部サイトの記事のサンプル（spec 008）。toPostCardItems に通すので、
+// 表示できない記事（下の「表示されない」もの）は出ず、dev サーバーのログに理由が出る
+const LIGHT = "/thumbnail_sample.jpg";
+const DARK = "/blog/2025-10-04/engineer.jpg";
+const base = {
+  createdAt: "2026-01-01T00:00:00.000Z",
+  updatedAt: "2026-01-01T00:00:00.000Z",
+  revisedAt: "2026-01-01T00:00:00.000Z",
+};
+const external = (
+  id: string,
+  site: string[],
+  url: string,
+  title: string,
+  image: string,
+): ExternalPost => ({
+  ...base,
+  id,
+  publishedAt: "2026-10-20T03:00:00.000Z",
+  url,
+  site,
+  title,
+  description:
+    "外部サイトに書いた記事の説明文。押すと新しいタブで外部サイトの記事が開く。",
+  author: "Ryoma",
+  role: "メンバー",
+  image: { url: image },
+  tags: [],
+});
+const externalItems = toPostCardItems(
+  [],
+  [
+    external(
+      "zenn-dark",
+      ["Zenn"],
+      "https://zenn.dev/tnd/articles/sample",
+      "Zenn の記事（暗い画像）",
+      DARK,
+    ),
+    external(
+      "qiita-light",
+      ["Qiita"],
+      "https://qiita.com/tnd/items/sample",
+      "Qiita の記事（明るい画像）",
+      LIGHT,
+    ),
+    external(
+      "other-dark",
+      ["その他"],
+      "https://note.com/tnd/n/sample",
+      "その他のサイトの記事（暗い画像）",
+      DARK,
+    ),
+    // ここから下は表示されない（ログに理由が出る）
+    external(
+      "invalid-http",
+      ["その他"],
+      "http://example.com/",
+      "【表示されないはず】https でない",
+      LIGHT,
+    ),
+    external(
+      "invalid-host",
+      ["Zenn"],
+      "https://qiita.com/tnd/items/sample",
+      "【表示されないはず】Zenn なのに qiita.com",
+      LIGHT,
+    ),
+    external(
+      "invalid-userinfo",
+      ["Zenn"],
+      "https://zenn.dev@example.com/",
+      "【表示されないはず】zenn.dev@example.com",
+      LIGHT,
+    ),
+    external(
+      "invalid-site",
+      [],
+      "https://zenn.dev/tnd/articles/sample",
+      "【表示されないはず】種類が空",
+      LIGHT,
+    ),
+  ],
+);
 ---
 
 <Layout title="NewsCard 表示サンプル（dev限定）" noindex={true}>
@@ -64,6 +152,31 @@ const common = {
             client:load
           />
         </div>
+      ))}
+    </div>
+
+    <h2 class="mb-4 mt-12 text-xl font-bold text-gray-900">
+      外部サイトの記事（spec 008）
+    </h2>
+    <p class="mb-8 text-sm text-gray-600">
+      画像の左上にサイトの名前、右上に外部リンクのアイコン。新しいタブで開く。
+      不正な URL の記事は表示されず、dev サーバーのログに理由が出る。
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 custom-md:grid-cols-3 gap-6 w-full">
+      {externalItems.map((item) => (
+        <NewsCard
+          image={item.image}
+          title={item.title}
+          description={item.description}
+          author={item.author}
+          role={item.role}
+          authorImage={item.authorImage}
+          date={formatDotDate(item.publishedAt)}
+          url={item.url}
+          external={item.external ? { label: item.external.label } : undefined}
+          ariaLabel={externalAriaLabel(item)}
+          client:load
+        />
       ))}
     </div>
   </main>
