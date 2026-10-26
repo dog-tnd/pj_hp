@@ -1,0 +1,57 @@
+---
+// 外部サイトの記事の印（spec 008、デザインシステム「外部サイトの記事の印」）。
+// 読み上げはリンクの aria-label で伝えるので、印はどれも aria-hidden にする
+interface Props {
+  // Zenn・Qiita・外部サイト
+  label: string;
+  // overlay：大きな画像の上に重ねる（画像の囲みは relative にする）
+  // inline：文字の行の中に置く
+  variant: "overlay" | "inline";
+  class?: string;
+}
+
+const { label, variant, class: className } = Astro.props;
+---
+
+{variant === "overlay" ? (
+  <span aria-hidden="true" class={className}>
+    <span class="absolute left-3 top-3 rounded-full bg-black/60 px-3 py-1 text-sm font-medium text-white backdrop-blur-xs">
+      {label}
+    </span>
+    <span class="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-xs">
+      <svg
+        class="h-4 w-4"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M14 3h7v7" />
+        <path d="M10 14L21 3" />
+        <path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5" />
+      </svg>
+    </span>
+  </span>
+) : (
+  <span
+    aria-hidden="true"
+    class:list={["inline-flex items-center gap-1 text-gray-500", className]}
+  >
+    ・{label}
+    <svg
+      class="h-3.5 w-3.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M14 3h7v7" />
+      <path d="M10 14L21 3" />
+      <path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5" />
+    </svg>
+  </span>
+)}

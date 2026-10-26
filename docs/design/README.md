@@ -131,6 +131,18 @@
 - 押せる部分の高さは 44px 以上
 - 新しいタブで開くリンクには、そのことを `aria-label` でも伝える
 
+### 外部サイトの記事の印
+
+Zenn・Qiita など外部サイトの記事へのリンクに付ける（spec 008。トップの新着記事とブログ一覧）。部品は `src/components/blog/ExternalMark.astro`。ブログ一覧のカード（`NewsCard`、React）では、同じクラスでカードの中に書いている。
+
+| 種類 | 置き場所 | クラス |
+|---|---|---|
+| 画像に重ねる（`overlay`） | 大きな画像の上。画像の囲みを `relative` にする | 左上（`left-3 top-3`）にサイトの名前：`rounded-full bg-black/60 px-3 py-1 text-sm font-medium text-white backdrop-blur-xs`。右上（`right-3 top-3`）に外部リンクのアイコン：`h-7 w-7` の丸（地は名前と同じ）に `h-4 w-4` のアイコン |
+| 文字の行に置く（`inline`） | 小さな画像の行（88px ほど）。著者名の後ろ | `・Zenn` と `h-3.5 w-3.5` のアイコン、`text-gray-500` |
+
+- 名前は `Zenn`・`Qiita`・`外部サイト`（その他のサイト）
+- 印は `aria-hidden="true"`。リンクは新しいタブで開き、`aria-label` を「<タイトル>（Zenn の記事・新しいタブで開きます）」にする
+
 ### フッター
 
 - 共通部品 `SiteFooter`（`src/components/SiteFooter.astro`）を `Layout` が `<main>` の後ろに出す。ページには書かない
