@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import NewsCard from "../components/NewsCard";
 import { externalAriaLabel, toPostCardItems } from "../utils/post-card";
 import type { ExternalPost } from "../lib/microcms";
+import { withOgImages } from "../lib/og-image";
 import { formatDotDate } from "../utils/date";
 
 // microCMS を呼ばずにカードのレイアウトを確認するためのサンプル。
@@ -38,7 +39,8 @@ const common = {
 };
 
 // 外部サイトの記事のサンプル（spec 008）。toPostCardItems に通すので、
-// 表示できない記事（下の「表示されない」もの）は出ず、dev サーバーのログに理由が出る
+// 表示できない記事（下の「表示されない」もの）は出ず、dev サーバーのログに理由が出る。
+// サムネイルが空の記事は withOgImages で OGP 画像を取りに行く（取れなければシンボル）
 const LIGHT = "/thumbnail_sample.jpg";
 const DARK = "/blog/2025-10-04/engineer.jpg";
 const base = {
@@ -51,7 +53,7 @@ const external = (
   site: string[],
   url: string,
   title: string,
-  image: string,
+  image?: string,
 ): ExternalPost => ({
   ...base,
   id,
@@ -63,63 +65,78 @@ const external = (
     "外部サイトに書いた記事の説明文。押すと新しいタブで外部サイトの記事が開く。",
   author: "Ryoma",
   role: "メンバー",
-  image: { url: image },
+  image: image ? { url: image } : undefined,
   tags: [],
 });
-const externalItems = toPostCardItems(
-  [],
-  [
-    external(
-      "zenn-dark",
-      ["Zenn"],
-      "https://zenn.dev/tnd/articles/sample",
-      "Zenn の記事（暗い画像）",
-      DARK,
-    ),
-    external(
-      "qiita-light",
-      ["Qiita"],
-      "https://qiita.com/tnd/items/sample",
-      "Qiita の記事（明るい画像）",
-      LIGHT,
-    ),
-    external(
-      "other-dark",
-      ["その他"],
-      "https://note.com/tnd/n/sample",
-      "その他のサイトの記事（暗い画像）",
-      DARK,
-    ),
-    // ここから下は表示されない（ログに理由が出る）
-    external(
-      "invalid-http",
-      ["その他"],
-      "http://example.com/",
-      "【表示されないはず】https でない",
-      LIGHT,
-    ),
-    external(
-      "invalid-host",
-      ["Zenn"],
-      "https://qiita.com/tnd/items/sample",
-      "【表示されないはず】Zenn なのに qiita.com",
-      LIGHT,
-    ),
-    external(
-      "invalid-userinfo",
-      ["Zenn"],
-      "https://zenn.dev@example.com/",
-      "【表示されないはず】zenn.dev@example.com",
-      LIGHT,
-    ),
-    external(
-      "invalid-site",
-      [],
-      "https://zenn.dev/tnd/articles/sample",
-      "【表示されないはず】種類が空",
-      LIGHT,
-    ),
-  ],
+const externalItems = await withOgImages(
+  toPostCardItems(
+    [],
+    [
+      external(
+        "zenn-dark",
+        ["Zenn"],
+        "https://zenn.dev/tnd/articles/sample",
+        "Zenn の記事（暗い画像）",
+        DARK,
+      ),
+      external(
+        "qiita-light",
+        ["Qiita"],
+        "https://qiita.com/tnd/items/sample",
+        "Qiita の記事（明るい画像）",
+        LIGHT,
+      ),
+      external(
+        "other-dark",
+        ["その他"],
+        "https://note.com/tnd/n/sample",
+        "その他のサイトの記事（暗い画像）",
+        DARK,
+      ),
+      // サムネイルが空：実在する記事は OGP 画像、存在しない記事はシンボルになる
+      external(
+        "qiita-og",
+        ["Qiita"],
+        "https://qiita.com/rya_ryo12357/items/ee8479a92d4a1bfb36f3",
+        "サムネイルが空（Qiita の OGP 画像になるはず）",
+      ),
+      external(
+        "qiita-404",
+        ["Qiita"],
+        "https://qiita.com/tnd/items/does-not-exist",
+        "サムネイルが空・記事が無い（シンボルになるはず）",
+      ),
+      // ここから下は表示されない（ログに理由が出る）
+      external(
+        "invalid-http",
+        ["その他"],
+        "http://example.com/",
+        "【表示されないはず】https でない",
+        LIGHT,
+      ),
+      external(
+        "invalid-host",
+        ["Zenn"],
+        "https://qiita.com/tnd/items/sample",
+        "【表示されないはず】Zenn なのに qiita.com",
+        LIGHT,
+      ),
+      external(
+        "invalid-userinfo",
+        ["Zenn"],
+        "https://zenn.dev@example.com/",
+        "【表示されないはず】zenn.dev@example.com",
+        LIGHT,
+      ),
+      external(
+        "invalid-site",
+        [],
+        "https://zenn.dev/tnd/articles/sample",
+        "【表示されないはず】種類が空",
+        LIGHT,
+      ),
+    ],
+  ),
 );
 ---
 

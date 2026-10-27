@@ -1,6 +1,7 @@
 // 一覧（/blog）とトップの新着記事に出す記事カードの項目を取得する。spec 008
 import { getAllExternalPosts, getAllPosts } from "./microcms";
 import { toPostCardItems, type PostCardItem } from "../utils/post-card";
+import { withOgImages } from "./og-image";
 
 // / と /blog の2ページで呼ぶので、ビルド中の取得（とログの警告）を1回にする。
 // dev ではページを開くたびに取り直す（microCMS の更新をすぐ見られるように）
@@ -11,7 +12,8 @@ async function fetchPostCardItems(): Promise<PostCardItem[]> {
     getAllPosts(),
     getAllExternalPosts(),
   ]);
-  return toPostCardItems(blogs, externals);
+  // サムネイルの無い外部サイトの記事には OGP 画像を当てる（spec 008 D8）
+  return withOgImages(toPostCardItems(blogs, externals));
 }
 
 /** 自サイトの記事と外部サイトの記事を、公開日時の新しい順に返す */

@@ -34,10 +34,17 @@ export type PostCardItem = {
   tags: string[];
   // 自サイトは /blog/{id}、外部は整えた URL
   url: string;
-  external: { site: ExternalSite; label: ExternalSiteLabel } | null;
+  external: {
+    site: ExternalSite;
+    label: ExternalSiteLabel;
+    // microCMS にサムネイルがあったか。無ければ OGP 画像を探す（lib/og-image.ts）
+    hasOwnImage: boolean;
+  } | null;
 };
 
 const SAMPLE_IMAGE = "/thumbnail_sample.jpg";
+// 外部サイトの記事で、サムネイルも OGP 画像も無いときに出すシンボル（spec 008 D8）
+export const EXTERNAL_FALLBACK_IMAGE = "/mainCharm.svg";
 const SAMPLE_AUTHOR_IMAGE = "/icon_sample.jpg";
 
 /**
@@ -110,14 +117,18 @@ export function fromExternalPost(
       id: post.id,
       title: post.title,
       description: post.description,
-      image: post.image?.url || SAMPLE_IMAGE,
+      image: post.image?.url || EXTERNAL_FALLBACK_IMAGE,
       author: post.author,
       role: post.role ?? "",
       authorImage: post.authorImage?.authorImage?.url || SAMPLE_AUTHOR_IMAGE,
       publishedAt: post.publishedAt,
       tags: (post.tags ?? []).map((tag) => tag.name),
       url: checked.href,
-      external: { site, label: SITE_LABELS[site] },
+      external: {
+        site,
+        label: SITE_LABELS[site],
+        hasOwnImage: Boolean(post.image?.url),
+      },
     },
   };
 }
