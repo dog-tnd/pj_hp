@@ -52,6 +52,7 @@
 | 入会申し込み（CTA） | `#F5BF48`（ホバー `#E9AF2E`）。**入会申し込みにだけ使う** |
 | 背景のぼかし・404 のプロンプト | `tnd` の色（`src/styles/tailwind.css` の `@theme`）。背景のぼかしと、404 のターミナルのプロンプトの帯（spec 007）にだけ使う |
 | マシュマロへの導線 | `marshmallow` の色。マシュマロの導線にだけ使う |
+| 外部サイトのバッジ | `zenn`・`qiita` の色（文字）と `zenn-tint`・`qiita-tint`（下地）。外部サイトの記事のバッジにだけ使う（spec 008） |
 
 ### 背景
 
@@ -137,10 +138,11 @@ Zenn・Qiita など外部サイトの記事へのリンクに付ける（spec 00
 
 | 種類 | 置き場所 | クラス |
 |---|---|---|
-| 画像に重ねる（`overlay`） | 大きな画像の上。画像の囲みを `relative` にする | 左上（`left-3 top-3`）にサイトの名前：`rounded-full bg-black/60 px-3 py-1 text-sm font-medium text-white backdrop-blur-xs`。右上（`right-3 top-3`）に外部リンクのアイコン：`h-7 w-7` の丸（地は名前と同じ）に `h-4 w-4` のアイコン |
+| 画像に重ねる（`overlay`） | 大きな画像の上。画像の囲みを `relative` にする | 左上（`left-3 top-3`）にサイトの名前：`rounded-full px-3 py-1 text-sm font-bold shadow-md` ＋ サイトの色。右上（`right-3 top-3`）に外部リンクのアイコン：`h-7 w-7` の丸（`shadow-md` ＋ サイトの色）に `h-4 w-4` のアイコン |
 | 文字の行に置く（`inline`） | 小さな画像の行（88px ほど）。著者名の後ろ | `・Zenn` と `h-3.5 w-3.5` のアイコン、`text-gray-500` |
 
 - 名前は `Zenn`・`Qiita`・`外部サイト`（その他のサイト）
+- サイトの色：Zenn は `bg-zenn-tint text-zenn`、Qiita は `bg-qiita-tint text-qiita`、その他は `bg-white text-gray-900`。ブランドの色（Zenn `#3EA8FF`・Qiita `#55C500`）そのままでは白地でコントラストが 4.5:1 に届かないので、同じ色味で濃くした色を文字に、ブランドの色を薄く混ぜた色を下地にする（どれも 4.5:1 以上）。クラスは `src/utils/post-card.ts` の `externalSiteBadgeClass()` で決める
 - 印は `aria-hidden="true"`。リンクは新しいタブで開き、`aria-label` を「<タイトル>（Zenn の記事・新しいタブで開きます）」にする
 
 ### フッター

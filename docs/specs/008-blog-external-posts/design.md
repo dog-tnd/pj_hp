@@ -76,7 +76,7 @@ microCMS のクライアントを読み込まない（dev ページでも使う�
 
 ### デザインの有無
 - 新しいデザインは作らない（D4）。ブログ一覧のカードは develop の `NewsCard`、タグの絞り込みも develop のまま。トップの新着記事は spec 005 のまま
-- 外部サイトのバッジは、#70 で3案から選んだ見た目（半透明の黒地に白文字）を使い、サイトの名前を3種類に広げる（D5）
+- 外部サイトのバッジは、白（Zenn・Qiita はブランドの色を薄く混ぜた白）の地に浮かせる影、文字はサイトの色にする（D9）。#70 で選んだ「半透明の黒地に白文字」から変えた
 
 ### 使用コンポーネント
 - 変更：
@@ -93,11 +93,20 @@ microCMS のクライアントを読み込まない（dev ページでも使う�
 
 ### `NewsCard` の外部サイトのバッジ
 - 画像の囲み（すでに `relative`）の中に `absolute` で重ねる。カードの高さ（`h-[440px]`）は変えず、本文やフッターを押し出さない
-- 左上（`left-3 top-3`）にサイトの名前：`rounded-full bg-black/60 px-3 py-1 text-sm font-medium text-white backdrop-blur-xs`
-- 右上（`right-3 top-3`）に外部リンクのアイコン：`flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-xs` の中に 16px（`h-4 w-4`）のアイコン（四角から右上に矢印が出る形）
+- 左上（`left-3 top-3`）にサイトの名前：`rounded-full px-3 py-1 text-sm font-bold shadow-md` ＋ サイトの色
+- 右上（`right-3 top-3`）に外部リンクのアイコン：`flex h-7 w-7 items-center justify-center rounded-full shadow-md` ＋ サイトの色の中に 16px（`h-4 w-4`）のアイコン（四角から右上に矢印が出る形）
+- サイトの色（`externalSiteBadgeClass(site)`、`src/utils/post-card.ts`）。`NewsCard` には `external` で `label` と `badgeClass` を渡す
+
+| サイト | クラス | 文字 | 下地 | コントラスト |
+|---|---|---|---|---|
+| Zenn | `bg-zenn-tint text-zenn` | `#0070CC` | `#F0F8FF` | 4.67:1 |
+| Qiita | `bg-qiita-tint text-qiita` | `#378100` | `#F1FAEB` | 4.56:1 |
+| その他 | `bg-white text-gray-900` | `#111827` | 白 | 17.7:1 |
+
+  - ブランドの色（Zenn `#3EA8FF`・Qiita `#55C500`）そのままでは白地で 2.6:1・2.2:1 しかなく、文字の 4.5:1 に届かない。人間の決定で、同じ色味のまま濃くした色を文字に、ブランドの色を白に 8% 混ぜた色を下地にした（2026-10-27）
+  - 色は `src/styles/tailwind.css` の `@theme` に `zenn`・`zenn-tint`・`qiita`・`qiita-tint` として足す
 - 名前とアイコンは `aria-hidden="true"`
 - `external` があるとき、`<a>` に `target="_blank" rel="noopener"` と `aria-label`
-- #70 の `backdrop-blur-sm`（v3、4px）は v4 では `backdrop-blur-xs`
 
 ### トップの「新着記事」（`src/pages/index.astro`）
 - `getAllPosts()` を `getPostCardItems()` に変え、先頭4件を使う。`postUrl()` は消して `item.url` を使う
@@ -127,7 +136,8 @@ microCMS のクライアントを読み込まない（dev ページでも使う�
 | 既存のカード・タグの絞り込み・トップの形を変えない | 厳守 | 人間の決定（D4） |
 | 自サイトと外部サイトの記事を1つの並びにし、公開日時の新しい順にする | 厳守 | 人間の決定（D1・D2・D3） |
 | 外部サイトの記事は新しいタブで開き、名前と外部リンクのアイコンで見分けられる | 厳守 | #70 の決定。押す前に外へ出ると分かるように |
-| バッジの見た目（半透明の黒、左上に名前・右上にアイコン） | 厳守 | #70 で3案から選んだもの |
+| バッジの見た目（白い地・浮かせる影・サイトの色の文字、左上に名前・右上にアイコン） | 厳守 | 人間の決定（D9） |
+| サイトの色の濃さ | 意図を守れば自由 | ブランドと同じ色味で、下地の上でコントラスト 4.5:1 以上ならよい |
 | トップの一覧3件では印を文字の行に置く | 意図を守れば自由 | 外部サイトだと分かり、小さな画像を隠さなければよい（判断） |
 
 ## 影響範囲
