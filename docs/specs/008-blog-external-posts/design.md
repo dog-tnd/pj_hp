@@ -17,7 +17,7 @@
 | `author` | 筆者名義 | テキストフィールド | ✔ | `blog` と同じ |
 | `role` | 筆者役職 | テキストフィールド | | `blog` と同じ |
 | `authorImage` | 筆者アイコン | コンテンツ参照（`author_image`） | | `blog` の `authorImage` と同じ参照先 |
-| `image` | サムネイル画像 | 画像 | | 空ならサンプル画像 |
+| `image` | サムネイル画像 | 画像 | | 初期値なし。空なら OGP 画像、それも無ければシンボル（D8） |
 | `tags` | タグ | 複数コンテンツ参照（`categories`） | | `blog` と同じタグを使う |
 
 表示名は `blog` に合わせた（2026-10-26 に管理画面で設定済み）。
@@ -37,7 +37,7 @@ type PostCardItem = {
   id: string;           // microCMS のコンテンツ ID（data 属性・key 用）
   title: string;
   description: string;
-  image: string;        // フォールバック済みの URL
+  image: string;        // フォールバック済みの URL（外部サイトの記事は OGP 画像の取得の前はシンボル）
   author: string;
   role: string;         // 空文字のこともある
   authorImage: string;  // フォールバック済みの URL
@@ -56,10 +56,21 @@ type PostCardItem = {
 - `fromExternalPost(post)`：外部サイトの記事を共通の形にする。`site` が1つだけ選ばれていて、`checkExternalUrl` を通れば項目を、通らなければ理由を返す。`href` には整えた URL を使う
 - `toPostCardItems(blogs, externals)`：上の2つで変換し、外した外部サイトの記事は `console.warn` に「外部サイトの記事 <id> を表示しません：<理由>」を出し（ビルドは止めない）、`Date.parse(publishedAt)` の降順で返す。dev ページでも、不正な URL の固定データをこれに通して確かめる
 
+### OGP 画像（`src/lib/og-image.ts`）
+microCMS のクライアントを読み込まない（dev ページでも使うため）。
+
+- `fetchOgImage(pageUrl)`：記事のページを取得し、`<meta property="og:image">`（無ければ `name="twitter:image"`）の `content` を返す。取れなければ理由を返す
+  - 5秒で打ち切る（`AbortSignal.timeout`）。HTTP のエラー・HTML でない応答は不可
+  - `content` の `&amp;` などを戻し、ページの URL を基準に `new URL()` で整える。`https:` でなければ不可
+  - 結果はモジュールの中で URL ごとに1回だけ取る（`/` と `/blog` で重複して取らない。dev でも記事ごとに毎回は取らない）
+- `withOgImages(items)`：外部サイトの記事のうち、microCMS のサムネイルが空のもの（`external.hasOwnImage` が false）だけ OGP 画像を取り、`image` を差し替える。取れなければシンボルのまま、`console.warn` に「外部サイトの記事 <id> の OGP 画像を使いません：<理由>。シンボルを使います」
+- OGP 画像は保存せず、外部サイトの URL をそのまま `<img src>` に使う（D8）
+- `fromExternalPost` は、サムネイルが空なら `image` をシンボル（`/mainCharm.svg`）にし、`external.hasOwnImage` に、サムネイルがあったかを入れる
+
 ### 取得（`src/lib/microcms.ts`・`src/lib/post-cards.ts`）
 - `microcms.ts` に `ExternalPost` 型と `getAllExternalPosts()` を足す（`getAllPosts()` と同じく `getAllContents` で全件、下書きを除く）
 - `getImageUrl`・`getAuthorImageUrl` の引数を `BlogPost | ExternalPost` に広げる
-- `post-cards.ts`：`getPostCardItems()` は `blog` と `external-posts` を並行して取り、`toPostCardItems` に渡す。`/` と `/blog` の2ページで呼ぶので、取得の Promise をモジュールの中で1つだけ持ち、ビルド中の取得と警告を1回にする
+- `post-cards.ts`：`getPostCardItems()` は `blog` と `external-posts` を並行して取り、`toPostCardItems` に渡し、`withOgImages` で OGP 画像を当てる。`/` と `/blog` の2ページで呼ぶので、取得の Promise をモジュールの中で1つだけ持ち、ビルド中の取得と警告を1回にする
 
 ## UI
 
@@ -104,6 +115,7 @@ type PostCardItem = {
 - 今のサンプル（タイトル・説明の長さ違い）はそのまま残し、外部サイトの記事の欄を足す
   - Zenn・Qiita・外部サイトの3種類を、明るい画像と暗い画像で出す
   - 不正な URL（`http:`、Zenn なのに `qiita.com`、`zenn.dev@example.com`、種類が空）の固定データを `toPostCardItems` に通し、表示されないこととログの理由を確かめる
+  - サムネイルが空の記事（実在する Qiita の記事と、存在しない URL）を `withOgImages` に通し、OGP 画像とシンボルになることを確かめる
 
 ### デザインシステム（`docs/design/README.md`）の更新
 - 「部品」に「外部サイトの記事の印」を足す（トップとブログ一覧の2ページで使うため）
