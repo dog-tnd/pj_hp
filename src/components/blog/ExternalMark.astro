@@ -7,18 +7,35 @@ interface Props {
   // overlay：大きな画像の上に重ねる（画像の囲みは relative にする）
   // inline：文字の行の中に置く
   variant: "overlay" | "inline";
+  // overlay の下地と文字・アイコンの色（utils/post-card.ts の externalSiteBadgeClass）
+  badgeClass?: string;
   class?: string;
 }
 
-const { label, variant, class: className } = Astro.props;
+const {
+  label,
+  variant,
+  badgeClass = "bg-white text-gray-900",
+  class: className,
+} = Astro.props;
 ---
 
 {variant === "overlay" ? (
   <span aria-hidden="true" class={className}>
-    <span class="absolute left-3 top-3 rounded-full bg-black/60 px-3 py-1 text-sm font-medium text-white backdrop-blur-xs">
+    <span
+      class:list={[
+        "absolute left-3 top-3 rounded-full px-3 py-1 text-sm font-bold shadow-md",
+        badgeClass,
+      ]}
+    >
       {label}
     </span>
-    <span class="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-xs">
+    <span
+      class:list={[
+        "absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full shadow-md",
+        badgeClass,
+      ]}
+    >
       <svg
         class="h-4 w-4"
         viewBox="0 0 24 24"

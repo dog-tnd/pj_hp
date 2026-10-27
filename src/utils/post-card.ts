@@ -157,6 +157,21 @@ export function toPostCardItems(
   );
 }
 
+/**
+ * 外部サイトのバッジの下地と文字・アイコンの色（spec 008 D9）。
+ * ブランドの色と同じ色味のまま、下地の上でコントラスト 4.5:1 以上になるようにした色（tailwind.css の @theme）
+ */
+export function externalSiteBadgeClass(site: ExternalSite): string {
+  switch (site) {
+    case "Zenn":
+      return "bg-zenn-tint text-zenn";
+    case "Qiita":
+      return "bg-qiita-tint text-qiita";
+    default:
+      return "bg-white text-gray-900";
+  }
+}
+
 /** 新しいタブで開く外部サイトの記事の読み上げ用ラベル */
 export function externalAriaLabel(item: PostCardItem): string | undefined {
   if (!item.external) return undefined;

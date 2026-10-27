@@ -12,7 +12,8 @@ interface NewsCardProps {
   // カードの幅・高さを上書きしたい場合に指定（未指定時は従来サイズ）
   sizeClass?: string;
   // 外部サイト（Zenn・Qiita など）の記事のとき、画像にバッジを重ねて新しいタブで開く（spec 008）
-  external?: { label: string };
+  // label：サイトの名前、badgeClass：下地と文字・アイコンの色（utils/post-card.ts の externalSiteBadgeClass）
+  external?: { label: string; badgeClass: string };
   // 外部サイトの記事の読み上げ用（例：「<タイトル>（Qiita の記事・新しいタブで開きます）」）
   ariaLabel?: string;
 }
@@ -47,14 +48,18 @@ const NewsCard: FC<NewsCardProps> = ({
           alt="Card layout"
           className="object-cover w-full h-full"
         />
-        {/* 外部サイトのバッジ（#70 で決めた見た目。デザインシステム「外部サイトの記事の印」）。
+        {/* 外部サイトのバッジ（白い地・浮かせる影・サイトの色。デザインシステム「外部サイトの記事の印」）。
             画像の上に重ねるだけなので、カードの高さは変わらない。読み上げはリンクの aria-label で伝える */}
         {external && (
           <span aria-hidden="true">
-            <span className="absolute left-3 top-3 rounded-full bg-black/60 px-3 py-1 text-sm font-medium text-white backdrop-blur-xs">
+            <span
+              className={`absolute left-3 top-3 rounded-full px-3 py-1 text-sm font-bold shadow-md ${external.badgeClass}`}
+            >
               {external.label}
             </span>
-            <span className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-xs">
+            <span
+              className={`absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full shadow-md ${external.badgeClass}`}
+            >
               <svg
                 className="h-4 w-4"
                 viewBox="0 0 24 24"

@@ -26,6 +26,14 @@
   --color-marshmallow-tint: #fbeeee;
   --color-marshmallow-icon: #b5525a;
 
+  /* 外部サイトの記事のバッジ（spec 008 D9）。外部サイトのバッジにだけ使う。
+     文字はブランドの色（Zenn #3ea8ff・Qiita #55c500）と同じ色味のまま、下地の上でコントラスト 4.5:1 以上になるまで濃くした色。
+     下地はブランドの色を白に 8% 混ぜた色 */
+  --color-zenn: #0070cc;
+  --color-zenn-tint: #f0f8ff;
+  --color-qiita: #378100;
+  --color-qiita-tint: #f1faeb;
+
   /* v4 の既定の色（oklch）は v3 と色味が違うため、使っている色の系統は v3 の値に戻す */
   --color-slate-50: #f8fafc;
   --color-slate-100: #f1f5f9;

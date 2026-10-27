@@ -2,7 +2,10 @@
 import Layout from "../../layouts/Layout.astro";
 import NewsCard from "../../components/NewsCard";
 import { getPostCardItems } from "../../lib/post-cards";
-import { externalAriaLabel } from "../../utils/post-card";
+import {
+  externalAriaLabel,
+  externalSiteBadgeClass,
+} from "../../utils/post-card";
 import { formatDotDate } from "../../utils/date";
 
 // 自サイトの記事と外部サイトの記事を、公開日時の新しい順に1つの並びにする（spec 008）
@@ -149,7 +152,14 @@ const remainingTags = allTagsSorted.slice(8);
                   date={formatDotDate(post.publishedAt)}
                   url={post.url}
                   external={
-                    post.external ? { label: post.external.label } : undefined
+                    post.external
+                      ? {
+                          label: post.external.label,
+                          badgeClass: externalSiteBadgeClass(
+                            post.external.site,
+                          ),
+                        }
+                      : undefined
                   }
                   ariaLabel={externalAriaLabel(post)}
                   client:load
