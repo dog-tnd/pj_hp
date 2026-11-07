@@ -8,6 +8,8 @@
 | `logo.svg` | 2.7 MB | 2560px の PNG を base64 で埋め込んだだけの SVG。48px 表示には過大なため `public/logo.png`（192px / 62KB）に差し替え |
 | `sns-line.png` | 22 KB | 参照なし |
 | `x_logo.svg` | 430 B | 参照なし（X のロゴは `public/sns-x.png` を使用中） |
+| `hero.jpg` | 695 KB | about ページのヒーロー画像を透明な `public/about/hero.png` に差し替え |
+| `about.css` | 約 21 KB | about ページのスタイルを Tailwind クラスへ移行。参照されない旧 CSS を保管 |
 | `menu.tsx` | 11 KB | 旧ナビゲーション（React）。`SiteHeader.astro` に置き換え（`docs/specs/001-site-header`） |
 | `MenuLayout.astro` | 680 B | `menu.tsx` を右カラムに置く旧3カラムレイアウト。ヘッダーの上部固定化で不要に |
 | `index.css` | 509 B | `menu.tsx` だけが読み込んでいた。フォントは `Layout.astro` の `<link>` で読み込み済み、`font-noto-*` クラスは未使用 |

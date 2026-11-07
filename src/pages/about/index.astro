@@ -1,467 +1,763 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import TwoLine from "../../components/TwoLine.astro";
+import {
+  getAllPosts,
+  getAuthorImageUrl,
+  getImageUrl,
+} from "../../lib/microcms";
+import { formatDotDate } from "../../utils/date";
+
+// 写真は public/about/ に配置し、対応するパスを設定する。
+// 空文字の枠はダミーを表示する。
+const aboutPhotos = {
+  hero: "/about/hero.png",
+  activities: {
+    internalHackathon: "/about/activityhackathonin.jpg",
+    externalHackathon: "/about/activityhackathonout.jpg",
+    social: "/about/activitysocial.jpg",
+  },
+  community: { presentation: "", work: "/about/MTG.png", social: "" },
+  voices: { web: "/about/memberA.png", data: "/about/memberB.png" },
+  companies: "/about/partners.jpg",
+};
+
+const activities = [
+  {
+    number: "01",
+    en: "HACKATHON",
+    title: "ハッカソン",
+    description:
+      "サークル内で開発イベントを開きます。短期間でチームを組み、動くものをつくって発表します。",
+    photo: aboutPhotos.activities.internalHackathon,
+    width: 593,
+    height: 445,
+  },
+  {
+    number: "02",
+    en: "COMPETITION",
+    title: "外部コンテスト",
+    description:
+      "Kaggleをはじめとするデータ分析コンペティションに、チームを編成して参加しています。近年はAIエージェントの開発にも取り組んでいます。",
+    photo: aboutPhotos.activities.externalHackathon,
+    width: 693,
+    height: 520,
+  },
+  {
+    number: "03",
+    en: "SOCIAL",
+    title: "ソーシャルイベント",
+    description:
+      "BBQ・懇親会・LT会など。つくる時間と同じくらい、話す時間を大切にしています。",
+    photo: aboutPhotos.activities.social,
+    width: 583,
+    height: 437,
+  },
+];
+
+const teams = [
+  {
+    en: "WEB DEVELOPMENT",
+    title: "ウェブ開発",
+    tags: [
+      "HTML / CSS",
+      "TypeScript",
+      "React / Next.js",
+      "Node.js",
+      "Go",
+      "Python",
+    ],
+  },
+  {
+    en: "DATA SCIENCE",
+    title: "データサイエンス",
+    tags: [
+      "Python",
+      "pandas",
+      "scikit-learn",
+      "PyTorch",
+      "データ分析",
+      "可視化",
+      "機械学習",
+      "深層学習",
+      "統計",
+      "Kaggle",
+      "AIエージェント",
+    ],
+  },
+];
+
+const steps = [
+  {
+    number: "01",
+    title: "入会申し込み",
+    description:
+      "「入会申し込み」のボタンから、Discordへの参加方法を確認します。",
+  },
+  {
+    number: "02",
+    title: "Discord に参加",
+    description:
+      "サーバーに入って自己紹介をします。普段のやりとりもここで行います。",
+  },
+  {
+    number: "03",
+    title: "チームを選んで活動",
+    description: "ウェブ開発かデータサイエンスを選びます。掛け持ちもできます。",
+  },
+];
+
+const posts = (await getAllPosts()).slice(0, 3);
 ---
 
 <Layout
   title="私たちについて | プログラミングサークル TND"
-  description="東京理科大学のプログラミングサークルTNDの紹介です。ハッカソンやチーム開発などの活動、Web開発・データサイエンスの2チーム、会費（年4,000円）、入会の方法（通年で募集）をまとめています。"
+  description="東京理科大学野田キャンパスのプログラミングサークルTND。ウェブ開発とデータサイエンスの2チームで、ハッカソンやチーム開発に取り組みます。会費は年間4,000円、メンバーは通年で募集しています。"
 >
-  <header>
-    <TwoLine />
-  </header>
-
-  <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-    <!-- 「プログラミングサークルTNDとは？」セクション -->
-    <section id="about" class="py-20 bg-gray-50">
-      <div class="container mx-auto px-4 py-10">
-        <h2
-          class="text-3xl md:text-4xl font-bold text-center mb-12"
-          style="font-family: 'Rubik Doodle Shadow';"
-        >
-          プログラミングサークル TNDとは？
-        </h2>
-        <div class="prose text-gray-600 mx-auto max-w-3xl">
-          <p>
-            TNDは、ウェブ開発、デザイン、データサイエンスに焦点を当てた東京理科大学野田キャンパスのプログラミングサークルです。2024年に設立され、実践的なプロジェクトや共同イベントを通して共に学び、成長することに力を入れています。
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 活動セクション -->
-    <section id="activities" class="py-20">
-      <div class="container mx-auto px-4">
-        <h2
-          class="text-3xl md:text-4xl font-bold text-center mb-6"
-          style="font-family: 'Rubik Doodle Shadow';"
-        >
-          活動
-        </h2>
-        <p class="text-lg text-center text-gray-600 mb-16 max-w-3xl mx-auto">
-          TNDでは、実践的なスキル向上と仲間との交流を目的に、様々なイベントを開催しています。
-        </p>
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <!-- 勉強会カード -->
-          <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 group hover:-translate-y-2 duration-300">
-            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-8 w-8 text-blue-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <!-- 例として＋アイコン -->
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold mb-3">勉強会</h3>
-            <ul class="space-y-2 text-gray-600">
-              <li>基礎から応用までの学習</li>
-              <li>定期開催で継続的な向上</li>
-              <li>先輩や仲間からのフィードバック</li>
-            </ul>
-          </div>
-          <!-- 内部ハッカソンカード -->
-          <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 group hover:-translate-y-2 duration-300">
-            <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-indigo-200 transition-colors">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-8 w-8 text-indigo-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold mb-3">内部ハッカソン</h3>
-            <ul class="space-y-2 text-gray-600">
-              <li>サークル内での開発コンペ</li>
-              <li>限られた時間でプロジェクト構築</li>
-              <li>仲間から迅速なフィードバック</li>
-            </ul>
-          </div>
-          <!-- 外部ハッカソンカード -->
-          <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 group hover:-translate-y-2 duration-300">
-            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-purple-200 transition-colors">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-8 w-8 text-purple-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold mb-3">外部ハッカソン</h3>
-            <ul class="space-y-2 text-gray-600">
-              <li>企業主催イベントへの参加</li>
-              <li>他大学との交流</li>
-            </ul>
-          </div>
-          <!-- ソーシャルイベントカード -->
-          <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 group hover:-translate-y-2 duration-300">
-            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-green-200 transition-colors">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-8 w-8 text-green-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold mb-3">ソーシャルイベント</h3>
-            <ul class="space-y-2 text-gray-600">
-              <li>BBQや懇親会などの交流</li>
-              <li>ライトニングトーク（LT）セッション</li>
-              <li>技術以外のつながりを深める</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- コースセクション -->
-    <section id="teams" class="py-20 bg-gray-50">
-      <div class="container mx-auto px-4">
-        <h2
-          class="text-3xl md:text-4xl font-bold text-center mb-8"
-          style="font-family: 'Rubik Doodle Shadow';"
-        >
-          チーム
-        </h2>
-        <div class="flex justify-center mb-8" x-data="{ activeTab: 'web' }">
-          <div class="inline-flex rounded-lg border border-gray-200 bg-white p-1">
-            <button class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-300 web-tab">
-              ウェブ開発
-            </button>
-            <button class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-300 design-tab">
-              デザイン
-            </button>
-            <button class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-300 data-tab">
-              データサイエンス
-            </button>
-          </div>
-        </div>
-        <div class="flex flex-col gap-8">
-          <!-- ウェブ開発コース -->
-          <div
-            id="web-content"
-            class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-blue-500 course-content"
-          >
-            <div class="flex items-center mb-4">
-              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6 text-blue-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945"
-                  />
-                </svg>
-              </div>
-              <h3 class="text-2xl font-bold">ウェブ開発</h3>
-            </div>
-            <p class="text-gray-600 mb-4">
-              フロントエンドとバックエンドの開発をします。
-            </p>
-            <div class="grid md:grid-cols-2 gap-4">
-              <div>
-                <h4 class="font-semibold text-lg mb-2">フロントエンド</h4>
-                <ul class="list-disc list-inside text-gray-600">
-                  <li>HTML / CSS</li>
-                  <li>JavaScript &amp; TypeScript</li>
-                  <li>React / Next.js</li>
-                </ul>
-              </div>
-              <div>
-                <h4 class="font-semibold text-lg mb-2">バックエンド</h4>
-                <ul class="list-disc list-inside text-gray-600">
-                  <li>Python</li>
-                  <li>Golang</li>
-                  <li>Node.js（TypeScript）</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <!-- デザインコース -->
-          <div
-            id="design-content"
-            class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-orange-500 course-content hidden"
-          >
-            <div class="flex items-center mb-4">
-              <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6 text-orange-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343"
-                  />
-                </svg>
-              </div>
-              <h3 class="text-2xl font-bold">デザイン</h3>
-            </div>
-            <p class="text-gray-600 mb-4">
-              UI/UXの基礎と、高度なツールを学び、魅力的なデジタル体験を創り出します。
-            </p>
-            <div class="grid md:grid-cols-2 gap-4">
-              <div>
-                <h4 class="font-semibold text-lg mb-2">UI/UX基礎</h4>
-                <ul class="list-disc list-inside text-gray-600">
-                  <li>Figma</li>
-                  <li>デザイン原則</li>
-                  <li>ユーザーリサーチ</li>
-                </ul>
-              </div>
-              <div>
-                <h4 class="font-semibold text-lg mb-2">その他ツール</h4>
-                <ul class="list-disc list-inside text-gray-600">
-                  <li>Illustrator</li>
-                  <li>Photoshop</li>
-                  <li>モーションデザイン</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <!-- データサイエンスコース -->
-          <div
-            id="data-content"
-            class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-green-500 course-content hidden"
-          >
-            <div class="flex items-center mb-4">
-              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6 text-green-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  />
-                </svg>
-              </div>
-              <h3 class="text-2xl font-bold">データサイエンス</h3>
-            </div>
-            <p class="text-gray-600 mb-4">
-              データ分析、AI、機械学習の初心者向け入門コースです。
-            </p>
-            <div class="grid md:grid-cols-2 gap-4">
-              <div>
-                <h4 class="font-semibold text-lg mb-2">基礎</h4>
-                <ul class="list-disc list-inside text-gray-600">
-                  <li>Pythonプログラミングの基礎</li>
-                  <li>pandas &amp; NumPy</li>
-                  <li>scikit-learn</li>
-                </ul>
-              </div>
-              <div>
-                <h4 class="font-semibold text-lg mb-2">応用</h4>
-                <ul class="list-disc list-inside text-gray-600">
-                  <li>Kaggleコンペティション</li>
-                  <li>AI・機械学習</li>
-                  <li>データ可視化</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TNDに参加する理由セクション -->
+  <div class="font-['Noto_Sans_JP'] text-gray-900">
     <section
-      id="why-join"
-      class="py-20 bg-linear-to-r/srgb from-blue-400 to-teal-300 text-gray-900"
+      id="about"
+      class="mx-auto max-w-[1440px] px-6 pt-[72px] pb-12 md:grid md:min-h-[518px] md:grid-cols-[minmax(0,1.25fr)_minmax(0,0.9fr)] md:items-center md:gap-12 lg:gap-16 lg:px-20 lg:pt-[104px] lg:pb-24 custom-md:gap-20"
+      aria-labelledby="about-title"
     >
-      <div class="container mx-auto px-4">
-        <h2
-          class="text-3xl md:text-4xl font-bold text-center mb-8"
-          style="font-family: 'Rubik Doodle Shadow';"
+      <div>
+        <p class="text-[11px] font-medium leading-relaxed tracking-[0.2em] text-gray-500 lg:text-sm lg:leading-5 lg:tracking-[0.22em]">
+          TOKYO UNIVERSITY OF SCIENCE /
+          <span class="whitespace-nowrap">NODA CAMPUS</span>
+        </p>
+        <p
+          aria-hidden="true"
+          class="mt-3.5 font-['Rubik_Doodle_Shadow'] text-[42px] font-normal leading-none text-blue-500 md:text-[64px] lg:mt-5 lg:text-[72px] custom-md:text-[92px]"
         >
-          TNDに参加する理由
-        </h2>
-        <div class="prose text-gray-700 mx-auto max-w-3xl text-center">
-          <p>
-            TNDに参加して、実際のプロジェクトを構築し、情熱ある仲間と協力しながら、
-            <br />
-            実践的なスキルを身につけましょう！
+          ABOUT
+        </p>
+        <h1
+          id="about-title"
+          class="mt-4 text-[22px] font-bold tracking-[0.04em] text-gray-900 lg:mt-6 lg:text-[30px]"
+        >
+          <span class="block md:inline whitespace-nowrap">東京理科大学</span>{" "}
+          <span class="whitespace-nowrap">野田キャンパスの</span>
+          <br />
+          <span class="whitespace-nowrap">プログラミングサークル</span>
+        </h1>
+        <p class="mt-5 max-w-[560px] text-[15px] leading-[1.9] text-gray-600 lg:text-lg lg:leading-loose custom-md:max-w-none">
+          TNDは2024年に設立したプログラミングサークルです。ウェブ開発とデータサイエンスの2つのチームで、ハッカソンやチーム開発に取り組んでいます。
+        </p>
+      </div>
+      <div class="mx-auto mt-9 w-full max-w-[390px] min-w-0 md:mt-0 md:max-w-none md:self-center md:translate-y-[25px]">
+        {aboutPhotos.hero ? (
+          <img
+            src={aboutPhotos.hero}
+            class="block h-auto w-full"
+            alt="仲間とプログラミングに取り組むイメージ"
+            width="1329"
+            height="1208"
+            loading="eager"
+            decoding="async"
+          />
+        ) : (
+          <span class="text-xs text-gray-500">メンバーの活動写真</span>
+        )}
+      </div>
+    </section>
+
+    <section
+      id="activities"
+      class="relative px-6 lg:px-20"
+      aria-labelledby="activities-title"
+    >
+      <div class="mx-auto max-w-[1280px] lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 border-t border-gray-200 py-8 lg:py-[52px]">
+        <div>
+          <p
+            aria-hidden="true"
+            class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-blue-500 lg:text-[28px]"
+          >
+            ACTIVITIES
           </p>
+          <h2
+            id="activities-title"
+            class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl lg:leading-8"
+          >
+            活動
+          </h2>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-          <div class="bg-white/80 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
-            <h3 class="text-xl font-semibold mb-2">実践で学ぶ</h3>
-            <p class="text-gray-600">
-              理論を実践に変えるハンズオンプロジェクト
-            </p>
-          </div>
-          <div class="bg-white/80 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
-            <h3 class="text-xl font-semibold mb-2">共に成長する</h3>
-            <p class="text-gray-600">経験豊富な仲間と協力して学びます</p>
-          </div>
-          <div class="bg-white/80 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
-            <h3 class="text-xl font-semibold mb-2">経験を積む</h3>
-            <p class="text-gray-600">
-              ハッカソンやイベントに参加して、
-              <br />
-              ポートフォリオを充実させましょう
-            </p>
+        <div>
+          <p class="mt-5 mb-6 max-w-[750px] text-[13px] leading-[2] text-gray-600 lg:mt-0 md:mb-7 md:text-base md:leading-[1.95]">
+            ハッカソン・外部コンテスト・ソーシャルイベントの3つを軸に活動しています。普段のやりとりはDiscordで行っています。
+          </p>
+          <div class="grid gap-3.5 md:gap-4">
+            {activities.map((activity) => (
+              <article class="flex min-h-0 flex-col-reverse items-stretch gap-3 rounded-[14px] border border-gray-200 bg-white px-4.5 pt-5 pb-5.5 md:grid md:min-h-[190px] md:grid-cols-[minmax(0,1fr)_155px] md:items-center md:gap-7 md:py-6 md:px-7 lg:grid-cols-[minmax(0,1fr)_200px]">
+                <div>
+                  <span class="text-[11px] font-bold tracking-[0.19em] text-gray-500 md:text-xs">
+                    {activity.number} · {activity.en}
+                  </span>
+                  <h3 class="mt-2 mb-1.5 text-[17px] font-bold md:mt-2.5 md:mb-2 md:text-xl">
+                    {activity.title}
+                  </h3>
+                  <p class="max-w-[610px] text-[13px] leading-[1.9] text-gray-600 md:text-sm">
+                    {activity.description}
+                  </p>
+                </div>
+                <div class="grid h-[145px] w-full min-w-0 place-items-center md:h-[142px]">
+                  {activity.photo ? (
+                    <img
+                      src={activity.photo}
+                      class="block h-full w-full max-w-[210px] object-contain mix-blend-multiply md:max-w-none"
+                      alt=""
+                      width={activity.width}
+                      height={activity.height}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <span class="text-xs text-gray-500">活動の写真</span>
+                  )}
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 参加方法セクション -->
-    <section id="join" class="py-20">
-      <div class="container mx-auto px-4">
-        <h2
-          class="text-3xl md:text-4xl font-bold text-center mb-8"
-          style="font-family: 'Rubik Doodle Shadow';"
-        >
-          参加方法
-        </h2>
-        <div class="prose text-gray-600 mx-auto max-w-3xl text-center mb-12">
-          <p>
-            募集は毎年4月と5月に行われます。以下の手順に従ってご参加ください。
+    <section
+      id="community"
+      class="relative px-6 lg:px-20"
+      aria-labelledby="community-title"
+    >
+      <div class="mx-auto max-w-[1280px] border-t border-gray-200 py-8 lg:py-[52px]">
+        <div class="lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 mb-5.5 items-start md:mb-8">
+          <div>
+            <p
+              aria-hidden="true"
+              class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-blue-500 lg:text-[28px]"
+            >
+              COMMUNITY
+            </p>
+            <h2
+              id="community-title"
+              class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl lg:leading-8"
+            >
+              普段の様子
+            </h2>
+          </div>
+          <p class="mt-5 max-w-[750px] text-[13px] leading-[2] text-gray-600 lg:mt-0 md:text-base md:leading-[1.95]">
+            普段のコミュニケーションはDiscordで取っています。わからないことの相談も、つくったものの共有も、イベントの告知も、ここに集まります。
           </p>
         </div>
-        <div class="relative max-w-2xl mx-auto">
-          <div class="absolute left-8 top-0 h-full w-1 bg-blue-200"></div>
-          <div class="space-y-12">
-            <div class="flex items-start">
-              <div class="flex items-center justify-center w-12 h-12 bg-blue-500 rounded-full text-white font-bold">
-                1
-              </div>
-              <div class="ml-6">
-                <h3 class="text-xl font-semibold">募集開始</h3>
-                <p class="text-gray-600">新歓Discordに入りましょう</p>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <div class="flex items-center justify-center w-12 h-12 bg-blue-500 rounded-full text-white font-bold">
-                2
-              </div>
-              <div class="ml-6">
-                <h3 class="text-xl font-semibold">説明会に参加</h3>
-                <p class="text-gray-600">4,5月は定期的に行う予定です</p>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <div class="flex items-center justify-center w-12 h-12 bg-blue-500 rounded-full text-white font-bold">
-                3
-              </div>
-              <div class="ml-6">
-                <h3 class="text-xl font-semibold">参加申し込み</h3>
-                <p class="text-gray-600">応募フォームに記入して完了！</p>
-              </div>
-            </div>
+        <div class="grid grid-cols-2 grid-rows-[auto_225px_112px] gap-3 md:min-h-[455px] md:grid-cols-[1fr_2.05fr_1fr] md:grid-rows-2 md:gap-4">
+          <div class="relative col-span-2 row-start-1 flex min-h-[188px] flex-col rounded-[13px] bg-indigo-500 p-5 text-white md:col-span-1 md:col-start-1 md:row-span-2 md:min-h-0 md:px-6 md:pt-7 md:pb-5.5">
+            <svg
+              class="absolute top-5 left-5 h-[19px] w-[19px] md:static md:mb-8 md:h-6 md:w-6"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M6 7.5c3.6-2 8.4-2 12 0l2 8.5c-1.3 1.2-3 2-4.7 2.5l-1-1.5c-1.5.3-3.1.3-4.6 0l-1 1.5C7 18 5.3 17.2 4 16l2-8.5Z" />
+              <circle
+                cx="9.5"
+                cy="12.5"
+                r=".7"
+                fill="currentColor"
+                stroke="none"
+              />
+              <circle
+                cx="14.5"
+                cy="12.5"
+                r=".7"
+                fill="currentColor"
+                stroke="none"
+              />
+            </svg>
+            <span class="hidden text-[11px] font-bold tracking-[0.19em] text-white md:inline">
+              ON DISCORD
+            </span>
+            <h3 class="mb-4 pl-8 text-base leading-[1.6] md:mt-3 md:mb-5 md:pl-0 md:text-xl">
+              Discordで
+              <br class="hidden md:inline" />
+              つながっています
+            </h3>
+            <ul class="grid grid-cols-2 gap-2 text-xs md:grid-cols-1 md:gap-3 md:text-[13px]">
+              <li class="before:mr-2.5 before:content-['#'] before:opacity-85">
+                質問・相談
+              </li>
+              <li class="before:mr-2.5 before:content-['#'] before:opacity-85">
+                進捗の共有
+              </li>
+              <li class="before:mr-2.5 before:content-['#'] before:opacity-85">
+                イベントの告知
+              </li>
+              <li class="before:mr-2.5 before:content-['#'] before:opacity-85">
+                雑談
+              </li>
+            </ul>
+            <p class="mt-4 border-t border-white/45 pt-4.5 text-[11px] leading-[1.6] md:mt-auto md:text-xs">
+              参加は「入会申し込み」のボタンから
+            </p>
+          </div>
+          <div class="relative min-h-0 overflow-hidden rounded-[13px] bg-gray-200 col-span-2 row-start-2 md:col-span-1 md:col-start-2 md:row-span-2 md:row-start-1">
+            {aboutPhotos.community.presentation ? (
+              <img
+                src={aboutPhotos.community.presentation}
+                class="block h-full w-full object-cover"
+                alt="ハッカソンの発表の様子"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : null}
+            <span class="absolute bottom-[10px] left-[10px] rounded-full bg-gray-600 px-3 py-1 text-[10px] leading-[1.3] text-white md:bottom-[14px] md:left-[14px] md:text-xs">
+              写真：ハッカソンの発表
+            </span>
+          </div>
+          <div class="relative min-h-0 overflow-hidden rounded-[13px] bg-gray-200 col-start-1 row-start-3 md:col-start-3 md:row-start-1">
+            {aboutPhotos.community.work ? (
+              <img
+                src={aboutPhotos.community.work}
+                class="block h-full w-full object-cover"
+                alt="作業の様子"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : null}
+            <span class="absolute bottom-[10px] left-[10px] rounded-full bg-gray-600 px-3 py-1 text-[10px] leading-[1.3] text-white md:bottom-[14px] md:left-[14px] md:text-xs">
+              写真：作業の様子
+            </span>
+          </div>
+          <div class="relative min-h-0 overflow-hidden rounded-[13px] bg-gray-200 col-start-2 row-start-3 md:col-start-3 md:row-start-2">
+            {aboutPhotos.community.social ? (
+              <img
+                src={aboutPhotos.community.social}
+                class="block h-full w-full object-cover"
+                alt="BBQの様子"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : null}
+            <span class="absolute bottom-[10px] left-[10px] rounded-full bg-gray-600 px-3 py-1 text-[10px] leading-[1.3] text-white md:bottom-[14px] md:left-[14px] md:text-xs">
+              写真：BBQ
+            </span>
           </div>
         </div>
-        <div class="mt-16 text-center">
-          <p class="text-lg mb-6">
-            <strong>会費：</strong> 半期2000円(年間4000円)
-            <br />
-            <strong>初心者歓迎：</strong> 現メンバーの9割は大学から始めてます！
-          </p>
-          <a
-            href="/contact"
-            class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition transform hover:scale-105"
+      </div>
+    </section>
+
+    <section
+      id="teams"
+      class="relative px-6 lg:px-20"
+      aria-labelledby="teams-title"
+    >
+      <div class="mx-auto max-w-[1280px] lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 border-t border-gray-200 py-8 lg:py-[52px]">
+        <div>
+          <p
+            aria-hidden="true"
+            class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-blue-500 lg:text-[28px]"
           >
-            お問い合わせ
+            TEAMS
+          </p>
+          <h2
+            id="teams-title"
+            class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl lg:leading-8"
+          >
+            チーム
+          </h2>
+        </div>
+        <div>
+          <p class="mt-5 mb-6 max-w-[750px] text-[13px] leading-[2] text-gray-600 lg:mt-0 md:mb-7 md:text-base md:leading-[1.95]">
+            2つのチームに分かれて活動します。掛け持ちも、途中で移ることもできます。
+          </p>
+          <div class="grid gap-3.5 md:grid-cols-2 md:gap-5">
+            {teams.map((team) => (
+              <article class="min-h-0 rounded-[14px] border border-gray-200 bg-white p-5 md:min-h-[242px] md:p-5.5 lg:p-7">
+                <span class="text-[11px] font-bold tracking-[0.19em] text-gray-500 md:text-xs">
+                  {team.en}
+                </span>
+                <h3 class="mt-2 mb-4 text-[17px] font-bold md:mt-3 md:mb-5 md:text-xl">
+                  {team.title}
+                </h3>
+                <ul class="flex flex-wrap gap-1.5 md:gap-2">
+                  {team.tags.map((tag) => (
+                    <li class="rounded-full border border-blue-200 bg-blue-50 px-2 py-1 text-[11px] leading-[1.4] font-medium text-blue-600 md:px-3 md:py-1 md:text-xs">
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="voices"
+      class="bg-blue-600 px-6 py-12 text-white lg:px-20 md:pt-24 md:pb-26"
+      aria-labelledby="voices-title"
+    >
+      <div class="mx-auto max-w-[1280px]">
+        <div>
+          <p
+            aria-hidden="true"
+            class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-white lg:text-[28px]"
+          >
+            VOICES
+          </p>
+          <h2
+            id="voices-title"
+            class="mt-2 text-[19px] font-bold text-white lg:mt-2.5 lg:text-2xl lg:leading-8"
+          >
+            メンバーの声
+          </h2>
+        </div>
+        <div class="mt-8 grid items-start gap-4 md:mt-16 md:grid-cols-2 md:gap-14">
+          <figure class="grid min-h-0 grid-cols-[52px_minmax(0,1fr)] grid-rows-[auto_52px] content-start gap-x-4 gap-y-4.5 rounded-[18px] border border-white/55 bg-white/[0.045] p-5 md:min-h-[244px] md:grid-cols-[110px_minmax(0,1fr)] md:grid-rows-[auto_auto] md:gap-x-7 md:gap-y-0 md:px-8 md:py-8">
+            <div class="col-start-1 row-start-2 h-[52px] w-[52px] overflow-hidden rounded-full border border-white/55 bg-blue-200/65 md:row-span-2 md:row-start-1 md:h-[110px] md:w-[110px]">
+              {aboutPhotos.voices.web && (
+                <img
+                  src={aboutPhotos.voices.web}
+                  class="block h-full w-full scale-[1.32] object-cover"
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+            </div>
+            <blockquote class="col-span-2 row-start-1 text-sm leading-[2] font-bold md:col-span-1 md:col-start-2 md:mb-6 md:text-lg">
+              「授業では触れない部分を、先輩に聞きながら進められました。半年でひとつサイトを公開できたのが自信になっています。」
+            </blockquote>
+            <figcaption class="col-start-2 row-start-2 flex flex-col self-center gap-0.5 text-[11px] md:self-auto md:text-[13px]">
+              <strong class="text-[13px] md:text-[15px]">Aさん</strong>
+              <span>2年・ウェブ開発チーム</span>
+            </figcaption>
+          </figure>
+          <figure class="grid min-h-0 grid-cols-[52px_minmax(0,1fr)] grid-rows-[auto_52px] content-start gap-x-4 gap-y-4.5 rounded-[18px] border border-white/55 bg-white/[0.045] p-5 md:min-h-[244px] md:grid-cols-[110px_minmax(0,1fr)] md:grid-rows-[auto_auto] md:gap-x-7 md:gap-y-0 md:px-8 md:py-8 md:mt-16">
+            <div class="col-start-1 row-start-2 h-[52px] w-[52px] overflow-hidden rounded-full border border-white/55 bg-blue-200/65 md:row-span-2 md:row-start-1 md:h-[110px] md:w-[110px]">
+              {aboutPhotos.voices.data && (
+                <img
+                  src={aboutPhotos.voices.data}
+                  class="block h-full w-full scale-[1.32] object-cover"
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+            </div>
+            <blockquote class="col-span-2 row-start-1 text-sm leading-[2] font-bold md:col-span-1 md:col-start-2 md:mb-6 md:text-lg">
+              「内部ハッカソンで初めてチーム開発をしました。役割を分けて動かす難しさは、ひとりでは経験できませんでした。」
+            </blockquote>
+            <figcaption class="col-start-2 row-start-2 flex flex-col self-center gap-0.5 text-[11px] md:self-auto md:text-[13px]">
+              <strong class="text-[13px] md:text-[15px]">Bさん</strong>
+              <span>3年・データサイエンスチーム</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="tech-blog"
+      class="relative mx-auto max-w-[1440px] px-6 py-8 lg:px-20 lg:py-[52px]"
+      aria-labelledby="blog-title"
+    >
+      <div class="mb-6 md:mb-9">
+        <p
+          aria-hidden="true"
+          class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-blue-500 lg:text-[28px]"
+        >
+          TECH BLOG
+        </p>
+        <h2
+          id="blog-title"
+          class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl lg:leading-8"
+        >
+          テックブログの最新記事
+        </h2>
+      </div>
+      {posts.length > 0 ? (
+        <div
+          class:list={[
+            "grid grid-cols-1 grid-rows-[auto] gap-3 md:gap-5",
+            posts.length < 3
+              ? "md:grid-cols-2 md:grid-rows-[auto]"
+              : "md:grid-cols-[2.05fr_1fr_1fr] md:grid-rows-[minmax(245px,auto)_minmax(245px,auto)]",
+          ]}
+        >
+          {posts.map((post, index) => (
+            <article
+              class:list={[
+                "relative min-w-0 overflow-hidden rounded-2xl border border-gray-200 bg-white",
+                index === 0 && "flex flex-col",
+                index === 0 && posts.length === 3 && "md:row-span-2",
+                index === 1 &&
+                  posts.length === 3 &&
+                  "flex flex-col md:col-[2/4] md:grid md:grid-cols-[40%_60%]",
+                index === 1 && posts.length < 3 && "flex flex-col",
+                index === 2 && "md:col-start-2",
+              ]}
+            >
+              <a
+                class:list={[
+                  "relative grid min-h-[132px] place-items-center bg-gray-100 text-center text-xs text-gray-500 no-underline",
+                  index === 0 &&
+                    "min-h-[215px] flex-[1_1_auto] md:min-h-[285px] md:flex-[1_1_57%]",
+                  index > 0 && "min-h-[180px]",
+                  index === 1 && posts.length === 3 && "md:h-full",
+                  index === 1 && posts.length < 3 && "md:min-h-[200px]",
+                  index === 2 && "md:min-h-[132px]",
+                ]}
+                href={`/blog/${post.id}`}
+                aria-hidden="true"
+                tabindex="-1"
+              >
+                <img
+                  src={getImageUrl(post)}
+                  class="absolute inset-0 h-full w-full object-cover"
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+                {index === 0 && (
+                  <span class="absolute top-4 left-4 z-10 rounded-full bg-blue-600 px-3.5 py-1 text-[11px] font-bold tracking-[0.15em] text-white">
+                    NEW
+                  </span>
+                )}
+              </a>
+              <div
+                class:list={[
+                  "relative flex min-w-0 flex-col p-5",
+                  index === 0 ? "md:py-6 md:px-7" : "md:p-5",
+                ]}
+              >
+                <span
+                  class:list={[
+                    "absolute -top-[28px] right-[18px] z-10 font-['Rubik_Doodle_Shadow'] text-[56px] leading-none text-blue-500",
+                    index === 1 &&
+                      "-top-[21px] right-3 text-[38px] md:top-3 md:right-[18px] md:text-[43px]",
+                    index === 2 &&
+                      "-top-5 right-[10px] text-[38px] md:text-[40px]",
+                  ]}
+                  aria-hidden="true"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div
+                  class:list={[
+                    "flex flex-wrap items-center gap-2.5 text-[11px] text-gray-500",
+                    index > 0 && "max-md:text-xs",
+                    index === 1 && "md:max-w-[calc(100%-60px)]",
+                  ]}
+                >
+                  {post.tags?.[0] && (
+                    <span class="rounded-full bg-blue-50 px-2.5 py-1 font-bold text-blue-600">
+                      #{post.tags[0].name}
+                    </span>
+                  )}
+                  <time datetime={post.publishedAt ?? undefined}>
+                    {formatDotDate(post.publishedAt)}
+                  </time>
+                </div>
+                <h3
+                  class:list={[
+                    "mt-3 mb-2 leading-[1.55]",
+                    index === 0
+                      ? "text-lg md:text-2xl md:leading-[1.5]"
+                      : "text-[15px] md:text-[17px] md:leading-[1.5]",
+                    index === 1 && "md:max-w-[calc(100%-60px)]",
+                  ]}
+                >
+                  <a
+                    class="text-gray-900 no-underline hover:text-blue-700"
+                    href={`/blog/${post.id}`}
+                  >
+                    {post.title}
+                  </a>
+                </h3>
+                {index === 0 && (
+                  <p class="mb-3 text-xs leading-[1.9] text-gray-600 md:mb-5 md:text-sm">
+                    {post.description}
+                  </p>
+                )}
+                <div
+                  class:list={[
+                    "mt-auto flex items-center gap-2 text-[11px] leading-[1.5] text-gray-500",
+                    index > 0 && "max-md:text-xs",
+                  ]}
+                >
+                  <img
+                    src={getAuthorImageUrl(post)}
+                    class="h-7 w-7 shrink-0 rounded-full object-cover"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span>
+                    {post.author}・{post.role}
+                  </span>
+                </div>
+              </div>
+            </article>
+          ))}
+          <a
+            class:list={[
+              "flex min-h-[180px] flex-col rounded-2xl bg-gray-900 p-4 text-white no-underline md:min-h-[245px] md:p-5.5",
+              posts.length === 2 && "md:col-span-2",
+              posts.length === 3 && "md:col-start-3",
+            ]}
+            href="/blog"
+          >
+            <span class="flex gap-1.5" aria-hidden="true">
+              <i class="h-[10px] w-[10px] rounded-full bg-red-400"></i>
+              <i class="h-[10px] w-[10px] rounded-full bg-yellow-400"></i>
+              <i class="h-[10px] w-[10px] rounded-full bg-green-400"></i>
+            </span>
+            <span
+              class="mt-3 font-mono text-[13px] leading-[1.8] text-gray-300 md:mt-7 md:text-sm"
+              aria-hidden="true"
+            >
+              ~/tnd
+              <br />
+              <b class="text-blue-300">❯</b> cd blog
+              <br />
+              <b class="text-blue-300">❯</b> ls ▍
+            </span>
+            <span class="mt-auto flex justify-between gap-2.5 border-t border-white/15 pt-4 text-[13px] font-bold md:text-sm">
+              記事の一覧を見る{" "}
+              <span class="text-[22px] leading-none" aria-hidden="true">
+                →
+              </span>
+            </span>
           </a>
         </div>
+      ) : (
+        <p class="text-gray-600">
+          記事は準備中です。<a href="/blog">テックブログを見る</a>
+        </p>
+      )}
+    </section>
+
+    <section
+      id="join"
+      class="relative px-6 lg:px-20"
+      aria-labelledby="join-title"
+    >
+      <div class="mx-auto max-w-[1280px] lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 border-t border-gray-200 py-8 lg:py-[52px]">
+        <div>
+          <p
+            aria-hidden="true"
+            class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-blue-500 lg:text-[28px]"
+          >
+            HOW TO JOIN
+          </p>
+          <h2
+            id="join-title"
+            class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl lg:leading-8"
+          >
+            参加方法
+          </h2>
+        </div>
+        <div>
+          <p class="mt-5 mb-6 max-w-[750px] text-[13px] leading-[2] text-gray-600 lg:mt-0 md:mb-7 md:text-base md:leading-[1.95]">
+            メンバーは通年で募集しています。学年や経験は問いません。
+          </p>
+          <ol class="my-7 flex flex-col border-l-2 border-gray-200 md:mt-9 md:mb-10 md:grid md:grid-cols-3 md:gap-7 md:border-0">
+            {steps.map((step) => (
+              <li class="relative min-w-0 pb-6 pl-5.5 last:pb-0 md:border-t-2 md:border-gray-200 md:pt-8 md:pb-0 md:pl-0">
+                <span
+                  class="absolute top-0.5 -left-2 h-[13px] w-[13px] rounded-full bg-blue-500 md:-top-[7px] md:left-0"
+                  aria-hidden="true"
+                ></span>
+                <span class="text-[11px] font-bold tracking-[0.19em] text-gray-500 md:text-xs">
+                  STEP {step.number}
+                </span>
+                <h3 class="mt-2.5 mb-2 text-base font-bold md:text-lg">
+                  {step.title}
+                </h3>
+                <p class="text-xs leading-[1.9] text-gray-600 md:text-[13px]">
+                  {step.description}
+                </p>
+              </li>
+            ))}
+          </ol>
+          <div class="grid gap-3.5 rounded-[14px] border border-gray-200 bg-white p-5 md:flex md:min-h-[104px] md:flex-wrap md:items-center md:gap-x-7 md:gap-y-4 md:py-5.5 md:px-8 lg:gap-10">
+            <div>
+              <small class="text-[11px] text-gray-500">会費</small>
+              <p class="mt-1 text-xs md:whitespace-nowrap">
+                <strong class="text-lg md:text-xl">半期 2,000円</strong>
+                <span class="text-[11px] text-gray-500">（年 4,000円）</span>
+              </p>
+            </div>
+            <div>
+              <small class="text-[11px] text-gray-500">経験</small>
+              <p class="mt-1 text-xs md:whitespace-nowrap">
+                メンバーの <strong class="text-lg md:text-xl">9割</strong>{" "}
+                が大学からのスタート
+              </p>
+            </div>
+            <button
+              class="mt-0.5 shrink-0 md:mt-0 md:ml-auto flex h-[52px] w-full items-center justify-center rounded-full bg-[#F5BF48] px-7 text-base font-bold text-white shadow-[0_4px_8px_rgba(17,24,39,.12),0_12px_28px_rgba(245,191,72,.34)] transition-[background,box-shadow,transform] duration-180 hover:-translate-y-px hover:bg-[linear-gradient(94deg,#f5bf48_0%,#f7bc5b_42%,#efa169_100%)] hover:shadow-[0_10px_20px_rgba(239,161,105,.28)] focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 md:w-auto"
+              type="button"
+              data-open-join
+              data-join-inline
+            >
+              入会申し込み
+            </button>
+          </div>
+        </div>
       </div>
     </section>
-  </main>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // タブ要素を取得（必ず存在すると仮定）
-      const webTab = document.querySelector(".web-tab") as HTMLElement;
-      const designTab = document.querySelector(".design-tab") as HTMLElement;
-      const dataTab = document.querySelector(".data-tab") as HTMLElement;
-      const contents = document.querySelectorAll(".course-content");
-
-      // 選択中のタブのスタイルを更新する補助関数
-      function updateActiveTab(selected: HTMLElement) {
-        [webTab, designTab, dataTab].forEach((tab) => {
-          // アクティブでない状態のスタイル（必要に応じて変更）
-          tab.classList.remove("bg-blue-500", "text-white");
-          tab.classList.add("bg-white", "text-gray-700");
-        });
-        // 選択されたタブにアクティブ状態のスタイルを追加
-        selected.classList.add("bg-blue-500", "text-white");
-        selected.classList.remove("bg-white", "text-gray-700");
-      }
-
-      // タブを切り替える関数（コンテンツとタブの両方を更新）
-      function activateTab(tabName: string) {
-        // すべてのコンテンツを非表示にする
-        contents.forEach((content) => content.classList.add("hidden"));
-        const content = document.getElementById(`${tabName}-content`);
-        if (content) {
-          content.classList.remove("hidden");
-        }
-
-        // タブのハイライト更新
-        if (tabName === "web") {
-          updateActiveTab(webTab);
-        } else if (tabName === "design") {
-          updateActiveTab(designTab);
-        } else if (tabName === "data") {
-          updateActiveTab(dataTab);
-        }
-      }
-
-      // 各タブにクリックイベントリスナーを設定
-      webTab.addEventListener("click", () => activateTab("web"));
-      designTab.addEventListener("click", () => activateTab("design"));
-      dataTab.addEventListener("click", () => activateTab("data"));
-
-      // 初期表示はウェブ開発タブ
-      activateTab("web");
-    });
-  </script>
+    <section
+      id="companies"
+      class="relative px-6 lg:px-20"
+      aria-labelledby="companies-title"
+    >
+      <div class="mx-auto max-w-[1280px] lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 border-t border-gray-200 pt-8 lg:pt-[52px]">
+        <div>
+          <p
+            aria-hidden="true"
+            class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-blue-500 lg:text-[28px]"
+          >
+            FOR COMPANIES
+          </p>
+          <h2
+            id="companies-title"
+            class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl lg:leading-8"
+          >
+            企業の方へ
+          </h2>
+        </div>
+        <div class="mt-5 flex min-h-0 flex-col-reverse items-stretch gap-3.5 rounded-[14px] border border-gray-200 bg-white p-5 lg:mt-0 custom-md:grid custom-md:min-h-[230px] custom-md:grid-cols-[minmax(0,1fr)_270px] custom-md:items-center custom-md:gap-8 md:py-8 md:px-8">
+          <div>
+            <p class="mb-4 max-w-[610px] text-xs leading-[1.95] text-gray-600 md:mb-5 md:text-sm">
+              協賛、イベントの共催、勉強会での登壇などのご相談を受け付けています。ウェブ開発とデータサイエンスの2つのチームに、約20名が所属しています。
+            </p>
+            <a
+              class="inline-flex h-12 items-center gap-2 rounded-[10px] border border-blue-500 bg-white px-4.5 text-sm font-bold text-blue-700 transition-colors hover:bg-blue-50 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 lg:h-11"
+              href="/contact"
+            >
+              お問い合わせページへ <span aria-hidden="true">→</span>
+            </a>
+          </div>
+          <div class="grid min-h-[135px] w-full place-items-center md:min-h-[170px]">
+            {aboutPhotos.companies ? (
+              <img
+                src={aboutPhotos.companies}
+                class="block w-full max-h-[145px] object-contain mix-blend-multiply md:max-h-[190px]"
+                alt="企業の方と学生が話し合うイメージ"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <span class="text-xs text-gray-500">企業の方との活動写真</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </Layout>
