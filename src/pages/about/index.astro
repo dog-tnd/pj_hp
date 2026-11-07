@@ -30,6 +30,8 @@ const activities = [
     description:
       "サークル内で開発イベントを開きます。短期間でチームを組み、動くものをつくって発表します。",
     photo: aboutPhotos.activities.internalHackathon,
+    width: 593,
+    height: 445,
   },
   {
     number: "02",
@@ -38,6 +40,8 @@ const activities = [
     description:
       "Kaggleをはじめとするデータ分析コンペティションに、チームを編成して参加しています。近年はAIエージェントの開発にも取り組んでいます。",
     photo: aboutPhotos.activities.externalHackathon,
+    width: 693,
+    height: 520,
   },
   {
     number: "03",
@@ -46,6 +50,8 @@ const activities = [
     description:
       "BBQ・懇親会・LT会など。つくる時間と同じくらい、話す時間を大切にしています。",
     photo: aboutPhotos.activities.social,
+    width: 583,
+    height: 437,
   },
 ];
 
@@ -175,6 +181,8 @@ const posts = (await getAllPosts()).slice(0, 3);
                   {activity.photo ? (
                     <img
                       src={activity.photo}
+                      width={activity.width}
+                      height={activity.height}
                       alt=""
                       loading="lazy"
                       decoding="async"
