@@ -6,9 +6,8 @@ import {
   getImageUrl,
 } from "../../lib/microcms";
 import { formatDotDate } from "../../utils/date";
-import "../../styles/about.css";
 
-// 写真は public/about/ に配置し、対応する値を "/about/写真名.jpg" に変更する。
+// 写真は public/about/ に配置し、対応するパスを設定する。
 // 空文字の枠はダミーを表示する。
 const aboutPhotos = {
   hero: "/about/hero.png",
@@ -114,31 +113,41 @@ const posts = (await getAllPosts()).slice(0, 3);
   title="私たちについて | プログラミングサークル TND"
   description="東京理科大学野田キャンパスのプログラミングサークルTND。ウェブ開発とデータサイエンスの2チームで、ハッカソンやチーム開発に取り組みます。会費は年間4,000円、メンバーは通年で募集しています。"
 >
-  <div class="about-page">
+  <div class="font-['Noto_Sans_JP'] text-gray-900">
     <section
       id="about"
-      class="about-hero about-shell"
+      class="mx-auto max-w-[1440px] px-6 pt-[72px] pb-12 md:grid md:min-h-[518px] md:grid-cols-[minmax(0,1.25fr)_minmax(0,0.9fr)] md:items-center md:gap-12 lg:gap-16 lg:px-20 lg:pt-[104px] lg:pb-24 custom-md:gap-20"
       aria-labelledby="about-title"
     >
-      <div class="about-hero-copy">
-        <p class="about-eyebrow">TOKYO UNIVERSITY OF SCIENCE / NODA CAMPUS</p>
-        <p aria-hidden="true" class="about-display about-hero-title">
+      <div>
+        <p class="text-[11px] font-medium leading-relaxed tracking-[0.2em] text-gray-500 lg:text-sm lg:leading-5 lg:tracking-[0.22em]">
+          TOKYO UNIVERSITY OF SCIENCE /
+          <span class="whitespace-nowrap">NODA CAMPUS</span>
+        </p>
+        <p
+          aria-hidden="true"
+          class="mt-3.5 font-['Rubik_Doodle_Shadow'] text-[42px] font-normal leading-none text-blue-500 md:text-[64px] lg:mt-5 lg:text-[72px] custom-md:text-[92px]"
+        >
           ABOUT
         </p>
-        <h1 id="about-title" class="about-hero-lead">
-          <span class="about-hero-university">東京理科大学</span>{" "}
-          野田キャンパスの
+        <h1
+          id="about-title"
+          class="mt-4 text-[22px] font-bold tracking-[0.04em] text-gray-900 lg:mt-6 lg:text-[30px]"
+        >
+          <span class="block md:inline whitespace-nowrap">東京理科大学</span>{" "}
+          <span class="whitespace-nowrap">野田キャンパスの</span>
           <br />
-          プログラミングサークル
+          <span class="whitespace-nowrap">プログラミングサークル</span>
         </h1>
-        <p class="about-hero-description">
+        <p class="mt-5 max-w-[560px] text-[15px] leading-[1.9] text-gray-600 lg:text-lg lg:leading-loose custom-md:max-w-none">
           TNDは2024年に設立したプログラミングサークルです。ウェブ開発とデータサイエンスの2つのチームで、ハッカソンやチーム開発に取り組んでいます。
         </p>
       </div>
-      <div class="about-hero-art">
+      <div class="mx-auto mt-9 w-full max-w-[390px] min-w-0 md:mt-0 md:max-w-none md:self-center md:translate-y-[25px]">
         {aboutPhotos.hero ? (
           <img
             src={aboutPhotos.hero}
+            class="block h-auto w-full"
             alt="仲間とプログラミングに取り組むイメージ"
             width="1329"
             height="1208"
@@ -146,49 +155,62 @@ const posts = (await getAllPosts()).slice(0, 3);
             decoding="async"
           />
         ) : (
-          <span class="about-photo-empty">メンバーの活動写真</span>
+          <span class="text-xs text-gray-500">メンバーの活動写真</span>
         )}
       </div>
     </section>
 
     <section
       id="activities"
-      class="about-section about-activities"
+      class="relative px-6 lg:px-20"
       aria-labelledby="activities-title"
     >
-      <div class="about-shell about-split">
-        <div class="about-section-heading">
-          <p aria-hidden="true" class="about-display">
+      <div class="mx-auto max-w-[1280px] lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 border-t border-gray-200 py-8 lg:py-[52px]">
+        <div>
+          <p
+            aria-hidden="true"
+            class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-blue-500 lg:text-[28px]"
+          >
             ACTIVITIES
           </p>
-          <h2 id="activities-title">活動</h2>
+          <h2
+            id="activities-title"
+            class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl lg:leading-8"
+          >
+            活動
+          </h2>
         </div>
-        <div class="about-section-content">
-          <p class="about-section-intro">
+        <div>
+          <p class="mt-5 mb-6 max-w-[750px] text-[13px] leading-[2] text-gray-600 lg:mt-0 md:mb-7 md:text-base md:leading-[1.95]">
             ハッカソン・外部コンテスト・ソーシャルイベントの3つを軸に活動しています。普段のやりとりはDiscordで行っています。
           </p>
-          <div class="about-activity-list">
+          <div class="grid gap-3.5 md:gap-4">
             {activities.map((activity) => (
-              <article class="about-activity-card">
-                <div class="about-activity-copy">
-                  <span class="about-overline">
+              <article class="flex min-h-0 flex-col-reverse items-stretch gap-3 rounded-[14px] border border-gray-200 bg-white px-4.5 pt-5 pb-5.5 md:grid md:min-h-[190px] md:grid-cols-[minmax(0,1fr)_155px] md:items-center md:gap-7 md:py-6 md:px-7 lg:grid-cols-[minmax(0,1fr)_200px]">
+                <div>
+                  <span class="text-[11px] font-bold tracking-[0.19em] text-gray-500 md:text-xs">
                     {activity.number} · {activity.en}
                   </span>
-                  <h3>{activity.title}</h3>
-                  <p>{activity.description}</p>
+                  <h3 class="mt-2 mb-1.5 text-[17px] font-bold md:mt-2.5 md:mb-2 md:text-xl">
+                    {activity.title}
+                  </h3>
+                  <p class="max-w-[610px] text-[13px] leading-[1.9] text-gray-600 md:text-sm">
+                    {activity.description}
+                  </p>
                 </div>
-                <div class="about-activity-art">
+                <div class="grid h-[145px] w-full min-w-0 place-items-center md:h-[142px]">
                   {activity.photo ? (
                     <img
                       src={activity.photo}
+                      class="block h-full w-full max-w-[210px] object-contain mix-blend-multiply md:max-w-none"
+                      alt=""
                       width={activity.width}
                       height={activity.height}
-                      alt=""
                       loading="lazy"
                       decoding="async"
                     />
                   ) : (
-                    <span class="about-photo-empty">活動の写真</span>
+                    <span class="text-xs text-gray-500">活動の写真</span>
                   )}
                 </div>
               </article>
@@ -200,24 +222,33 @@ const posts = (await getAllPosts()).slice(0, 3);
 
     <section
       id="community"
-      class="about-section about-community"
+      class="relative px-6 lg:px-20"
       aria-labelledby="community-title"
     >
-      <div class="about-shell">
-        <div class="about-split about-section-top">
-          <div class="about-section-heading">
-            <p aria-hidden="true" class="about-display">
+      <div class="mx-auto max-w-[1280px] border-t border-gray-200 py-8 lg:py-[52px]">
+        <div class="lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 mb-5.5 items-start md:mb-8">
+          <div>
+            <p
+              aria-hidden="true"
+              class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-blue-500 lg:text-[28px]"
+            >
               COMMUNITY
             </p>
-            <h2 id="community-title">普段の様子</h2>
+            <h2
+              id="community-title"
+              class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl lg:leading-8"
+            >
+              普段の様子
+            </h2>
           </div>
-          <p class="about-section-intro">
+          <p class="mt-5 max-w-[750px] text-[13px] leading-[2] text-gray-600 lg:mt-0 md:text-base md:leading-[1.95]">
             普段のコミュニケーションはDiscordで取っています。わからないことの相談も、つくったものの共有も、イベントの告知も、ここに集まります。
           </p>
         </div>
-        <div class="about-community-grid">
-          <div class="about-discord-card">
+        <div class="grid grid-cols-2 grid-rows-[auto_225px_112px] gap-3 md:min-h-[455px] md:grid-cols-[1fr_2.05fr_1fr] md:grid-rows-2 md:gap-4">
+          <div class="relative col-span-2 row-start-1 flex min-h-[188px] flex-col rounded-[13px] bg-indigo-500 p-5 text-white md:col-span-1 md:col-start-1 md:row-span-2 md:min-h-0 md:px-6 md:pt-7 md:pb-5.5">
             <svg
+              class="absolute top-5 left-5 h-[19px] w-[19px] md:static md:mb-8 md:h-6 md:w-6"
               viewBox="0 0 24 24"
               width="24"
               height="24"
@@ -244,52 +275,73 @@ const posts = (await getAllPosts()).slice(0, 3);
                 stroke="none"
               />
             </svg>
-            <span class="about-overline">ON DISCORD</span>
-            <h3>
+            <span class="hidden text-[11px] font-bold tracking-[0.19em] text-white md:inline">
+              ON DISCORD
+            </span>
+            <h3 class="mb-4 pl-8 text-base leading-[1.6] md:mt-3 md:mb-5 md:pl-0 md:text-xl">
               Discordで
-              <br />
+              <br class="hidden md:inline" />
               つながっています
             </h3>
-            <ul>
-              <li>質問・相談</li>
-              <li>進捗の共有</li>
-              <li>イベントの告知</li>
-              <li>雑談</li>
+            <ul class="grid grid-cols-2 gap-2 text-xs md:grid-cols-1 md:gap-3 md:text-[13px]">
+              <li class="before:mr-2.5 before:content-['#'] before:opacity-85">
+                質問・相談
+              </li>
+              <li class="before:mr-2.5 before:content-['#'] before:opacity-85">
+                進捗の共有
+              </li>
+              <li class="before:mr-2.5 before:content-['#'] before:opacity-85">
+                イベントの告知
+              </li>
+              <li class="before:mr-2.5 before:content-['#'] before:opacity-85">
+                雑談
+              </li>
             </ul>
-            <p class="about-discord-note">参加は「入会申し込み」のボタンから</p>
+            <p class="mt-4 border-t border-white/45 pt-4.5 text-[11px] leading-[1.6] md:mt-auto md:text-xs">
+              参加は「入会申し込み」のボタンから
+            </p>
           </div>
-          <div class="about-community-photo about-community-photo-main">
+          <div class="relative min-h-0 overflow-hidden rounded-[13px] bg-gray-200 col-span-2 row-start-2 md:col-span-1 md:col-start-2 md:row-span-2 md:row-start-1">
             {aboutPhotos.community.presentation ? (
               <img
                 src={aboutPhotos.community.presentation}
+                class="block h-full w-full object-cover"
                 alt="ハッカソンの発表の様子"
                 loading="lazy"
                 decoding="async"
               />
             ) : null}
-            <span>写真：ハッカソンの発表</span>
+            <span class="absolute bottom-[10px] left-[10px] rounded-full bg-gray-600 px-3 py-1 text-[10px] leading-[1.3] text-white md:bottom-[14px] md:left-[14px] md:text-xs">
+              写真：ハッカソンの発表
+            </span>
           </div>
-          <div class="about-community-photo about-community-photo-work">
+          <div class="relative min-h-0 overflow-hidden rounded-[13px] bg-gray-200 col-start-1 row-start-3 md:col-start-3 md:row-start-1">
             {aboutPhotos.community.work ? (
               <img
                 src={aboutPhotos.community.work}
+                class="block h-full w-full object-cover"
                 alt="作業の様子"
                 loading="lazy"
                 decoding="async"
               />
             ) : null}
-            <span>写真：作業の様子</span>
+            <span class="absolute bottom-[10px] left-[10px] rounded-full bg-gray-600 px-3 py-1 text-[10px] leading-[1.3] text-white md:bottom-[14px] md:left-[14px] md:text-xs">
+              写真：作業の様子
+            </span>
           </div>
-          <div class="about-community-photo about-community-photo-social">
+          <div class="relative min-h-0 overflow-hidden rounded-[13px] bg-gray-200 col-start-2 row-start-3 md:col-start-3 md:row-start-2">
             {aboutPhotos.community.social ? (
               <img
                 src={aboutPhotos.community.social}
+                class="block h-full w-full object-cover"
                 alt="BBQの様子"
                 loading="lazy"
                 decoding="async"
               />
             ) : null}
-            <span>写真：BBQ</span>
+            <span class="absolute bottom-[10px] left-[10px] rounded-full bg-gray-600 px-3 py-1 text-[10px] leading-[1.3] text-white md:bottom-[14px] md:left-[14px] md:text-xs">
+              写真：BBQ
+            </span>
           </div>
         </div>
       </div>
@@ -297,28 +349,42 @@ const posts = (await getAllPosts()).slice(0, 3);
 
     <section
       id="teams"
-      class="about-section about-teams"
+      class="relative px-6 lg:px-20"
       aria-labelledby="teams-title"
     >
-      <div class="about-shell about-split">
-        <div class="about-section-heading">
-          <p aria-hidden="true" class="about-display">
+      <div class="mx-auto max-w-[1280px] lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 border-t border-gray-200 py-8 lg:py-[52px]">
+        <div>
+          <p
+            aria-hidden="true"
+            class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-blue-500 lg:text-[28px]"
+          >
             TEAMS
           </p>
-          <h2 id="teams-title">チーム</h2>
+          <h2
+            id="teams-title"
+            class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl lg:leading-8"
+          >
+            チーム
+          </h2>
         </div>
-        <div class="about-section-content">
-          <p class="about-section-intro">
+        <div>
+          <p class="mt-5 mb-6 max-w-[750px] text-[13px] leading-[2] text-gray-600 lg:mt-0 md:mb-7 md:text-base md:leading-[1.95]">
             2つのチームに分かれて活動します。掛け持ちも、途中で移ることもできます。
           </p>
-          <div class="about-team-list">
+          <div class="grid gap-3.5 md:grid-cols-2 md:gap-5">
             {teams.map((team) => (
-              <article class="about-team-card">
-                <span class="about-overline">{team.en}</span>
-                <h3>{team.title}</h3>
-                <ul class="about-tag-list">
+              <article class="min-h-0 rounded-[14px] border border-gray-200 bg-white p-5 md:min-h-[242px] md:p-5.5 lg:p-7">
+                <span class="text-[11px] font-bold tracking-[0.19em] text-gray-500 md:text-xs">
+                  {team.en}
+                </span>
+                <h3 class="mt-2 mb-4 text-[17px] font-bold md:mt-3 md:mb-5 md:text-xl">
+                  {team.title}
+                </h3>
+                <ul class="flex flex-wrap gap-1.5 md:gap-2">
                   {team.tags.map((tag) => (
-                    <li>{tag}</li>
+                    <li class="rounded-full border border-blue-200 bg-blue-50 px-2 py-1 text-[11px] leading-[1.4] font-medium text-blue-600 md:px-3 md:py-1 md:text-xs">
+                      {tag}
+                    </li>
                   ))}
                 </ul>
               </article>
@@ -328,54 +394,64 @@ const posts = (await getAllPosts()).slice(0, 3);
       </div>
     </section>
 
-    <section id="voices" class="about-voices" aria-labelledby="voices-title">
-      <div class="about-shell">
-        <div class="about-section-heading">
-          <p aria-hidden="true" class="about-display">
+    <section
+      id="voices"
+      class="bg-blue-600 px-6 py-12 text-white lg:px-20 md:pt-24 md:pb-26"
+      aria-labelledby="voices-title"
+    >
+      <div class="mx-auto max-w-[1280px]">
+        <div>
+          <p
+            aria-hidden="true"
+            class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-white lg:text-[28px]"
+          >
             VOICES
           </p>
-          <h2 id="voices-title">メンバーの声</h2>
+          <h2
+            id="voices-title"
+            class="mt-2 text-[19px] font-bold text-white lg:mt-2.5 lg:text-2xl lg:leading-8"
+          >
+            メンバーの声
+          </h2>
         </div>
-        <div class="about-voice-grid">
-          <figure class="about-voice-card">
-            <div class="about-voice-avatar">
+        <div class="mt-8 grid items-start gap-4 md:mt-16 md:grid-cols-2 md:gap-14">
+          <figure class="grid min-h-0 grid-cols-[52px_minmax(0,1fr)] grid-rows-[auto_52px] content-start gap-x-4 gap-y-4.5 rounded-[18px] border border-white/55 bg-white/[0.045] p-5 md:min-h-[244px] md:grid-cols-[110px_minmax(0,1fr)] md:grid-rows-[auto_auto] md:gap-x-7 md:gap-y-0 md:px-8 md:py-8">
+            <div class="col-start-1 row-start-2 h-[52px] w-[52px] overflow-hidden rounded-full border border-white/55 bg-blue-200/65 md:row-span-2 md:row-start-1 md:h-[110px] md:w-[110px]">
               {aboutPhotos.voices.web && (
                 <img
                   src={aboutPhotos.voices.web}
+                  class="block h-full w-full scale-[1.32] object-cover"
                   alt=""
                   loading="lazy"
                   decoding="async"
                 />
               )}
             </div>
-            <blockquote>
-              <p>
-                「授業では触れない部分を、先輩に聞きながら進められました。半年でひとつサイトを公開できたのが自信になっています。」
-              </p>
+            <blockquote class="col-span-2 row-start-1 text-sm leading-[2] font-bold md:col-span-1 md:col-start-2 md:mb-6 md:text-lg">
+              「授業では触れない部分を、先輩に聞きながら進められました。半年でひとつサイトを公開できたのが自信になっています。」
             </blockquote>
-            <figcaption>
-              <strong>Aさん</strong>
+            <figcaption class="col-start-2 row-start-2 flex flex-col self-center gap-0.5 text-[11px] md:self-auto md:text-[13px]">
+              <strong class="text-[13px] md:text-[15px]">Aさん</strong>
               <span>2年・ウェブ開発チーム</span>
             </figcaption>
           </figure>
-          <figure class="about-voice-card">
-            <div class="about-voice-avatar">
+          <figure class="grid min-h-0 grid-cols-[52px_minmax(0,1fr)] grid-rows-[auto_52px] content-start gap-x-4 gap-y-4.5 rounded-[18px] border border-white/55 bg-white/[0.045] p-5 md:min-h-[244px] md:grid-cols-[110px_minmax(0,1fr)] md:grid-rows-[auto_auto] md:gap-x-7 md:gap-y-0 md:px-8 md:py-8 md:mt-16">
+            <div class="col-start-1 row-start-2 h-[52px] w-[52px] overflow-hidden rounded-full border border-white/55 bg-blue-200/65 md:row-span-2 md:row-start-1 md:h-[110px] md:w-[110px]">
               {aboutPhotos.voices.data && (
                 <img
                   src={aboutPhotos.voices.data}
+                  class="block h-full w-full scale-[1.32] object-cover"
                   alt=""
                   loading="lazy"
                   decoding="async"
                 />
               )}
             </div>
-            <blockquote>
-              <p>
-                「内部ハッカソンで初めてチーム開発をしました。役割を分けて動かす難しさは、ひとりでは経験できませんでした。」
-              </p>
+            <blockquote class="col-span-2 row-start-1 text-sm leading-[2] font-bold md:col-span-1 md:col-start-2 md:mb-6 md:text-lg">
+              「内部ハッカソンで初めてチーム開発をしました。役割を分けて動かす難しさは、ひとりでは経験できませんでした。」
             </blockquote>
-            <figcaption>
-              <strong>Bさん</strong>
+            <figcaption class="col-start-2 row-start-2 flex flex-col self-center gap-0.5 text-[11px] md:self-auto md:text-[13px]">
+              <strong class="text-[13px] md:text-[15px]">Bさん</strong>
               <span>3年・データサイエンスチーム</span>
             </figcaption>
           </figure>
@@ -385,65 +461,139 @@ const posts = (await getAllPosts()).slice(0, 3);
 
     <section
       id="tech-blog"
-      class="about-section about-blog about-shell"
+      class="relative mx-auto max-w-[1440px] px-6 py-8 lg:px-20 lg:py-[52px]"
       aria-labelledby="blog-title"
     >
-      <div class="about-section-heading">
-        <p aria-hidden="true" class="about-display">
+      <div class="mb-6 md:mb-9">
+        <p
+          aria-hidden="true"
+          class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-blue-500 lg:text-[28px]"
+        >
           TECH BLOG
         </p>
-        <h2 id="blog-title">テックブログの最新記事</h2>
+        <h2
+          id="blog-title"
+          class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl lg:leading-8"
+        >
+          テックブログの最新記事
+        </h2>
       </div>
       {posts.length > 0 ? (
-        <div class="about-blog-grid">
+        <div
+          class:list={[
+            "grid grid-cols-2 grid-rows-[auto] gap-3 md:gap-5",
+            "md:grid-cols-[2.05fr_1fr_1fr] md:grid-rows-[minmax(245px,auto)_minmax(245px,auto)]",
+          ]}
+        >
           {posts.map((post, index) => (
             <article
               class:list={[
-                "about-blog-card",
-                { "about-blog-card-featured": index === 0 },
+                "relative min-w-0 overflow-hidden rounded-2xl border border-gray-200 bg-white",
+                index === 1 && "col-span-2 md:col-span-1",
+                index === 0 && "col-span-2 flex flex-col md:col-span-1",
+                index === 0 && "md:row-span-2",
+                index === 1 &&
+                  true &&
+                  "flex flex-col md:col-[2/4] md:grid md:grid-cols-[40%_60%]",
+                index === 1 && posts.length < 3 && "flex flex-col",
+                index === 2 && "md:col-start-2",
               ]}
             >
               <a
-                class="about-blog-image"
+                class:list={[
+                  "relative grid min-h-[132px] place-items-center bg-gray-100 text-center text-xs text-gray-500 no-underline",
+                  index === 0 &&
+                    "min-h-[215px] flex-[1_1_auto] md:min-h-[285px] md:flex-[1_1_57%]",
+                  index > 0 && "min-h-[180px]",
+                  index === 1 && true && "md:h-full",
+                  index === 1 && posts.length < 3 && "md:min-h-[200px]",
+                  index === 2 && "md:min-h-[132px]",
+                ]}
                 href={`/blog/${post.id}`}
                 aria-hidden="true"
                 tabindex="-1"
               >
                 <img
                   src={getImageUrl(post)}
+                  class="absolute inset-0 h-full w-full object-cover"
                   alt=""
                   loading="lazy"
                   decoding="async"
                 />
-                {index === 0 && <span class="about-new-badge">NEW</span>}
-                <span class="about-blog-number">
+                {index === 0 && (
+                  <span class="absolute top-4 left-4 z-10 rounded-full bg-blue-600 px-3.5 py-1 text-[11px] font-bold tracking-[0.15em] text-white">
+                    NEW
+                  </span>
+                )}
+                <span
+                  class:list={[
+                    "absolute -top-[28px] right-[18px] z-10 font-['Rubik_Doodle_Shadow'] text-[56px] leading-none text-blue-500",
+                    index === 1 &&
+                      "-top-[21px] right-3 text-[38px] md:top-3 md:right-[-245px] md:text-[43px]",
+                    index === 2 &&
+                      "-top-5 right-[10px] text-[38px] md:text-[40px]",
+                  ]}
+                  aria-hidden="true"
+                >
                   {String(index + 1).padStart(2, "0")}
                 </span>
               </a>
-              <div class="about-blog-copy">
-                <div class="about-blog-meta">
+              <div
+                class:list={[
+                  "relative flex min-w-0 flex-col p-5",
+                  index === 0 ? "md:py-6 md:px-7" : "md:p-5",
+                ]}
+              >
+                <div
+                  class:list={[
+                    "flex flex-wrap items-center gap-2.5 text-[11px] text-gray-500",
+                    index > 0 && "max-md:text-xs",
+                    index === 1 && "md:max-w-[calc(100%-60px)]",
+                  ]}
+                >
                   {post.tags?.[0] && (
-                    <span class="about-blog-tag">#{post.tags[0].name}</span>
+                    <span class="rounded-full bg-blue-50 px-2.5 py-1 font-bold text-blue-600">
+                      #{post.tags[0].name}
+                    </span>
                   )}
                   <time datetime={post.publishedAt ?? undefined}>
                     {formatDotDate(post.publishedAt)}
                   </time>
                 </div>
-                <h3>
-                  <a href={`/blog/${post.id}`}>{post.title}</a>
+                <h3
+                  class:list={[
+                    "mt-3 mb-2 leading-[1.55]",
+                    index === 0
+                      ? "text-lg md:text-2xl md:leading-[1.5]"
+                      : "text-[15px] md:text-[17px] md:leading-[1.5]",
+                    index === 1 && "md:max-w-[calc(100%-60px)]",
+                  ]}
+                >
+                  <a
+                    class="text-gray-900 no-underline hover:text-blue-700"
+                    href={`/blog/${post.id}`}
+                  >
+                    {post.title}
+                  </a>
                 </h3>
                 {index === 0 && (
-                  <p class="about-blog-description">{post.description}</p>
+                  <p class="mb-3 text-xs leading-[1.9] text-gray-600 md:mb-5 md:text-sm">
+                    {post.description}
+                  </p>
                 )}
-                <div class="about-blog-author">
-                  {index === 0 && (
-                    <img
-                      src={getAuthorImageUrl(post)}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  )}
+                <div
+                  class:list={[
+                    "mt-auto flex items-center gap-2 text-[11px] leading-[1.5] text-gray-500",
+                    index > 0 && "max-md:text-xs",
+                  ]}
+                >
+                  <img
+                    src={getAuthorImageUrl(post)}
+                    class="h-7 w-7 shrink-0 rounded-full object-cover"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <span>
                     {post.author}・{post.role}
                   </span>
@@ -451,26 +601,39 @@ const posts = (await getAllPosts()).slice(0, 3);
               </div>
             </article>
           ))}
-          <a class="about-blog-more" href="/blog">
-            <span class="about-terminal-dots" aria-hidden="true">
-              <i></i>
-              <i></i>
-              <i></i>
+          <a
+            class:list={[
+              "col-start-2 md:col-start-auto flex min-h-[180px] flex-col rounded-2xl bg-gray-900 p-4 text-white no-underline md:min-h-[245px] md:p-5.5",
+              false && "md:col-span-2",
+              true && "md:col-start-3",
+            ]}
+            href="/blog"
+          >
+            <span class="flex gap-1.5" aria-hidden="true">
+              <i class="h-[10px] w-[10px] rounded-full bg-red-400"></i>
+              <i class="h-[10px] w-[10px] rounded-full bg-yellow-400"></i>
+              <i class="h-[10px] w-[10px] rounded-full bg-green-400"></i>
             </span>
-            <span class="about-terminal-code" aria-hidden="true">
+            <span
+              class="mt-3 font-mono text-[10px] leading-[1.8] text-gray-300 md:mt-7 md:text-sm"
+              aria-hidden="true"
+            >
               ~/tnd
               <br />
-              <b>❯</b> cd blog
+              <b class="text-blue-300">❯</b> cd blog
               <br />
-              <b>❯</b> ls ▍
+              <b class="text-blue-300">❯</b> ls ▍
             </span>
-            <span class="about-blog-more-label">
-              記事の一覧を見る <span aria-hidden="true">→</span>
+            <span class="mt-auto flex justify-between gap-2.5 border-t border-white/15 pt-4 text-[11px] font-bold md:text-sm">
+              記事の一覧を見る{" "}
+              <span class="text-[22px] leading-none" aria-hidden="true">
+                →
+              </span>
             </span>
           </a>
         </div>
       ) : (
-        <p class="about-blog-empty">
+        <p class="text-gray-600">
           記事は準備中です。<a href="/blog">テックブログを見る</a>
         </p>
       )}
@@ -478,46 +641,64 @@ const posts = (await getAllPosts()).slice(0, 3);
 
     <section
       id="join"
-      class="about-section about-join"
+      class="relative px-6 lg:px-20"
       aria-labelledby="join-title"
     >
-      <div class="about-shell about-split">
-        <div class="about-section-heading">
-          <p aria-hidden="true" class="about-display">
+      <div class="mx-auto max-w-[1280px] lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 border-t border-gray-200 py-8 lg:py-[52px]">
+        <div>
+          <p
+            aria-hidden="true"
+            class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-blue-500 lg:text-[28px]"
+          >
             HOW TO JOIN
           </p>
-          <h2 id="join-title">参加方法</h2>
+          <h2
+            id="join-title"
+            class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl lg:leading-8"
+          >
+            参加方法
+          </h2>
         </div>
-        <div class="about-section-content">
-          <p class="about-section-intro">
+        <div>
+          <p class="mt-5 mb-6 max-w-[750px] text-[13px] leading-[2] text-gray-600 lg:mt-0 md:mb-7 md:text-base md:leading-[1.95]">
             メンバーは通年で募集しています。学年や経験は問いません。
           </p>
-          <ol class="about-steps">
+          <ol class="my-7 flex flex-col border-l-2 border-gray-200 md:mt-9 md:mb-10 md:grid md:grid-cols-3 md:gap-7 md:border-0">
             {steps.map((step) => (
-              <li>
-                <span class="about-step-dot" aria-hidden="true"></span>
-                <span class="about-overline">STEP {step.number}</span>
-                <h3>{step.title}</h3>
-                <p>{step.description}</p>
+              <li class="relative min-w-0 pb-6 pl-5.5 last:pb-0 md:border-t-2 md:border-gray-200 md:pt-8 md:pb-0 md:pl-0">
+                <span
+                  class="absolute top-0.5 -left-2 h-[13px] w-[13px] rounded-full bg-blue-500 md:-top-[7px] md:left-0"
+                  aria-hidden="true"
+                ></span>
+                <span class="text-[11px] font-bold tracking-[0.19em] text-gray-500 md:text-xs">
+                  STEP {step.number}
+                </span>
+                <h3 class="mt-2.5 mb-2 text-base font-bold md:text-lg">
+                  {step.title}
+                </h3>
+                <p class="text-xs leading-[1.9] text-gray-600 md:text-[13px]">
+                  {step.description}
+                </p>
               </li>
             ))}
           </ol>
-          <div class="about-join-details">
+          <div class="grid gap-3.5 rounded-[14px] border border-gray-200 bg-white p-5 md:flex md:min-h-[104px] md:flex-wrap md:items-center md:gap-x-7 md:gap-y-4 md:py-5.5 md:px-8 lg:gap-10">
             <div>
-              <small>会費</small>
-              <p>
-                <strong>半期 2,000円</strong>
-                <span>（年 4,000円）</span>
+              <small class="text-[11px] text-gray-500">会費</small>
+              <p class="mt-1 text-xs md:whitespace-nowrap">
+                <strong class="text-lg md:text-xl">半期 2,000円</strong>
+                <span class="text-[11px] text-gray-500">（年 4,000円）</span>
               </p>
             </div>
             <div>
-              <small>経験</small>
-              <p>
-                メンバーの <strong>9割</strong> が大学からのスタート
+              <small class="text-[11px] text-gray-500">経験</small>
+              <p class="mt-1 text-xs md:whitespace-nowrap">
+                メンバーの <strong class="text-lg md:text-xl">9割</strong>{" "}
+                が大学からのスタート
               </p>
             </div>
             <button
-              class="about-join-button"
+              class="mt-0.5 shrink-0 md:mt-0 md:ml-auto flex h-12 w-full items-center justify-center rounded-full bg-[#F5BF48] px-7 text-sm font-bold text-white shadow-[0_8px_18px_rgba(245,191,72,.35)] hover:bg-[#ecad26] md:w-auto"
               type="button"
               data-open-join
               data-join-inline
@@ -531,35 +712,47 @@ const posts = (await getAllPosts()).slice(0, 3);
 
     <section
       id="companies"
-      class="about-section about-companies"
+      class="relative px-6 lg:px-20"
       aria-labelledby="companies-title"
     >
-      <div class="about-shell about-split">
-        <div class="about-section-heading">
-          <p aria-hidden="true" class="about-display">
+      <div class="mx-auto max-w-[1280px] lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 border-t border-gray-200 pt-8 lg:pt-[52px]">
+        <div>
+          <p
+            aria-hidden="true"
+            class="font-['Rubik_Doodle_Shadow'] text-2xl font-normal leading-tight text-blue-500 lg:text-[28px]"
+          >
             FOR COMPANIES
           </p>
-          <h2 id="companies-title">企業の方へ</h2>
+          <h2
+            id="companies-title"
+            class="mt-2 text-[19px] font-bold lg:mt-2.5 lg:text-2xl lg:leading-8"
+          >
+            企業の方へ
+          </h2>
         </div>
-        <div class="about-company-card">
-          <div class="about-company-copy">
-            <p>
+        <div class="mt-5 flex min-h-0 flex-col-reverse items-stretch gap-3.5 rounded-[14px] border border-gray-200 bg-white p-5 lg:mt-0 custom-md:grid custom-md:min-h-[230px] custom-md:grid-cols-[minmax(0,1fr)_270px] custom-md:items-center custom-md:gap-8 md:py-8 md:px-8">
+          <div>
+            <p class="mb-4 max-w-[610px] text-xs leading-[1.95] text-gray-600 md:mb-5 md:text-sm">
               協賛、イベントの共催、勉強会での登壇などのご相談を受け付けています。ウェブ開発とデータサイエンスの2つのチームに、約20名が所属しています。
             </p>
-            <a href="/contact">
+            <a
+              class="inline-flex h-10 items-center gap-3.5 rounded-[9px] border border-blue-500 bg-white px-4 text-[13px] font-bold text-[#1255ed] hover:bg-blue-50"
+              href="/contact"
+            >
               お問い合わせページへ <span aria-hidden="true">→</span>
             </a>
           </div>
-          <div class="about-company-art">
+          <div class="grid min-h-[135px] w-full place-items-center md:min-h-[170px]">
             {aboutPhotos.companies ? (
               <img
                 src={aboutPhotos.companies}
+                class="block w-full max-h-[145px] object-contain mix-blend-multiply md:max-h-[190px]"
                 alt="企業の方と学生が話し合うイメージ"
                 loading="lazy"
                 decoding="async"
               />
             ) : (
-              <span class="about-photo-empty">企業の方との活動写真</span>
+              <span class="text-xs text-gray-500">企業の方との活動写真</span>
             )}
           </div>
         </div>
