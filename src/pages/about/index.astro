@@ -337,7 +337,7 @@ const posts = (await getAllPosts()).slice(0, 3);
           <h2 id="voices-title">メンバーの声</h2>
         </div>
         <div class="about-voice-grid">
-          <blockquote class="about-voice-card">
+          <figure class="about-voice-card">
             <div class="about-voice-avatar">
               {aboutPhotos.voices.web && (
                 <img
@@ -348,17 +348,17 @@ const posts = (await getAllPosts()).slice(0, 3);
                 />
               )}
             </div>
-            <div>
+            <blockquote>
               <p>
                 「授業では触れない部分を、先輩に聞きながら進められました。半年でひとつサイトを公開できたのが自信になっています。」
               </p>
-              <footer>
-                <strong>Aさん</strong>
-                <span>2年・ウェブ開発チーム</span>
-              </footer>
-            </div>
-          </blockquote>
-          <blockquote class="about-voice-card">
+            </blockquote>
+            <figcaption>
+              <strong>Aさん</strong>
+              <span>2年・ウェブ開発チーム</span>
+            </figcaption>
+          </figure>
+          <figure class="about-voice-card">
             <div class="about-voice-avatar">
               {aboutPhotos.voices.data && (
                 <img
@@ -369,16 +369,16 @@ const posts = (await getAllPosts()).slice(0, 3);
                 />
               )}
             </div>
-            <div>
+            <blockquote>
               <p>
                 「内部ハッカソンで初めてチーム開発をしました。役割を分けて動かす難しさは、ひとりでは経験できませんでした。」
               </p>
-              <footer>
-                <strong>Bさん</strong>
-                <span>3年・データサイエンスチーム</span>
-              </footer>
-            </div>
-          </blockquote>
+            </blockquote>
+            <figcaption>
+              <strong>Bさん</strong>
+              <span>3年・データサイエンスチーム</span>
+            </figcaption>
+          </figure>
         </div>
       </div>
     </section>

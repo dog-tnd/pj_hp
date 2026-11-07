@@ -410,14 +410,14 @@
   line-height: 2;
 }
 
-.about-voice-card footer {
+.about-voice-card figcaption {
   display: flex;
   flex-direction: column;
   gap: 2px;
   font-size: 13px;
 }
 
-.about-voice-card footer strong {
+.about-voice-card figcaption strong {
   font-size: 15px;
 }
 
@@ -1080,7 +1080,7 @@
     line-height: 2;
   }
 
-  .about-voice-card footer {
+  .about-voice-card figcaption {
     position: absolute;
     left: 88px;
     bottom: 25px;
@@ -1091,7 +1091,7 @@
     position: relative;
   }
 
-  .about-voice-card footer strong {
+  .about-voice-card figcaption strong {
     font-size: 13px;
   }
 
