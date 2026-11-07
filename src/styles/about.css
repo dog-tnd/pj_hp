@@ -98,12 +98,12 @@
   column-gap: 36px;
 }
 
-.about-section-heading h2 {
+.about-section-heading .about-display {
   margin: 0 0 15px;
   font-size: 31px;
 }
 
-.about-section-heading > p {
+.about-section-heading > h2 {
   margin: 0;
   font-size: 21px;
   font-weight: 700;
@@ -346,16 +346,16 @@
 }
 
 .about-voices .about-display,
-.about-voices .about-section-heading > p {
+.about-voices .about-section-heading > h2 {
   color: #fff;
 }
 
-.about-voices .about-section-heading h2 {
+.about-voices .about-section-heading .about-display {
   margin-bottom: 15px;
   font-size: 46px;
 }
 
-.about-voices .about-section-heading > p {
+.about-voices .about-section-heading > h2 {
   font-size: 26px;
 }
 
@@ -886,12 +886,12 @@
     transform: none;
   }
 
-  .about-section-heading h2 {
+  .about-section-heading .about-display {
     margin-bottom: 12px;
     font-size: 30px;
   }
 
-  .about-section-heading > p {
+  .about-section-heading > h2 {
     font-size: 18px;
   }
 
@@ -1051,11 +1051,11 @@
     padding-block: 49px 58px;
   }
 
-  .about-voices .about-section-heading h2 {
+  .about-voices .about-section-heading .about-display {
     font-size: 34px;
   }
 
-  .about-voices .about-section-heading > p {
+  .about-voices .about-section-heading > h2 {
     font-size: 21px;
   }
 
