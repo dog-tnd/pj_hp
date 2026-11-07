@@ -409,16 +409,12 @@ const posts = (await getAllPosts()).slice(0, 3);
                 aria-hidden="true"
                 tabindex="-1"
               >
-                {post.image?.url ? (
-                  <img
-                    src={getImageUrl(post)}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                  />
-                ) : (
-                  <span>記事のサムネイル（microCMS）</span>
-                )}
+                <img
+                  src={getImageUrl(post)}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
                 {index === 0 && <span class="about-new-badge">NEW</span>}
                 <span class="about-blog-number">
                   {String(index + 1).padStart(2, "0")}
